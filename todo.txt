@@ -1,0 +1,1 @@
+1. Na allaksume ta table names se lowercase giati to hibernate metatrepei automata se lowercase ta tablenames apo to application side.
