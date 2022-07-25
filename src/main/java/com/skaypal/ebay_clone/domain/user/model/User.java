@@ -1,6 +1,6 @@
 package com.skaypal.ebay_clone.domain.user.model;
 
-import com.skaypal.ebay_clone.UserRegStatus;
+import com.skaypal.ebay_clone.domain.user.UserRegStatus;
 
 import javax.persistence.*;
 

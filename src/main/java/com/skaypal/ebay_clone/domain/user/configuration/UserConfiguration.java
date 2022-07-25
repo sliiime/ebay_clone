@@ -1,6 +1,6 @@
 package com.skaypal.ebay_clone.domain.user.configuration;
 
-import com.skaypal.ebay_clone.UserRegStatus;
+import com.skaypal.ebay_clone.domain.user.UserRegStatus;
 import com.skaypal.ebay_clone.domain.user.model.User;
 import com.skaypal.ebay_clone.domain.user.repositories.UserRepository;
 import org.springframework.boot.CommandLineRunner;
