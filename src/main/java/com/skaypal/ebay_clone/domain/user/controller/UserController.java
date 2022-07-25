@@ -4,9 +4,8 @@ package com.skaypal.ebay_clone.domain.user.controller;
 import com.skaypal.ebay_clone.domain.user.model.User;
 import com.skaypal.ebay_clone.domain.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,8 +22,15 @@ public class UserController {
         }
 
          @GetMapping
-         public List<User> getUsers(){
-            return userService.getUsers();
+         public ResponseEntity<List<User>> getUsers(){
+            List<User> users = userService.getUsers();
+            return ResponseEntity.ok(users);
+         }
+
+         @GetMapping(path = "/{id}")
+        public ResponseEntity<User> getUser(@PathVariable Integer id){
+            return ResponseEntity.ok(userService.getUser(id));
+
          }
 
 
