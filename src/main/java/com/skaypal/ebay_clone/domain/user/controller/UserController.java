@@ -1,9 +1,8 @@
-package com.skaypal.ebay_clone.controllers;
+package com.skaypal.ebay_clone.domain.user.controller;
 
 
-import com.skaypal.ebay_clone.UserRegStatus;
-import com.skaypal.ebay_clone.model.User;
-import com.skaypal.ebay_clone.service.UserService;
+import com.skaypal.ebay_clone.domain.user.model.User;
+import com.skaypal.ebay_clone.domain.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

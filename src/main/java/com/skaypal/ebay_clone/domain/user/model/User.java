@@ -1,4 +1,4 @@
-package com.skaypal.ebay_clone.model;
+package com.skaypal.ebay_clone.domain.user.model;
 
 import com.skaypal.ebay_clone.UserRegStatus;
 

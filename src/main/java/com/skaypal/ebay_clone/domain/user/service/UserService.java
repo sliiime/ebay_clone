@@ -1,8 +1,7 @@
-package com.skaypal.ebay_clone.service;
+package com.skaypal.ebay_clone.domain.user.service;
 
-import com.skaypal.ebay_clone.UserRegStatus;
-import com.skaypal.ebay_clone.model.User;
-import com.skaypal.ebay_clone.repositories.UserRepository;
+import com.skaypal.ebay_clone.domain.user.model.User;
+import com.skaypal.ebay_clone.domain.user.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

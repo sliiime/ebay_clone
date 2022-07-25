@@ -1,14 +1,16 @@
-package com.skaypal.ebay_clone.configuration;
+package com.skaypal.ebay_clone.domain.user.configuration;
 
 import com.skaypal.ebay_clone.UserRegStatus;
-import com.skaypal.ebay_clone.model.User;
-import com.skaypal.ebay_clone.repositories.UserRepository;
+import com.skaypal.ebay_clone.domain.user.model.User;
+import com.skaypal.ebay_clone.domain.user.repositories.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 
+
+//For db initialization and testing purposes
 @Configuration
 public class UserConfiguration {
 
