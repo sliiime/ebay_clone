@@ -1,6 +1,7 @@
 package com.skaypal.ebay_clone.domain.user.model;
 
 import com.skaypal.ebay_clone.domain.user.UserRegStatus;
+import com.skaypal.ebay_clone.domain.user.dto.CreateUserDto;
 
 import javax.persistence.*;
 
@@ -11,21 +12,26 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(unique = true)
     private String username;
     private String password;
     private String name;
     private String surname;
     private String address;
+
+    @Column(unique = true)
     private String email;
+    @Column(unique = true)
     private String afm;
     private Float rating;
     @Column(name = "registered")
     @Enumerated(EnumType.STRING)
     private UserRegStatus registrationStatus;
-    @Column(name = "phone")
+    @Column(name = "phone",unique = true)
     private String phoneNumber;
 
-    public User(){}
+    public User() {
+    }
 
     public User(Integer id,
                 String username,
@@ -37,7 +43,7 @@ public class User {
                 String afm,
                 Float rating,
                 UserRegStatus registrationStatus,
-                String phoneNumber){
+                String phoneNumber) {
 
         this.id = id;
         this.username = username;
@@ -51,6 +57,7 @@ public class User {
         this.registrationStatus = registrationStatus;
         this.phoneNumber = phoneNumber;
     }
+
     public User(String username,
                 String password,
                 String name,
@@ -60,7 +67,7 @@ public class User {
                 String afm,
                 Float rating,
                 UserRegStatus registrationStatus,
-                String phoneNumber){
+                String phoneNumber) {
 
         this.username = username;
         this.password = password;
@@ -74,6 +81,19 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
+    public User(CreateUserDto user) {
+        this.username = user.getUsername();
+        this.password = user.getPassword();
+        this.name = user.getName();
+        this.surname = user.getSurname();
+        this.address = user.getAddress();
+        this.email = user.getEmail();
+        this.afm = user.getAfm();
+        this.rating = 0F;
+        this.registrationStatus = UserRegStatus.PENDING;
+        this.phoneNumber = user.getPhoneNumber();
+    }
+
     public Integer getId() {
         return id;
     }
@@ -82,11 +102,11 @@ public class User {
         return rating;
     }
 
-    public String getUsername(){
+    public String getUsername() {
         return username;
     }
 
-    public String getSurname(){
+    public String getSurname() {
         return surname;
     }
 

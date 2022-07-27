@@ -24,7 +24,7 @@ public class UserConfiguration {
                     "Palamidas",
                     "Spiti sou 3",
                     "kke@youjizz.com",
-                    "afm",1F,
+                    "afm1",1F,
                     UserRegStatus.PENDING,
                     "69696969"));
 
@@ -35,7 +35,7 @@ public class UserConfiguration {
                     "Eugenios",
                     "Lilipoupoli 2",
                     "syriza@sugarbabes.com",
-                    "afm",1F,
+                    "afm2",1F,
                     UserRegStatus.PENDING,
                     "12121312"));
 
