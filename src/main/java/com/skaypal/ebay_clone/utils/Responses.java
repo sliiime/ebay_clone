@@ -34,7 +34,7 @@ public class Responses {
     }
 
     public static ResponseStatusException notFound(String entity,String fieldName,String fieldValue){
-        return new ResponseStatusException(HttpStatus.NOT_FOUND,entity + "with " + fieldName + " " + fieldValue + " not found");
+        return new ResponseStatusException(HttpStatus.NOT_FOUND,entity + " with " + fieldName + " " + fieldValue + " not found");
     }
     
     public static ResponseStatusException conflict(String entity,List<String> conflicts){
@@ -44,8 +44,6 @@ public class Responses {
         conflictFields = conflictFields.substring(0,conflictFields.length()-2);
 
         return new ResponseStatusException(HttpStatus.CONFLICT,"There already exists a " +entity +" with this : " + conflictFields);
-
-
 
     }
 

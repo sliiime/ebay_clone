@@ -22,7 +22,7 @@ public class UserService {
 
     @Autowired
     public UserService(UserRepository userRepository,
-                       UserValidator  userValidator) {
+                       UserValidator userValidator) {
         this.userRepository = userRepository;
         this.userValidator = userValidator;
     }
@@ -32,12 +32,11 @@ public class UserService {
     }
 
     public User getUser(Integer id) {
-        return userRepository.findById(id).orElseThrow(() -> Responses.notFound("User","id",id.toString()));
+        return userRepository.findById(id).orElseThrow(() -> Responses.notFound("User", "id", id.toString()));
     }
 
 
     public User createUser(CreateUserDto createUserDto) {
-
 
 
         userValidator.createUserValidator(createUserDto);
@@ -52,13 +51,13 @@ public class UserService {
     public void updateUser(UpdateUserDto updateUserDto, Integer id) {
 
 
-        userValidator.updateUserValidator(updateUserDto,id);
+        userValidator.updateUserValidator(updateUserDto, id);
 
-        User user = userRepository.findById(id).orElseThrow(() -> Responses.notFound("User","id",id.toString()));
+        User user = userRepository.findById(id).orElseThrow(() -> Responses.notFound("User", "id", id.toString()));
 
 
         //Checking which fields need to be updated
-        if( updateUserDto.getUsername() != null)
+        if (updateUserDto.getUsername() != null)
             user.setUsername(updateUserDto.getUsername());
         if (updateUserDto.getPassword() != null)
             user.setPassword(updateUserDto.getPassword());
@@ -71,4 +70,12 @@ public class UserService {
 
 
     }
+
+    public void deleteUser(Integer id) {
+        User user = userRepository.findById(id).orElseThrow(() -> Responses.notFound("User", "id", id.toString()));
+        userRepository.delete(user);
+    }
+
+
+
 }

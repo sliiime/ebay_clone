@@ -47,16 +47,19 @@ public class UserValidator {
             Optional<User> u = userRepository.findByUsername(user.getUsername());
             if (u.isPresent() && u.get().getId() != id) conflicts.add("username");
         }
+
         if (user.getPhone() != null){
             Optional<User> u = userRepository.findByPhone(user.getPhone());
             if (u.isPresent() && u.get().getId() != id) conflicts.add("phone");
         }
+
         if (user.getEmail() != null){
             Optional<User> u = userRepository.findByEmail(user.getUsername());
             if (u.isPresent() && u.get().getId() != id) conflicts.add("email");
         }
 
         if (conflicts.size() != 0) throw Responses.conflict("User",conflicts);
+
 
 
     }
