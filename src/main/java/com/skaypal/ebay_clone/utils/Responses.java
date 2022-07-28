@@ -4,30 +4,32 @@ import org.apache.coyote.Response;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.net.URI;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.LinkedList;
+import java.util.List;
 
+@ControllerAdvice
 public class Responses {
 
     public static <T> ResponseEntity<T> created(String location){
         return ResponseEntity.created(URI.create(location)).build();
     }
 
-    public static ResponseStatusException constraintViolation(SQLIntegrityConstraintViolationException x){
-        String message = x.getMessage();
-        message = message.replaceAll("[^'.']","");
-        String[] vea = message.split("['.']");
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<List<String>> methodArgumentNotValidHandler(MethodArgumentNotValidException m){ //Thrown when a constraint is violated by a dto
+        List<String> errors = new LinkedList<>();
+        for (FieldError error : m.getBindingResult().getFieldErrors()){
+            errors.add(error.getField() + " " + error.getDefaultMessage()); //Needs some improving :D
+        }
 
-        String value = vea[0].replaceAll("'","");
-        String[] ea = vea[1].replace("_UNIQUE","'").split("'.'");
-
-        String entity = ea[0].replaceAll("'","");
-        String attribute = ea[1].replaceAll("'","");
-
-        return new ResponseStatusException(HttpStatus.NOT_FOUND,entity + "with " + attribute + " = " + value + " already exists");
-
+        return ResponseEntity.badRequest().body(errors);
     }
 
 }

@@ -15,7 +15,7 @@ import java.util.List;
 public class UserConfiguration {
 
     @Bean
-    CommandLineRunner commandLineRunner(UserRepository userRepository){
+    CommandLineRunner commandLineRunner(UserRepository UserRepository){
         return args -> {
             User user1= (new User(
                     "Bratsaras420",
@@ -39,7 +39,7 @@ public class UserConfiguration {
                     UserRegStatus.PENDING,
                     "12121312"));
 
-            userRepository.saveAll(List.of(user1,user2));
+            UserRepository.saveAll(List.of(user1,user2));
         };
     }
 }

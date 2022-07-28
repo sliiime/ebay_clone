@@ -18,38 +18,28 @@ public class User {
     private Integer id;
     @Column(unique = true)
     @NotNull
-    @Length(max = 15)
     private String username;
     @NotNull
-    @Length(min = 8,max =30)
     private String password;
 
     @NotNull
-    @Length(max = 50)
     private String name;
 
     @NotNull
-    @Length(max = 50)
     private String surname;
 
     @NotNull
-    @Length(max = 50)
     private String address;
 
     @Column(unique = true)
     private String email;
     @Column(unique = true)
-    @NotNull
-    @Pattern(regexp = "[0-9]{9}")
     private String afm;
     private Float rating;
     @Column(name = "registered")
     @Enumerated(EnumType.STRING)
     private UserRegStatus registrationStatus;
     @Column(name = "phone",unique = true)
-    @NotNull
-    @Length(min = 8 ,max = 12)
-    @Pattern(regexp = "[0-9]*")
     private String phone;
 
     public User() {

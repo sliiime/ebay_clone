@@ -15,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "ebay_clone/api/user")
+@Validated
 public class UserController {
 
     public static final String location = "ebay_clone/api/user";
@@ -39,7 +40,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody CreateUserDto createUserDto){
+    public ResponseEntity<User> createUser(@Valid @RequestBody CreateUserDto createUserDto){
         User user = userService.createUser(createUserDto);
         return Responses.created(location +'/' + user.getId());
     }
