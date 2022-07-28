@@ -2,8 +2,12 @@ package com.skaypal.ebay_clone.domain.user.model;
 
 import com.skaypal.ebay_clone.domain.user.UserRegStatus;
 import com.skaypal.ebay_clone.domain.user.dto.CreateUserDto;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 @Entity
 @Table()
@@ -13,22 +17,40 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column(unique = true)
+    @NotNull
+    @Length(max = 15)
     private String username;
+    @NotNull
+    @Length(min = 8,max =30)
     private String password;
+
+    @NotNull
+    @Length(max = 50)
     private String name;
+
+    @NotNull
+    @Length(max = 50)
     private String surname;
+
+    @NotNull
+    @Length(max = 50)
     private String address;
 
     @Column(unique = true)
     private String email;
     @Column(unique = true)
+    @NotNull
+    @Pattern(regexp = "[0-9]{9}")
     private String afm;
     private Float rating;
     @Column(name = "registered")
     @Enumerated(EnumType.STRING)
     private UserRegStatus registrationStatus;
     @Column(name = "phone",unique = true)
-    private String phoneNumber;
+    @NotNull
+    @Length(min = 8 ,max = 12)
+    @Pattern(regexp = "[0-9]*")
+    private String phone;
 
     public User() {
     }
@@ -43,7 +65,7 @@ public class User {
                 String afm,
                 Float rating,
                 UserRegStatus registrationStatus,
-                String phoneNumber) {
+                String phone) {
 
         this.id = id;
         this.username = username;
@@ -55,7 +77,7 @@ public class User {
         this.afm = afm;
         this.rating = rating;
         this.registrationStatus = registrationStatus;
-        this.phoneNumber = phoneNumber;
+        this.phone = phone;
     }
 
     public User(String username,
@@ -67,7 +89,7 @@ public class User {
                 String afm,
                 Float rating,
                 UserRegStatus registrationStatus,
-                String phoneNumber) {
+                String phone) {
 
         this.username = username;
         this.password = password;
@@ -78,7 +100,7 @@ public class User {
         this.afm = afm;
         this.rating = rating;
         this.registrationStatus = registrationStatus;
-        this.phoneNumber = phoneNumber;
+        this.phone = phone;
     }
 
     public User(CreateUserDto user) {
@@ -91,7 +113,7 @@ public class User {
         this.afm = user.getAfm();
         this.rating = 0F;
         this.registrationStatus = UserRegStatus.PENDING;
-        this.phoneNumber = user.getPhoneNumber();
+        this.phone = user.getPhoneNumber();
     }
 
     public Integer getId() {
@@ -130,8 +152,8 @@ public class User {
         return password;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getPhone() {
+        return phone;
     }
 
     public UserRegStatus getRegistrationStatus() {
@@ -162,8 +184,8 @@ public class User {
         this.password = password;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setPhone(String phoneNumber) {
+        this.phone = phoneNumber;
     }
 
     public void setRating(Float rating) {

@@ -1,16 +1,38 @@
 package com.skaypal.ebay_clone.domain.user.dto;
 
-import org.springframework.validation.annotation.Validated;
+import org.hibernate.validator.constraints.Length;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 public class CreateUserDto {
+    @NotBlank
+    @Length(max = 15)
     private String username;
+    @NotBlank
+    @Length(min = 8,max =30)
     private String password;
+    @NotBlank
+    @Length(max = 50)
     private String name;
+    @NotBlank
+    @Length(max = 50)
     private String surname;
+    @NotBlank
+    @Length(max = 50)
     private String address;
+    @Email
     private String email;
+
+    @NotBlank
+    @Pattern(regexp = "[0-9]{9}")
     private String afm;
 
+    @NotBlank
+    @Length(min = 8 ,max = 12)
+    @Pattern(regexp = "[0-9]*")
     private String phoneNumber;
 
     public CreateUserDto() {

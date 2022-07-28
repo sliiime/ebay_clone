@@ -24,18 +24,18 @@ public class UserConfiguration {
                     "Palamidas",
                     "Spiti sou 3",
                     "kke@youjizz.com",
-                    "afm1",1F,
+                    "123456789",1F,
                     UserRegStatus.PENDING,
                     "69696969"));
 
             User user2 = (new User(
-                    "Boubounokefalos666",
+                    "Boubounis666",
                     "TzouraApoTzina",
                     "Kyrios",
                     "Eugenios",
                     "Lilipoupoli 2",
                     "syriza@sugarbabes.com",
-                    "afm2",1F,
+                    "123456788",1F,
                     UserRegStatus.PENDING,
                     "12121312"));
 
