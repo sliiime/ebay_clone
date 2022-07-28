@@ -3,37 +3,37 @@ package com.skaypal.ebay_clone.domain.user.dto;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 public class CreateUserDto {
-    @NotBlank
+    @NotNull
     @Length(max = 15)
     private String username;
-    @NotBlank
+    @NotNull
     @Length(min = 8,max =30)
     private String password;
-    @NotBlank
+    @NotNull
     @Length(max = 50)
     private String name;
-    @NotBlank
+    @NotNull
     @Length(max = 50)
     private String surname;
-    @NotBlank
-    @Length(max = 50)
+    @NotNull
+
     private String address;
     @Email
     private String email;
 
-    @NotBlank
+    @NotNull
     @Pattern(regexp = "[0-9]{9}")
     private String afm;
 
     @NotBlank
     @Length(min = 8 ,max = 12)
     @Pattern(regexp = "[0-9]*")
-    private String phoneNumber;
+    private String phone;
 
     public CreateUserDto() {
     }
@@ -55,7 +55,7 @@ public class CreateUserDto {
         this.address = address;
         this.email = email;
         this.afm = afm;
-        this.phoneNumber = phoneNumber;
+        this.phone = phoneNumber;
     }
 
     public CreateUserDto(String username,
@@ -74,7 +74,7 @@ public class CreateUserDto {
         this.address = address;
         this.email = email;
         this.afm = afm;
-        this.phoneNumber = phoneNumber;
+        this.phone = phoneNumber;
     }
 
     public String getUsername() {
@@ -105,8 +105,8 @@ public class CreateUserDto {
         return password;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getPhone() {
+        return phone;
     }
 
 
@@ -131,8 +131,8 @@ public class CreateUserDto {
         this.password = password;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public void setSurname(String surname) {

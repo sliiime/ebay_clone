@@ -1,15 +1,18 @@
 package com.skaypal.ebay_clone.domain.user.service;
 
 import com.skaypal.ebay_clone.domain.user.dto.CreateUserDto;
+import com.skaypal.ebay_clone.domain.user.dto.UpdateUserDto;
 import com.skaypal.ebay_clone.domain.user.model.User;
 import com.skaypal.ebay_clone.domain.user.repositories.UserRepository;
 import com.skaypal.ebay_clone.domain.user.validator.UserValidator;
+import com.skaypal.ebay_clone.utils.Responses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -29,18 +32,42 @@ public class UserService {
     }
 
     public User getUser(Integer id) {
-        return userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User with id " + id + " not found"));
+        return userRepository.findById(id).orElseThrow(() -> Responses.notFound("User","id",id.toString()));
     }
 
 
     public User createUser(CreateUserDto createUserDto) {
 
 
+
+        userValidator.createUserValidator(createUserDto);
+
         User user = new User(createUserDto);
 
-        userValidator.createUserValidator(user);
-
         return userRepository.save(user);
+
+    }
+
+
+    public void updateUser(UpdateUserDto updateUserDto, Integer id) {
+
+
+        userValidator.updateUserValidator(updateUserDto,id);
+
+        User user = userRepository.findById(id).orElseThrow(() -> Responses.notFound("User","id",id.toString()));
+
+
+        //Checking which fields need to be updated
+        if( updateUserDto.getUsername() != null)
+            user.setUsername(updateUserDto.getUsername());
+        if (updateUserDto.getPassword() != null)
+            user.setPassword(updateUserDto.getPassword());
+        if (updateUserDto.getEmail() != null)
+            user.setEmail(updateUserDto.getEmail());
+        if (updateUserDto.getPhone() != null)
+            user.setPhone(updateUserDto.getPhone());
+
+        userRepository.save(user);
 
 
     }

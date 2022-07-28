@@ -14,6 +14,7 @@ import java.net.URI;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Stream;
 
 @ControllerAdvice
 public class Responses {
@@ -30,6 +31,22 @@ public class Responses {
         }
 
         return ResponseEntity.badRequest().body(errors);
+    }
+
+    public static ResponseStatusException notFound(String entity,String fieldName,String fieldValue){
+        return new ResponseStatusException(HttpStatus.NOT_FOUND,entity + "with " + fieldName + " " + fieldValue + " not found");
+    }
+    
+    public static ResponseStatusException conflict(String entity,List<String> conflicts){
+
+        String conflictFields = "";
+        for (String conflict : conflicts) conflictFields += conflict + " ,";
+        conflictFields = conflictFields.substring(0,conflictFields.length()-2);
+
+        return new ResponseStatusException(HttpStatus.CONFLICT,"There already exists a " +entity +" with this : " + conflictFields);
+
+
+
     }
 
 }

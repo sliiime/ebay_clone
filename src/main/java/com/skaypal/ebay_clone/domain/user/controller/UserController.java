@@ -2,6 +2,7 @@ package com.skaypal.ebay_clone.domain.user.controller;
 
 
 import com.skaypal.ebay_clone.domain.user.dto.CreateUserDto;
+import com.skaypal.ebay_clone.domain.user.dto.UpdateUserDto;
 import com.skaypal.ebay_clone.domain.user.model.User;
 import com.skaypal.ebay_clone.domain.user.service.UserService;
 import com.skaypal.ebay_clone.utils.Responses;
@@ -43,5 +44,11 @@ public class UserController {
     public ResponseEntity<User> createUser(@Valid @RequestBody CreateUserDto createUserDto){
         User user = userService.createUser(createUserDto);
         return Responses.created(location +'/' + user.getId());
+    }
+
+    @PutMapping(path = "/{id}")
+    public ResponseEntity<?> updateUser(@PathVariable Integer id,@Valid @RequestBody UpdateUserDto updateUserDto){
+        userService.updateUser(updateUserDto,id);
+        return ResponseEntity.ok().build();
     }
 }

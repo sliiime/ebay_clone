@@ -2,12 +2,9 @@ package com.skaypal.ebay_clone.domain.user.model;
 
 import com.skaypal.ebay_clone.domain.user.UserRegStatus;
 import com.skaypal.ebay_clone.domain.user.dto.CreateUserDto;
-import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 
 @Entity
 @Table()
@@ -103,7 +100,7 @@ public class User {
         this.afm = user.getAfm();
         this.rating = 0F;
         this.registrationStatus = UserRegStatus.PENDING;
-        this.phone = user.getPhoneNumber();
+        this.phone = user.getPhone();
     }
 
     public Integer getId() {
