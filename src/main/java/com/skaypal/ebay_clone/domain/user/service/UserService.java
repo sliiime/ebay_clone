@@ -6,6 +6,7 @@ import com.skaypal.ebay_clone.domain.user.model.User;
 import com.skaypal.ebay_clone.domain.user.repositories.UserRepository;
 import com.skaypal.ebay_clone.domain.user.validator.UserValidator;
 import com.skaypal.ebay_clone.utils.Responses;
+import com.skaypal.ebay_clone.validator.ValidationResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -39,7 +40,9 @@ public class UserService {
     public User createUser(CreateUserDto createUserDto) {
 
 
-        userValidator.createUserValidator(createUserDto);
+        ValidationResult validationResult = userValidator.validateCreateUserDto(createUserDto);
+
+        if (!validationResult.isValid()) throw new ResponseStatusException(HttpStatus.CONFLICT,validationResult.getErrorMessage());
 
         User user = new User(createUserDto);
 
@@ -48,12 +51,14 @@ public class UserService {
     }
 
 
-    public void updateUser(UpdateUserDto updateUserDto, Integer id) {
+    public void updateUser(UpdateUserDto updateUserDto) {
 
 
-        userValidator.updateUserValidator(updateUserDto, id);
+        ValidationResult validationResult = userValidator.validateUpdateUserDto(updateUserDto);
 
-        User user = userRepository.findById(id).orElseThrow(() -> Responses.notFound("User", "id", id.toString()));
+        if (!validationResult.isValid()) throw new ResponseStatusException(HttpStatus.CONFLICT,validationResult.getErrorMessage());
+
+        User user = userRepository.findById(updateUserDto.getId()).orElseThrow(() -> Responses.notFound("User","id", updateUserDto.getId().toString()));
 
 
         //Checking which fields need to be updated

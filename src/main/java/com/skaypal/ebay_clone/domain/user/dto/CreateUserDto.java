@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
-public class CreateUserDto {
+public class  CreateUserDto {
     @NotNull
     @Length(max = 15)
     private String username;

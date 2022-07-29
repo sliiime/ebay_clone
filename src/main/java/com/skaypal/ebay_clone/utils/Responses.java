@@ -43,7 +43,7 @@ public class Responses {
         for (String conflict : conflicts) conflictFields += conflict + " ,";
         conflictFields = conflictFields.substring(0,conflictFields.length()-2);
 
-        return new ResponseStatusException(HttpStatus.CONFLICT,"There already exists a " +entity +" with this : " + conflictFields);
+        return new ResponseStatusException(HttpStatus.CONFLICT,"There already exists an " +entity +" with this : " + conflictFields);
 
     }
 

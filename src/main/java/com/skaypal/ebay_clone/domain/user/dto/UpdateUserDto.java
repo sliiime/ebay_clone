@@ -3,10 +3,13 @@ package com.skaypal.ebay_clone.domain.user.dto;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Null;
 import javax.validation.constraints.Pattern;
 
 public class UpdateUserDto {
 
+    @Null
+    Integer id;
     @Length(max = 15)
     private String username;
 
@@ -22,6 +25,8 @@ public class UpdateUserDto {
 
     @Email
     private String email;
+
+    public Integer getId() {return id;}
 
     public String getAddress() {
         return address;
@@ -42,6 +47,8 @@ public class UpdateUserDto {
     public String getUsername() {
         return username;
     }
+
+    public void setId(Integer id){this.id = id;}
 
     public void setAddress(String address) {
         this.address = address;
