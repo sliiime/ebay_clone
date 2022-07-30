@@ -35,6 +35,7 @@ public class UserService {
     }
 
     public User getUser(Integer id) throws UserNotFoundException{
+
         return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("id", id.toString()));
     }
 
@@ -60,7 +61,8 @@ public class UserService {
 
         if (!validationResult.isValid()) throw new UserConflictException(validationResult.getErrorMessage());
 
-        User user = userRepository.findById(updateUserDto.getId()).orElseThrow(() -> new UserNotFoundException("id",updateUserDto.getId().toString()));
+        User user = userRepository.findById(updateUserDto.getId()).orElseThrow(() -> new UserNotFoundException("id", updateUserDto.getId().toString()));
+
 
 
         //Checking which fields need to be updated
@@ -79,6 +81,7 @@ public class UserService {
     }
 
     public void deleteUser(Integer id) throws UserNotFoundException {
+
         User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("id", id.toString()));
         userRepository.delete(user);
     }
