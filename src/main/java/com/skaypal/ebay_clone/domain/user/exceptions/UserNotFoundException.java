@@ -10,6 +10,9 @@ public class UserNotFoundException extends NotFoundException {
 
     }
 
+    public UserNotFoundException(String message){
+        this.message = message;
+    }
 
 
 

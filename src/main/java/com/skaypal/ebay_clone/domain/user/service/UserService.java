@@ -2,6 +2,7 @@ package com.skaypal.ebay_clone.domain.user.service;
 
 import com.skaypal.ebay_clone.domain.user.dto.CreateUserDto;
 import com.skaypal.ebay_clone.domain.user.dto.UpdateUserDto;
+import com.skaypal.ebay_clone.domain.user.exceptions.UserConflictException;
 import com.skaypal.ebay_clone.domain.user.exceptions.UserNotFoundException;
 import com.skaypal.ebay_clone.domain.user.model.User;
 import com.skaypal.ebay_clone.domain.user.repositories.UserRepository;
@@ -33,17 +34,17 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User getUser(Integer id) {
-        return userRepository.findById(id).orElseThrow(() -> Responses.notFound("User", "id", id.toString()));
+    public User getUser(Integer id) throws UserNotFoundException{
+        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("id", id.toString()));
     }
 
 
-    public User createUser(CreateUserDto createUserDto) {
+    public User createUser(CreateUserDto createUserDto) throws UserConflictException {
 
 
         ValidationResult validationResult = userValidator.validateCreateUserDto(createUserDto);
 
-        if (!validationResult.isValid()) throw new ResponseStatusException(HttpStatus.CONFLICT,validationResult.getErrorMessage());
+        if (!validationResult.isValid()) throw new UserConflictException(validationResult.getErrorMessage());
 
         User user = new User(createUserDto);
 
@@ -52,12 +53,12 @@ public class UserService {
     }
 
 
-    public void updateUser(UpdateUserDto updateUserDto) {
+    public void updateUser(UpdateUserDto updateUserDto) throws UserConflictException, UserNotFoundException{
 
 
         ValidationResult validationResult = userValidator.validateUpdateUserDto(updateUserDto);
 
-        if (!validationResult.isValid()) throw new ResponseStatusException(HttpStatus.CONFLICT,validationResult.getErrorMessage());
+        if (!validationResult.isValid()) throw new UserConflictException(validationResult.getErrorMessage());
 
         User user = userRepository.findById(updateUserDto.getId()).orElseThrow(() -> new UserNotFoundException("id",updateUserDto.getId().toString()));
 
@@ -77,7 +78,7 @@ public class UserService {
 
     }
 
-    public void deleteUser(Integer id) {
+    public void deleteUser(Integer id) throws UserNotFoundException {
         User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("id", id.toString()));
         userRepository.delete(user);
     }
