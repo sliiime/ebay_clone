@@ -2,6 +2,8 @@ package com.skaypal.ebay_clone.domain.user.service;
 
 import com.skaypal.ebay_clone.domain.user.dto.CreateUserDto;
 import com.skaypal.ebay_clone.domain.user.dto.UpdateUserDto;
+import com.skaypal.ebay_clone.domain.user.exceptions.UserConflictException;
+import com.skaypal.ebay_clone.domain.user.exceptions.UserNotFoundException;
 import com.skaypal.ebay_clone.domain.user.model.User;
 import com.skaypal.ebay_clone.domain.user.repositories.UserRepository;
 import com.skaypal.ebay_clone.domain.user.validator.UserValidator;
@@ -33,7 +35,7 @@ public class UserService {
     }
 
     public User getUser(Integer id) {
-        return userRepository.findById(id).orElseThrow(() -> Responses.notFound("User", "id", id.toString()));
+        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("id", id.toString()));
     }
 
 
@@ -42,7 +44,7 @@ public class UserService {
 
         ValidationResult validationResult = userValidator.validateCreateUserDto(createUserDto);
 
-        if (!validationResult.isValid()) throw new ResponseStatusException(HttpStatus.CONFLICT,validationResult.getErrorMessage());
+        if (!validationResult.isValid()) throw new UserConflictException(validationResult.getErrorMessage());
 
         User user = new User(createUserDto);
 
@@ -56,9 +58,9 @@ public class UserService {
 
         ValidationResult validationResult = userValidator.validateUpdateUserDto(updateUserDto);
 
-        if (!validationResult.isValid()) throw new ResponseStatusException(HttpStatus.CONFLICT,validationResult.getErrorMessage());
+        if (!validationResult.isValid()) throw new UserConflictException(validationResult.getErrorMessage());
 
-        User user = userRepository.findById(updateUserDto.getId()).orElseThrow(() -> Responses.notFound("User","id", updateUserDto.getId().toString()));
+        User user = userRepository.findById(updateUserDto.getId()).orElseThrow(() -> new UserNotFoundException("id", updateUserDto.getId().toString()));
 
 
         //Checking which fields need to be updated
@@ -77,7 +79,7 @@ public class UserService {
     }
 
     public void deleteUser(Integer id) {
-        User user = userRepository.findById(id).orElseThrow(() -> Responses.notFound("User", "id", id.toString()));
+        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("id", id.toString()));
         userRepository.delete(user);
     }
 
