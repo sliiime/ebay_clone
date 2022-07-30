@@ -34,7 +34,12 @@ CREATE TABLE IF NOT EXISTS `ebay_clone`.`user` (
   `rating` FLOAT NULL,
   `registered` ENUM("ACCEPTED", "DECLINED", "PENDING") NULL,
   `phone` VARCHAR(45) NULL,
-  PRIMARY KEY (`id`))
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
+  UNIQUE INDEX `username_UNIQUE` (`username` ASC) VISIBLE,
+  UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE,
+  UNIQUE INDEX `AFM_UNIQUE` (`AFM` ASC) VISIBLE,
+  UNIQUE INDEX `phone_UNIQUE` (`phone` ASC) VISIBLE)
 ENGINE = InnoDB;
 
 

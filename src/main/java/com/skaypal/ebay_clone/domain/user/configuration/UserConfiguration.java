@@ -15,7 +15,7 @@ import java.util.List;
 public class UserConfiguration {
 
     @Bean
-    CommandLineRunner commandLineRunner(UserRepository userRepository){
+    CommandLineRunner commandLineRunner(UserRepository UserRepository){
         return args -> {
             User user1= (new User(
                     "Bratsaras420",
@@ -24,22 +24,22 @@ public class UserConfiguration {
                     "Palamidas",
                     "Spiti sou 3",
                     "kke@youjizz.com",
-                    "afm",1F,
+                    "123456789",1F,
                     UserRegStatus.PENDING,
                     "69696969"));
 
             User user2 = (new User(
-                    "Boubounokefalos666",
+                    "Boubounis666",
                     "TzouraApoTzina",
                     "Kyrios",
                     "Eugenios",
                     "Lilipoupoli 2",
                     "syriza@sugarbabes.com",
-                    "afm",1F,
+                    "123456788",1F,
                     UserRegStatus.PENDING,
                     "12121312"));
 
-            userRepository.saveAll(List.of(user1,user2));
+            UserRepository.saveAll(List.of(user1,user2));
         };
     }
 }
