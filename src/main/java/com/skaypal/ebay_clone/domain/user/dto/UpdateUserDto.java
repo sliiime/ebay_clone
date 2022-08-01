@@ -14,6 +14,7 @@ public class UpdateUserDto {
     private String username;
 
     @Length(min = 8,max =30)
+    @Pattern(regexp = "^(?=.*[A-Z])(?=.*[\\[-`!-//:-@-'{-~])(?=.*\\d).*$")
     private String password;
 
     @Length(max = 50)
