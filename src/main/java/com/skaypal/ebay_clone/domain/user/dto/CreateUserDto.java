@@ -13,6 +13,7 @@ public class  CreateUserDto {
     private String username;
     @NotNull
     @Length(min = 8,max =30)
+    @Pattern(regexp = "^(?=.*[A-Z])(?=.*[\\[-`!-//:-@-'{-~])(?=.*\\d).*$")
     private String password;
     @NotNull
     @Length(max = 50)
