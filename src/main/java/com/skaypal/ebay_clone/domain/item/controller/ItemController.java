@@ -37,6 +37,7 @@ public class ItemController {
     @PostMapping
     public ResponseEntity<Item> createItem(@Valid @RequestBody CreateItemDto createItemDto){
         Item item = new Item(createItemDto);
+        itemService.createItem(createItemDto);
         return Responses.created(location + "/" + item.getId());
     }
 

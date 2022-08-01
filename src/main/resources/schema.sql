@@ -34,12 +34,7 @@ CREATE TABLE IF NOT EXISTS `ebay_clone`.`user` (
   `rating` FLOAT NULL,
   `registered` ENUM("ACCEPTED", "DECLINED", "PENDING") NULL,
   `phone` VARCHAR(45) NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
-  UNIQUE INDEX `username_UNIQUE` (`username` ASC) VISIBLE,
-  UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE,
-  UNIQUE INDEX `AFM_UNIQUE` (`AFM` ASC) VISIBLE,
-  UNIQUE INDEX `phone_UNIQUE` (`phone` ASC) VISIBLE)
+  PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
 
@@ -50,8 +45,11 @@ DROP TABLE IF EXISTS `ebay_clone`.`country` ;
 
 CREATE TABLE IF NOT EXISTS `ebay_clone`.`country` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `country` VARCHAR(45) NULL,
-  PRIMARY KEY (`id`))
+  `name` VARCHAR(120) NOT NULL,
+  `iso` VARCHAR(2) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `name_UNIQUE` (`name` ASC) VISIBLE,
+  UNIQUE INDEX `code_UNIQUE` (`iso` ASC) VISIBLE)
 ENGINE = InnoDB;
 
 
@@ -73,9 +71,9 @@ CREATE TABLE IF NOT EXISTS `ebay_clone`.`item` (
   `end_date` DATETIME NULL,
   `description` VARCHAR(200) NULL,
   `category` VARCHAR(45) NULL,
-  `Country_id` INT NOT NULL,
+  `Country_id` INT NOT NULL DEFAULT 1,
   `status` ENUM("PREVIEW", "ONGOING", "DONE") NULL,
-  `User_id` INT NOT NULL,
+  `User_id` INT NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`, `Country_id`, `User_id`),
   INDEX `fk_Item_Country1_idx` (`Country_id` ASC) VISIBLE,
   INDEX `fk_Item_User1_idx` (`User_id` ASC) VISIBLE,
