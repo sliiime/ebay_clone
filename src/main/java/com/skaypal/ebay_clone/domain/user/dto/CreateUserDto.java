@@ -60,13 +60,13 @@ public class  CreateUserDto {
     }
 
     public CreateUserDto(String username,
-                String password,
-                String name,
-                String surname,
-                String address,
-                String email,
-                String afm,
-                String phoneNumber) {
+                        String password,
+                        String name,
+                        String surname,
+                        String address,
+                        String email,
+                        String afm,
+                        String phoneNumber) {
 
         this.username = username;
         this.password = password;

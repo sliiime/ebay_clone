@@ -2,6 +2,9 @@ package com.skaypal.ebay_clone.domain.item.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.skaypal.ebay_clone.domain.item.ItemStatusEnum;
+import com.skaypal.ebay_clone.domain.item.dto.CreateItemDto;
+import com.skaypal.ebay_clone.domain.item.dto.UpdateItemDto;
+import com.skaypal.ebay_clone.domain.user.dto.UpdateUserDto;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -88,6 +91,14 @@ public class Item {
         this.status = status;
     }
 
+    public Item(CreateItemDto createItemDto) {
+        this.name = createItemDto.getName();
+        this.buy_price = createItemDto.getBuy_price();
+        this.category = createItemDto.getCategory();
+        if(createItemDto.getDescription()!=null)
+            this.description = createItemDto.getDescription();
+    }
+
     public Integer  getId() { return id; }
     public String   getName() { return name; }
     public Float    getCurrent_best_price() { return current_best_price; }
@@ -115,4 +126,13 @@ public class Item {
     public void  setDescription(String description) { this.description = description; }
     public void  setCategory(String category) { this.category = category; }
     public void  setStatus(ItemStatusEnum status) { this.status = status; }
+
+    public void updateItemWithDto(UpdateItemDto updateItemDto) {
+        if(updateItemDto.getName()!=null)
+            this.name = updateItemDto.getName();
+        if(updateItemDto.getDescription()!=null)
+            this.description = updateItemDto.getDescription();
+        if(updateItemDto.getCategory()!=null)
+            this.category = updateItemDto.getCategory();
+    }
 }
