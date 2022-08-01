@@ -3,6 +3,7 @@ package com.skaypal.ebay_clone.domain.user.controller;
 
 import com.skaypal.ebay_clone.domain.user.dto.CreateUserDto;
 import com.skaypal.ebay_clone.domain.user.dto.UpdateUserDto;
+import com.skaypal.ebay_clone.domain.user.dto.ViewUserDto;
 import com.skaypal.ebay_clone.domain.user.model.User;
 import com.skaypal.ebay_clone.domain.user.service.UserService;
 import com.skaypal.ebay_clone.utils.Responses;
@@ -30,19 +31,19 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> getUsers() {
-        List<User> users = userService.getUsers();
+    public ResponseEntity<List<ViewUserDto>> getUsers() {
+        List<ViewUserDto> users = userService.getUsers();
         return ResponseEntity.ok(users);
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<User> getUser(@PathVariable Integer id) {
+    public ResponseEntity<ViewUserDto> getUser(@PathVariable Integer id) {
         return ResponseEntity.ok(userService.getUser(id));
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@Valid @RequestBody CreateUserDto createUserDto){
-        User user = userService.createUser(createUserDto);
+    public ResponseEntity<?> createUser(@Valid @RequestBody CreateUserDto createUserDto){
+        ViewUserDto user = userService.createUser(createUserDto);
         return Responses.created(location +'/' + user.getId());
     }
 

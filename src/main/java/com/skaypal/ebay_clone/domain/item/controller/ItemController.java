@@ -2,6 +2,7 @@ package com.skaypal.ebay_clone.domain.item.controller;
 
 import com.skaypal.ebay_clone.domain.item.dto.CreateItemDto;
 import com.skaypal.ebay_clone.domain.item.dto.UpdateItemDto;
+import com.skaypal.ebay_clone.domain.item.dto.ViewItemDto;
 import com.skaypal.ebay_clone.domain.item.model.Item;
 import com.skaypal.ebay_clone.domain.item.service.ItemService;
 import com.skaypal.ebay_clone.utils.Responses;
@@ -26,16 +27,16 @@ public class ItemController {
     public ItemController(ItemService itemService) { this.itemService = itemService; }
 
     @GetMapping
-    public ResponseEntity<List<Item>> getItems() {
-        List<Item> items = itemService.getItems();
+    public ResponseEntity<List<ViewItemDto>> getItems() {
+        List<ViewItemDto> items = itemService.getItems();
         return ResponseEntity.ok(items);
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<Item> getItem(@PathVariable Integer id) { return ResponseEntity.ok(itemService.getItem(id)); }
+    public ResponseEntity<ViewItemDto> getItem(@PathVariable Integer id) { return ResponseEntity.ok(itemService.getItem(id)); }
 
     @PostMapping
-    public ResponseEntity<Item> createItem(@Valid @RequestBody CreateItemDto createItemDto){
+    public ResponseEntity<?> createItem(@Valid @RequestBody CreateItemDto createItemDto){
         Item item = new Item(createItemDto);
         itemService.createItem(createItemDto);
         return Responses.created(location + "/" + item.getId());

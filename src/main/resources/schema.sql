@@ -73,17 +73,17 @@ CREATE TABLE IF NOT EXISTS `ebay_clone`.`item` (
   `category` VARCHAR(45) NULL,
   `Country_id` INT NOT NULL DEFAULT 1,
   `status` ENUM("PREVIEW", "ONGOING", "DONE") NULL,
-  `User_id` INT NOT NULL DEFAULT 1,
-  PRIMARY KEY (`id`, `Country_id`, `User_id`),
+  `seller` INT NOT NULL DEFAULT 1,
+  PRIMARY KEY (`id`, `Country_id`, `seller`),
   INDEX `fk_Item_Country1_idx` (`Country_id` ASC) VISIBLE,
-  INDEX `fk_Item_User1_idx` (`User_id` ASC) VISIBLE,
+  INDEX `fk_Item_User1_idx` (`seller` ASC) VISIBLE,
   CONSTRAINT `fk_Item_Country1`
     FOREIGN KEY (`Country_id`)
     REFERENCES `ebay_clone`.`country` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Item_User1`
-    FOREIGN KEY (`User_id`)
+    FOREIGN KEY (`seller`)
     REFERENCES `ebay_clone`.`user` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)

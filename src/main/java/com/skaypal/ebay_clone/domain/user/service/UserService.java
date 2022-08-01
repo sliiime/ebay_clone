@@ -2,6 +2,7 @@ package com.skaypal.ebay_clone.domain.user.service;
 
 import com.skaypal.ebay_clone.domain.user.dto.CreateUserDto;
 import com.skaypal.ebay_clone.domain.user.dto.UpdateUserDto;
+import com.skaypal.ebay_clone.domain.user.dto.ViewUserDto;
 import com.skaypal.ebay_clone.domain.user.exceptions.UserConflictException;
 import com.skaypal.ebay_clone.domain.user.exceptions.UserNotFoundException;
 import com.skaypal.ebay_clone.domain.user.model.User;
@@ -16,6 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -30,17 +32,17 @@ public class UserService {
         this.userValidator = userValidator;
     }
 
-    public List<User> getUsers() {
-        return userRepository.findAll();
+    public List<ViewUserDto> getUsers() {
+        return userRepository.findAll().stream().map((u) -> new ViewUserDto(u)).collect(Collectors.toList());
     }
 
-    public User getUser(Integer id) throws UserNotFoundException{
+    public ViewUserDto getUser(Integer id) throws UserNotFoundException{
 
-        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("id", id.toString()));
+        return new ViewUserDto(userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("id", id.toString())));
     }
 
 
-    public User createUser(CreateUserDto createUserDto) throws UserConflictException {
+    public ViewUserDto createUser(CreateUserDto createUserDto) throws UserConflictException {
 
 
         ValidationResult validationResult = userValidator.validateCreateUserDto(createUserDto);
@@ -49,7 +51,7 @@ public class UserService {
 
         User user = new User(createUserDto);
 
-        return userRepository.save(user);
+        return new ViewUserDto(userRepository.save(user));
 
     }
 

@@ -40,8 +40,9 @@ public class Item {
     @Enumerated(EnumType.STRING)
     private ItemStatusEnum status;
 
-    @ManyToOne
-    private User seller;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "seller")
+    private final User seller = new User(1); //hardcoded for now
 
     public Item() {
     }
@@ -136,6 +137,8 @@ public class Item {
     public Double getLatitude() {
         return latitude;
     }
+
+    public User getSeller() { return seller;}
 
     public Double getLongitude() {
         return longitude;

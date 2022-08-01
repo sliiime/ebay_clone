@@ -1,10 +1,14 @@
 package com.skaypal.ebay_clone.domain.user.model;
 
+import com.skaypal.ebay_clone.domain.item.model.Item;
 import com.skaypal.ebay_clone.domain.user.UserRegStatus;
 import com.skaypal.ebay_clone.domain.user.dto.CreateUserDto;
+import org.hibernate.boot.model.source.spi.FetchCharacteristics;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table()
@@ -39,8 +43,13 @@ public class User {
     @Column(name = "phone",unique = true)
     private String phone;
 
+    @OneToMany(mappedBy = "seller",fetch = FetchType.LAZY)
+    private List<Item> items;
+
     public User() {
     }
+
+    public User(Integer id){ this.id = id; }
 
     public User(Integer id,
                 String username,
@@ -101,6 +110,7 @@ public class User {
         this.rating = 0F;
         this.registrationStatus = UserRegStatus.PENDING;
         this.phone = user.getPhone();
+        this.items = new ArrayList<>();
     }
 
     public Integer getId() {
@@ -147,6 +157,8 @@ public class User {
         return registrationStatus;
     }
 
+    public List<Item> getItems(){ return this.items;}
+
     public void setAddress(String address) {
         this.address = address;
     }
@@ -190,6 +202,8 @@ public class User {
     public void setUsername(String username) {
         this.username = username;
     }
+
+    public void setItems(List<Item> items){this.items = items;}
 
 
 }
