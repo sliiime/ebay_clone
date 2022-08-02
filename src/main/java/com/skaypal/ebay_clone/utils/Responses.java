@@ -1,5 +1,6 @@
 package com.skaypal.ebay_clone.utils;
 
+import com.skaypal.ebay_clone.utils.exceptions.BadRequestException;
 import com.skaypal.ebay_clone.utils.exceptions.ConflictException;
 import com.skaypal.ebay_clone.utils.exceptions.NotFoundException;
 import org.springframework.http.HttpStatus;
@@ -8,6 +9,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.net.URI;
@@ -37,17 +39,14 @@ public class Responses {
     }
 
     @ExceptionHandler(ConflictException.class)
-    public ResponseEntity<String> conflictExceptionHanlder(ConflictException e){
+    public ResponseEntity<String> conflictExceptionHandler(ConflictException e){
         return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
     }
 
-    public static ResponseStatusException conflict(String entity, String fieldName, String fieldValue) {
-
-        String article = IsVowel.isVowel(entity.charAt(0)) ? "an" : "a";
-        String message = String.format("There already exists %s %s with % [%]", article, entity, fieldName, fieldValue);
-
-        return new ResponseStatusException(HttpStatus.CONFLICT, message);
-
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<String> badRequestExceptionHandler(BadRequestException e){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
+
 
 }

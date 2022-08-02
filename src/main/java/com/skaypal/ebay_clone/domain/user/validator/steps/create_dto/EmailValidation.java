@@ -1,4 +1,4 @@
-package com.skaypal.ebay_clone.domain.user.validator.steps.create;
+package com.skaypal.ebay_clone.domain.user.validator.steps.create_dto;
 
 import com.skaypal.ebay_clone.domain.user.dto.CreateUserDto;
 import com.skaypal.ebay_clone.domain.user.repositories.UserRepository;

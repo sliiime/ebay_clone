@@ -4,11 +4,11 @@ public class NotFoundException extends RuntimeException{
 
     protected String message;
 
-    public NotFoundException(String message){
+    protected NotFoundException(String message){
         this.message = message;
     }
 
-    public NotFoundException(){}
+    protected NotFoundException(){}
 
     @Override
     public String getMessage() {

@@ -6,7 +6,7 @@ public class UserNotFoundException extends NotFoundException {
 
 
     public UserNotFoundException(String fieldName,String fieldValue){
-        this.message =  String.format("User with %s [%s] was not found",fieldName,fieldName);
+        this.message =  String.format("User with %s [%s] was not found",fieldName,fieldValue);
 
     }
 

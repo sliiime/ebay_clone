@@ -189,7 +189,7 @@ CREATE TABLE IF NOT EXISTS `ebay_clone`.`message` (
   `body` VARCHAR(200) NULL,
   `sender` INT NOT NULL,
   `receiver` INT NOT NULL,
-  `read` TINYINT NULL,
+  `seen` TINYINT(1) NULL,
   PRIMARY KEY (`id`, `sender`, `receiver`),
   INDEX `fk_Message_User1_idx` (`sender` ASC) VISIBLE,
   INDEX `fk_Message_User2_idx` (`receiver` ASC) VISIBLE,

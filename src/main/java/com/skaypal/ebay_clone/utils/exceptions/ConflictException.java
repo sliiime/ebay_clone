@@ -4,9 +4,9 @@ public class ConflictException extends RuntimeException {
 
     protected String message;
 
-    public ConflictException(){}
+    protected ConflictException(){}
 
-    public ConflictException(String message){
+    protected ConflictException(String message){
         this.message = message;
     }
 
