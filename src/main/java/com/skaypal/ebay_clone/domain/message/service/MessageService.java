@@ -9,7 +9,7 @@ import com.skaypal.ebay_clone.domain.message.exceptions.MessageNotFoundException
 import com.skaypal.ebay_clone.domain.message.model.Message;
 import com.skaypal.ebay_clone.domain.message.repository.MessageRepository;
 import com.skaypal.ebay_clone.domain.message.validator.MessageValidator;
-import com.skaypal.ebay_clone.validator.ValidationResult;
+import com.skaypal.ebay_clone.utils.validator.ValidationResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,4 +1,4 @@
-package com.skaypal.ebay_clone.validator;
+package com.skaypal.ebay_clone.utils.validator;
 
 public abstract class ValidationStep<T> {
 

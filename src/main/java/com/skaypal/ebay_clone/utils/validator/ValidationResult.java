@@ -1,6 +1,4 @@
-package com.skaypal.ebay_clone.validator;
-
-import org.springframework.http.HttpStatus;
+package com.skaypal.ebay_clone.utils.validator;
 
 public class ValidationResult {
     private final String errorMessage;

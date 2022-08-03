@@ -6,6 +6,7 @@ import com.skaypal.ebay_clone.domain.message.dto.UpdateMessageDto;
 import com.skaypal.ebay_clone.domain.message.dto.ViewMessageDto;
 import com.skaypal.ebay_clone.domain.message.model.Message;
 import com.skaypal.ebay_clone.domain.message.service.MessageService;
+import com.skaypal.ebay_clone.utils.Responses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,10 +42,10 @@ public class MessageController {
     @PostMapping
     public ResponseEntity<?> createMessage(@Valid @RequestBody CreateMessageDto createMessageDto) {
 
-        createMessageDto.setSenderId(1);
+        createMessageDto.setSenderId(1); //Should be set by some token probably
         ViewMessageDto message = messageService.createMessage(createMessageDto);
 
-        return ResponseEntity.ok().header("location", String.format("%s/%s", location, message.getId().toString())).build();
+        return Responses.created(String.format("%s/%s", location, message.getId().toString()));
     }
 
     @PutMapping(path = "/{id}")

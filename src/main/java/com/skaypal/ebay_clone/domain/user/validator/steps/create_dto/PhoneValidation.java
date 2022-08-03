@@ -2,8 +2,8 @@ package com.skaypal.ebay_clone.domain.user.validator.steps.create_dto;
 
 import com.skaypal.ebay_clone.domain.user.dto.CreateUserDto;
 import com.skaypal.ebay_clone.domain.user.repositories.UserRepository;
-import com.skaypal.ebay_clone.validator.ValidationResult;
-import com.skaypal.ebay_clone.validator.ValidationStep;
+import com.skaypal.ebay_clone.utils.validator.ValidationResult;
+import com.skaypal.ebay_clone.utils.validator.ValidationStep;
 
 public class PhoneValidation extends ValidationStep<CreateUserDto> {
 

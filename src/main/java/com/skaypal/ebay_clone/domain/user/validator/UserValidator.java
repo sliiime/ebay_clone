@@ -10,7 +10,7 @@ import com.skaypal.ebay_clone.domain.user.validator.steps.create_dto.UsernameVal
 import com.skaypal.ebay_clone.domain.user.validator.steps.update_dto.UpdateEmailValidation;
 import com.skaypal.ebay_clone.domain.user.validator.steps.update_dto.UpdatePhoneValidation;
 import com.skaypal.ebay_clone.domain.user.validator.steps.update_dto.UpdateUsernameValidation;
-import com.skaypal.ebay_clone.validator.ValidationResult;
+import com.skaypal.ebay_clone.utils.validator.ValidationResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

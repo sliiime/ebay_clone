@@ -2,9 +2,8 @@ package com.skaypal.ebay_clone.domain.message.validator.steps;
 
 import com.skaypal.ebay_clone.domain.message.dto.CreateMessageDto;
 import com.skaypal.ebay_clone.domain.user.validator.UserValidator;
-import com.skaypal.ebay_clone.validator.ValidationResult;
-import com.skaypal.ebay_clone.validator.ValidationStep;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.skaypal.ebay_clone.utils.validator.ValidationResult;
+import com.skaypal.ebay_clone.utils.validator.ValidationStep;
 
 public class ReceiverIdValidation extends ValidationStep<CreateMessageDto> {
 

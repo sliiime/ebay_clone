@@ -3,8 +3,8 @@ package com.skaypal.ebay_clone.domain.user.validator.steps.update_dto;
 import com.skaypal.ebay_clone.domain.user.dto.UpdateUserDto;
 import com.skaypal.ebay_clone.domain.user.model.User;
 import com.skaypal.ebay_clone.domain.user.repositories.UserRepository;
-import com.skaypal.ebay_clone.validator.ValidationResult;
-import com.skaypal.ebay_clone.validator.ValidationStep;
+import com.skaypal.ebay_clone.utils.validator.ValidationResult;
+import com.skaypal.ebay_clone.utils.validator.ValidationStep;
 
 import java.util.Optional;
 

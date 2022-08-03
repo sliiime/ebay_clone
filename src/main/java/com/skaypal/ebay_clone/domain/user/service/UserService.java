@@ -8,15 +8,11 @@ import com.skaypal.ebay_clone.domain.user.exceptions.UserNotFoundException;
 import com.skaypal.ebay_clone.domain.user.model.User;
 import com.skaypal.ebay_clone.domain.user.repositories.UserRepository;
 import com.skaypal.ebay_clone.domain.user.validator.UserValidator;
-import com.skaypal.ebay_clone.utils.Responses;
-import com.skaypal.ebay_clone.validator.ValidationResult;
+import com.skaypal.ebay_clone.utils.validator.ValidationResult;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
