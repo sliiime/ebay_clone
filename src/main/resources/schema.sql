@@ -161,13 +161,13 @@ DROP TABLE IF EXISTS `ebay_clone`.`rating` ;
 CREATE TABLE IF NOT EXISTS `ebay_clone`.`rating` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `rating` INT NULL,
-  `rater` INT NOT NULL,
+  `ratedBy` INT NOT NULL,
   `rated` INT NOT NULL,
-  PRIMARY KEY (`id`, `rater`, `rated`),
-  INDEX `fk_Rating_User1_idx` (`rater` ASC) VISIBLE,
+  PRIMARY KEY (`id`, `ratedBy`, `rated`),
+  INDEX `fk_Rating_User1_idx` (`ratedBy` ASC) VISIBLE,
   INDEX `fk_Rating_User2_idx` (`rated` ASC) VISIBLE,
   CONSTRAINT `fk_Rating_User1`
-    FOREIGN KEY (`rater`)
+    FOREIGN KEY (`ratedBy`)
     REFERENCES `ebay_clone`.`user` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,

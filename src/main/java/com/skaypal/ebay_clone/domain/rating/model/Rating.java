@@ -20,7 +20,6 @@ public class Rating {
     private User rated;
 
     @ManyToOne
-    @Column(name = "rater")
     private User ratedBy;
 
     public Rating(CreateRatingDto createRatingDto){
