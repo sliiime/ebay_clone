@@ -13,6 +13,7 @@ public class ViewRatingDto {
 
     public ViewRatingDto(){}
     public ViewRatingDto(Rating rating){
+        this.id = rating.getRating();
         this.rating = rating.getRating();
         this.ratedId = rating.getRated().getId();
         this.ratedById = rating.getRatedBy().getId();

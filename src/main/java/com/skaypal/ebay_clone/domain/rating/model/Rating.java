@@ -17,16 +17,20 @@ public class Rating {
     private Integer rating;
 
     @ManyToOne
-    private User rated;
+    @JoinColumn(name ="ratedby")
+    private User ratedBy;
 
     @ManyToOne
-    private User ratedBy;
+    @JoinColumn(name="rated")
+    private User rated;
 
     public Rating(CreateRatingDto createRatingDto){
         this.rated = new User(createRatingDto.getRatedId());
         this.ratedBy = new User(createRatingDto.getRatedById());
         this.rating = createRatingDto.getRating();
     }
+
+    protected Rating(){}
 
     public Integer getId() { return id;}
 
@@ -37,9 +41,9 @@ public class Rating {
     public User getRatedBy() { return ratedBy;}
 
     public void setId(Integer id) { this.id = id;}
-    public void setRating(Integer rating) { this. rating = rating;}
+    public void setRating(Integer rating) { this.rating = rating;}
     public void setRated(User rated){this.rated = rated;}
-    public void setRatedBy(User ratedBy){this.ratedBy = rated;}
+    public void setRatedBy(User ratedBy){this.ratedBy = ratedBy;}
 
 
 
