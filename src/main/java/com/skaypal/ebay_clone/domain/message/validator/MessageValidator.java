@@ -1,5 +1,7 @@
 package com.skaypal.ebay_clone.domain.message.validator;
 
+import com.skaypal.ebay_clone.domain.item.model.Item;
+import com.skaypal.ebay_clone.domain.item.validator.ItemValidator;
 import com.skaypal.ebay_clone.domain.message.dto.CreateMessageDto;
 import com.skaypal.ebay_clone.domain.message.repository.MessageRepository;
 import com.skaypal.ebay_clone.domain.message.validator.steps.ReceiverIdValidation;
@@ -14,6 +16,8 @@ public class MessageValidator {
 
     MessageRepository messageRepository;
     UserValidator userValidator;
+
+    ItemValidator itemValidator;
 
     @Autowired
     public MessageValidator(MessageRepository messageRepository,UserValidator userRepository){

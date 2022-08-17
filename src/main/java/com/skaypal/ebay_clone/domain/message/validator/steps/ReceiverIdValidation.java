@@ -7,15 +7,17 @@ import com.skaypal.ebay_clone.utils.validator.ValidationStep;
 
 public class ReceiverIdValidation extends ValidationStep<CreateMessageDto> {
 
-    UserValidator userValidator;
+    private UserValidator userValidator;
+
     public ReceiverIdValidation(UserValidator userValidator){
         this.userValidator = userValidator;
+
     }
 
     @Override
     public ValidationResult validate(CreateMessageDto toValidate) {
-       return userValidator.userExists(toValidate.getReceiverId())
-                ? checkNext(toValidate):
-                ValidationResult.invalid(String.format("Receiver with id [%s] does not exist",toValidate.getReceiverId().toString()));
+        return userValidator.userExists(toValidate.getReceiverId()) ?
+                checkNext(toValidate) :
+                ValidationResult.invalid("Receiver with this id does not exist");
     }
 }

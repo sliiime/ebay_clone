@@ -72,8 +72,8 @@ CREATE TABLE IF NOT EXISTS `ebay_clone`.`item` (
   `description` VARCHAR(200) NULL,
   `category` VARCHAR(45) NULL,
   `Country_id` INT NOT NULL DEFAULT 1,
-  `status` ENUM("PREVIEW", "ONGOING", "DONE") NULL,
   `seller` INT NOT NULL DEFAULT 1,
+  `status` ENUM("PREVIEW", "ONGOIN", "NOT_BOUGHT", "BOUGHT_TIMEOUT", "BOUGHT_BUYOUT") NULL,
   PRIMARY KEY (`id`, `Country_id`, `seller`),
   INDEX `fk_Item_Country1_idx` (`Country_id` ASC) VISIBLE,
   INDEX `fk_Item_User1_idx` (`seller` ASC) VISIBLE,
@@ -136,17 +136,17 @@ CREATE TABLE IF NOT EXISTS `ebay_clone`.`bid` (
   `time` DATETIME NULL,
   `price` FLOAT NULL,
   `Item_id` INT NOT NULL,
-  `User_id` INT NOT NULL,
-  PRIMARY KEY (`id`, `Item_id`, `User_id`),
+  `bidder` INT NOT NULL,
+  PRIMARY KEY (`id`, `Item_id`, `bidder`),
   INDEX `fk_Bids_Item1_idx` (`Item_id` ASC) VISIBLE,
-  INDEX `fk_Bids_User1_idx` (`User_id` ASC) VISIBLE,
+  INDEX `fk_Bids_User1_idx` (`bidder` ASC) VISIBLE,
   CONSTRAINT `fk_Bids_Item1`
     FOREIGN KEY (`Item_id`)
     REFERENCES `ebay_clone`.`item` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Bids_User1`
-    FOREIGN KEY (`User_id`)
+    FOREIGN KEY (`bidder`)
     REFERENCES `ebay_clone`.`user` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
