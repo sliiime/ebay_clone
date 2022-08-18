@@ -110,6 +110,10 @@ public class Item {
         this.description = createItemDto.getDescription();
     }
 
+    public Item(Integer id) {
+        this.id = id;
+    }
+
     public Integer getId() {
         return id;
     }

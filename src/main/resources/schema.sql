@@ -73,7 +73,7 @@ CREATE TABLE IF NOT EXISTS `ebay_clone`.`item` (
   `category` VARCHAR(45) NULL,
   `Country_id` INT NOT NULL DEFAULT 1,
   `seller` INT NOT NULL DEFAULT 1,
-  `status` ENUM("PREVIEW", "ONGOIN", "NOT_BOUGHT", "BOUGHT_TIMEOUT", "BOUGHT_BUYOUT") NULL,
+  `status` ENUM("PREVIEW", "ONGOING", "NOT_BOUGHT", "BOUGHT_TIMEOUT", "BOUGHT_BUYOUT") NULL,
   PRIMARY KEY (`id`, `Country_id`, `seller`),
   INDEX `fk_Item_Country1_idx` (`Country_id` ASC) VISIBLE,
   INDEX `fk_Item_User1_idx` (`seller` ASC) VISIBLE,
@@ -133,7 +133,7 @@ DROP TABLE IF EXISTS `ebay_clone`.`bid` ;
 
 CREATE TABLE IF NOT EXISTS `ebay_clone`.`bid` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `time` DATETIME NULL,
+  `submission_date` DATETIME NULL,
   `price` FLOAT NULL,
   `Item_id` INT NOT NULL,
   `bidder` INT NOT NULL,

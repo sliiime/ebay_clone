@@ -42,7 +42,7 @@ public class ItemController {
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable Integer id,@Valid @RequestBody UpdateItemDto updateItemDto){
+    public ResponseEntity<?> updateItem(@PathVariable Integer id,@Valid @RequestBody UpdateItemDto updateItemDto){
         updateItemDto.setId(id);
         itemService.updateItem(updateItemDto);
         return ResponseEntity.ok().build();
