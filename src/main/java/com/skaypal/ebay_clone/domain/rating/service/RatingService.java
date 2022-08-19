@@ -5,6 +5,7 @@ import com.skaypal.ebay_clone.domain.rating.dto.ViewRatingDto;
 import com.skaypal.ebay_clone.domain.rating.exceptions.RatingBadRequestException;
 import com.skaypal.ebay_clone.domain.rating.exceptions.RatingNotFoundException;
 import com.skaypal.ebay_clone.domain.rating.model.Rating;
+import com.skaypal.ebay_clone.domain.rating.repositories.JPARatingRepository;
 import com.skaypal.ebay_clone.domain.rating.repositories.RatingRepository;
 import com.skaypal.ebay_clone.domain.rating.validator.RatingValidator;
 import com.skaypal.ebay_clone.utils.validator.ValidationResult;
@@ -21,7 +22,7 @@ public class RatingService {
     RatingValidator ratingValidator;
 
     @Autowired
-    public RatingService(RatingRepository ratingRepository,RatingValidator ratingValidator){
+    public RatingService(RatingRepository ratingRepository, RatingValidator ratingValidator){
         this.ratingRepository = ratingRepository;
         this.ratingValidator = ratingValidator;
     }
