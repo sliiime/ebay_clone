@@ -9,12 +9,9 @@ public class ViewItemDto {
 
     private Integer id;
     private String name;
-    private Float currentBestPrice;
+    private Float bestBid;
     private Float buyPrice;
-
-
     private Float minBid;
-
     private Integer numOfBids;
     private Double latitude;
     private Double longitude;
@@ -22,17 +19,18 @@ public class ViewItemDto {
     private Date endDate;
     private String description;
     private String category;
-    private ItemStatusEnum status;
 
+    private ItemStatusEnum status;
     private Integer sellerId;
+
+    private Integer highestBidderId;
+
 
     public ViewItemDto(Item item) {
         this.id = item.getId();
         this.name = item.getName();
-        this.currentBestPrice = item.getCurrentBestPrice();
         this.buyPrice = item.getBuyPrice();
         this.minBid = item.getMinBid();
-        this.numOfBids = item.getNumOfBids();
         this.latitude = item.getLatitude();
         this.longitude = item.getLongitude();
         this.startDate = item.getStartDate();
@@ -51,8 +49,8 @@ public class ViewItemDto {
         return name;
     }
 
-    public Float getCurrentBestPrice() {
-        return currentBestPrice;
+    public Float getBestBid() {
+        return bestBid;
     }
 
     public Float getBuyPrice() {
@@ -71,6 +69,7 @@ public class ViewItemDto {
         return latitude;
     }
 
+    public Integer getHighestBidderId() {return this.highestBidderId;}
     public Integer getSellerId(){ return sellerId;}
 
     public Double getLongitude() {
@@ -105,8 +104,8 @@ public class ViewItemDto {
         this.name = name;
     }
 
-    public void setCurrentBestPrice(Float current_best_price) {
-        this.currentBestPrice = current_best_price;
+    public void setBestBid(Float current_best_price) {
+        this.bestBid = current_best_price;
     }
 
     public void setBuyPrice(Float buy_price) {
@@ -149,5 +148,6 @@ public class ViewItemDto {
         this.status = status;
     }
 
+    public void setHighestBidderId(Integer id){this.highestBidderId = id;}
     public void setSellerId(Integer sellerId){this.sellerId = sellerId;}
 }

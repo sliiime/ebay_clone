@@ -23,12 +23,14 @@ public class BidService {
     public BidService(BidRepository bidRepository, BidValidator bidValidator) {
         this.bidRepository = bidRepository;
         this.bidValidator = bidValidator;
+
     }
 
     public ViewBidDto getBid(Integer id) {
 
         Optional<Bid> bid =  bidRepository.findById(id);
         return new ViewBidDto(bid.orElseThrow(() -> new BidNotFoundException("id",id.toString())));
+
     }
 
     public ViewBidDto createBid(CreateBidDto createBidDto) {

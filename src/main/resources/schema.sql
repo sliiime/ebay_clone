@@ -61,10 +61,8 @@ DROP TABLE IF EXISTS `ebay_clone`.`item` ;
 CREATE TABLE IF NOT EXISTS `ebay_clone`.`item` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NULL,
-  `current_best_price` FLOAT NULL,
   `buy_price` FLOAT NULL,
   `min_bid` FLOAT NULL,
-  `num_of_bids` INT NULL,
   `latitude` DECIMAL(10,8) NULL,
   `longitude` DECIMAL(10,8) NULL,
   `start_date` DATETIME NULL,

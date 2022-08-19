@@ -1,6 +1,7 @@
 package com.skaypal.ebay_clone.domain.item.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.skaypal.ebay_clone.domain.bid.model.Bid;
 import com.skaypal.ebay_clone.domain.item.ItemStatusEnum;
 import com.skaypal.ebay_clone.domain.item.dto.CreateItemDto;
 import com.skaypal.ebay_clone.domain.item.dto.UpdateItemDto;
@@ -8,6 +9,7 @@ import com.skaypal.ebay_clone.domain.user.model.User;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table()
@@ -17,17 +19,12 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
-    @Column(name = "current_best_price")
-    private Float currentBestPrice;
     @Column(name = "buy_price")
     private Float buyPrice;
 
     @Column(name = "min_bid")
 
     private Float minBid;
-
-    @Column(name = "num_of_bids")
-    private Integer numOfBids;
     private Double latitude;
     private Double longitude;
     @JsonFormat(pattern = "dd/MM/yyyy")
@@ -42,17 +39,18 @@ public class Item {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "seller")
-    private final User seller = new User(1); //hardcoded for now
+    private User seller;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<Bid> bids;
 
     public Item() {
     }
 
     public Item(Integer id,
                 String name,
-                Float currentBestPrice,
                 Float buyPrice,
                 Float minBid,
-                Integer numOfBids,
                 Double latitude,
                 Double longitude,
                 Date startDate,
@@ -63,10 +61,8 @@ public class Item {
 
         this.id = id;
         this.name = name;
-        this.currentBestPrice = currentBestPrice;
         this.buyPrice = buyPrice;
         this.minBid = minBid;
-        this.numOfBids = numOfBids;
         this.latitude = latitude;
         this.longitude = longitude;
         this.startDate = startDate;
@@ -77,23 +73,20 @@ public class Item {
     }
 
     public Item(String name,
-                Float currentBestPrice,
                 Float buyPrice,
                 Float minBid,
-                Integer numOfBids,
                 Double latitude,
                 Double longitude,
                 Date startDate,
                 Date endDate,
                 String description,
                 String category,
-                ItemStatusEnum status) {
+                ItemStatusEnum status,
+                User seller) {
 
         this.name = name;
-        this.currentBestPrice = currentBestPrice;
         this.buyPrice = buyPrice;
         this.minBid = minBid;
-        this.numOfBids = numOfBids;
         this.latitude = latitude;
         this.longitude = longitude;
         this.startDate = startDate;
@@ -101,7 +94,10 @@ public class Item {
         this.description = description;
         this.category = category;
         this.status = status;
+        this.seller = seller;
     }
+
+    
 
     public Item(CreateItemDto createItemDto) {
         this.name = createItemDto.getName();
@@ -122,20 +118,12 @@ public class Item {
         return name;
     }
 
-    public Float getCurrentBestPrice() {
-        return currentBestPrice;
-    }
-
     public Float getBuyPrice() {
         return buyPrice;
     }
 
     public Float getMinBid() {
         return minBid;
-    }
-
-    public Integer getNumOfBids() {
-        return numOfBids;
     }
 
     public Double getLatitude() {
@@ -176,20 +164,12 @@ public class Item {
         this.name = name;
     }
 
-    public void setCurrentBestPrice(Float current_best_price) {
-        this.currentBestPrice = current_best_price;
-    }
-
     public void setBuyPrice(Float buy_price) {
         this.buyPrice = buy_price;
     }
 
     public void setMinBid(Float min_bid) {
         this.minBid = min_bid;
-    }
-
-    public void setNumOfBids(Integer num_of_bids) {
-        this.numOfBids = num_of_bids;
     }
 
     public void setLatitude(Double latitude) {

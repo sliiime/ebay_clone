@@ -46,6 +46,17 @@ public class Bid {
         this.bidder = bidder;
     }
 
+    public Bid(Date submissionDate,
+               Float price,
+               Item item,
+               User bidder){
+
+        this.submissionDate = submissionDate;
+        this.price = price;
+        this.item = item;
+        this.bidder = bidder;
+    }
+
     public Bid(CreateBidDto createBidDto) {
         this.item = new Item(createBidDto.getItemId());
         this.bidder = new User(createBidDto.getBidderId());

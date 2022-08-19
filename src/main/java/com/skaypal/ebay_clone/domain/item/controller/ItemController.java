@@ -12,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -37,6 +38,7 @@ public class ItemController {
 
     @PostMapping
     public ResponseEntity<?> createItem(@Valid @RequestBody CreateItemDto createItemDto){
+        createItemDto.setStartDate(new Date());
         ViewItemDto item = itemService.createItem(createItemDto);
         return Responses.created(location + "/" + item.getId());
     }
