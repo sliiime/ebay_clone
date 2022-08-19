@@ -3,6 +3,8 @@ package com.skaypal.ebay_clone.domain.item.repositories;
 import com.skaypal.ebay_clone.domain.bid.model.Bid;
 import com.skaypal.ebay_clone.domain.item.model.Item;
 import com.skaypal.ebay_clone.domain.user.model.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +21,8 @@ public interface ItemRepository {
     public Integer getNumOfBids(Integer itemId);
 
     public Bid getHighestBid(Integer itemId);
+
+    public Page<Item> findAll(Pageable pageable);
 
 
 }

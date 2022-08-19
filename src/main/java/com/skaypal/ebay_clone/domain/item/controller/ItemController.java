@@ -7,6 +7,7 @@ import com.skaypal.ebay_clone.domain.item.model.Item;
 import com.skaypal.ebay_clone.domain.item.service.ItemService;
 import com.skaypal.ebay_clone.utils.Responses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -27,10 +28,15 @@ public class ItemController {
     @Autowired
     public ItemController(ItemService itemService) { this.itemService = itemService; }
 
-    @GetMapping
+    /*@GetMapping
     public ResponseEntity<List<ViewItemDto>> getItems() {
         List<ViewItemDto> items = itemService.getItems();
         return ResponseEntity.ok(items);
+    }*/
+
+    @GetMapping
+    public ResponseEntity<Page<ViewItemDto>> getItemsPage(@RequestParam Integer p){
+        return ResponseEntity.ok(itemService.getPage(p));
     }
 
     @GetMapping(path = "/{id}")

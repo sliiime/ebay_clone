@@ -5,6 +5,8 @@ import com.skaypal.ebay_clone.domain.bid.repository.BidRepository;
 import com.skaypal.ebay_clone.domain.item.model.Item;
 import com.skaypal.ebay_clone.domain.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -55,5 +57,10 @@ public class ItemRepositoryImpl implements ItemRepository {
         List<Bid> bids = bidRepository.getBidsOfItem(itemId);
         if (bids.size() == 0) return null;
         return bids.get(0);
+    }
+
+    @Override
+    public Page<Item> findAll(Pageable pageable) {
+        return jpaItemRepository.findAll(pageable);
     }
 }

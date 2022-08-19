@@ -77,8 +77,56 @@ public class OnStartupConfiguration {
                     ItemStatusEnum.BOUGHT_BUYOUT,
                     new User(1)
             ));
+            Item item3 = (new Item("item2",
+                    1f,
+                    1f,
+                    50d,
+                    40d,
+                    new Date(),
+                    Date.from(Instant.now().plusSeconds(10000)),
+                    "perigrafh",
+                    "KATHGORIA",
+                    ItemStatusEnum.BOUGHT_BUYOUT,
+                    new User(1)
+            ));
+            Item item4 = (new Item("item3",
+                    1f,
+                    1f,
+                    50d,
+                    40d,
+                    new Date(),
+                    Date.from(Instant.now().plusSeconds(10000)),
+                    "perigrafh",
+                    "KATHGORIA",
+                    ItemStatusEnum.BOUGHT_BUYOUT,
+                    new User(1)
+            ));
+            Item item5 = (new Item("item4",
+                    1f,
+                    1f,
+                    50d,
+                    40d,
+                    new Date(),
+                    Date.from(Instant.now().plusSeconds(10000)),
+                    "perigrafh",
+                    "KATHGORIA",
+                    ItemStatusEnum.BOUGHT_BUYOUT,
+                    new User(1)
+            ));
+            Item item6 = (new Item("item6",
+                    1f,
+                    1f,
+                    50d,
+                    40d,
+                    new Date(),
+                    Date.from(Instant.now().plusSeconds(10000)),
+                    "perigrafh",
+                    "KATHGORIA",
+                    ItemStatusEnum.BOUGHT_BUYOUT,
+                    new User(1)
+            ));
 
-            JPAItemRepository.saveAll(List.of(item1,item2));
+            JPAItemRepository.saveAll(List.of(item1,item2,item3,item4,item5,item6));
         };
     }
 

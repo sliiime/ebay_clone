@@ -8,6 +8,8 @@ import com.skaypal.ebay_clone.domain.item.exceptions.ItemNotFoundException;
 import com.skaypal.ebay_clone.domain.item.model.Item;
 import com.skaypal.ebay_clone.domain.item.repositories.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +19,8 @@ import java.util.stream.Collectors;
 public class ItemService {
 
     ItemRepository itemRepository;
+
+    private final Integer ITEM_PAGE_SIZE = 2;
 
     @Autowired
     public ItemService(ItemRepository itemRepository) { this.itemRepository = itemRepository; }
@@ -29,6 +33,7 @@ public class ItemService {
         viewItemDto.setNumOfBids(itemRepository.getNumOfBids(id));
 
         Bid highestBid = itemRepository.getHighestBid(id);
+
         if (highestBid == null){
             viewItemDto.setBestBid(null);
             viewItemDto.setHighestBidderId(null);
@@ -55,5 +60,12 @@ public class ItemService {
     public void deleteItem(Integer id) {
         Item item = itemRepository.findById(id).orElseThrow(() -> new ItemNotFoundException("id", id.toString()));
         itemRepository.delete(item);
+    }
+
+    public Page<ViewItemDto> getPage(Integer p) {
+        Page<Item> itemPage = itemRepository.findAll(PageRequest.of(p,ITEM_PAGE_SIZE));
+        Page<ViewItemDto> viewItemDtoPage = itemPage.map(item -> new ViewItemDto(item));
+
+        return viewItemDtoPage;
     }
 }
