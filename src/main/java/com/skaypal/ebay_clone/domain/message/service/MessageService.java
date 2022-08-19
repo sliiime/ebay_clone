@@ -7,6 +7,7 @@ import com.skaypal.ebay_clone.domain.message.dto.ViewMessageDto;
 import com.skaypal.ebay_clone.domain.message.exceptions.BadRequestMessageException;
 import com.skaypal.ebay_clone.domain.message.exceptions.MessageNotFoundException;
 import com.skaypal.ebay_clone.domain.message.model.Message;
+import com.skaypal.ebay_clone.domain.message.repository.JPAMessageRepository;
 import com.skaypal.ebay_clone.domain.message.repository.MessageRepository;
 import com.skaypal.ebay_clone.domain.message.validator.MessageValidator;
 import com.skaypal.ebay_clone.utils.validator.ValidationResult;
@@ -22,7 +23,7 @@ public class MessageService {
     private MessageValidator messageValidator;
 
     @Autowired
-    public MessageService(MessageRepository messageRepository,MessageValidator messageValidator){
+    public MessageService(MessageRepository messageRepository, MessageValidator messageValidator){
         this.messageRepository = messageRepository;
         this.messageValidator = messageValidator;
     }

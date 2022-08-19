@@ -1,8 +1,16 @@
 package com.skaypal.ebay_clone.domain.message.repository;
 
 import com.skaypal.ebay_clone.domain.message.model.Message;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
-@Repository
-public interface MessageRepository extends JpaRepository<Message,Integer> { }
+import java.util.List;
+import java.util.Optional;
+
+public interface MessageRepository {
+
+    public Optional<Message> findById(Integer id);
+    public List<Message> findAll();
+
+    public Message save(Message message);
+
+    public void deleteById(Integer id);
+}
