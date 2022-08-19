@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+
 @RestController
 @RequestMapping(path = "ebay_clone/api/bid")
 public class BidController {
@@ -28,8 +30,8 @@ public class BidController {
 
     @PostMapping
     public ResponseEntity<?> createBid(@RequestBody CreateBidDto createBidDto){
-        createBidDto.setBidderId(1);
-        createBidDto.setItemId(1);
+        createBidDto.setBidderId(2);
+        createBidDto.setSubmissionDate(new Date());
         ViewBidDto viewBidDto = bidService.createBid(createBidDto);
 
         return Responses.created(String.format("%s/%s", location, viewBidDto.getId().toString()));

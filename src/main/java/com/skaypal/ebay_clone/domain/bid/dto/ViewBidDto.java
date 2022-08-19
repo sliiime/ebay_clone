@@ -40,7 +40,7 @@ public class ViewBidDto {
         return this.itemId;
     }
 
-    public Float price(){
+    public Float getPrice(){
         return this.price;
     }
 

@@ -1,7 +1,10 @@
 package com.skaypal.ebay_clone.domain.bid.validator;
 
 import com.skaypal.ebay_clone.domain.bid.dto.CreateBidDto;
+import com.skaypal.ebay_clone.domain.bid.repository.BidRepository;
 import com.skaypal.ebay_clone.domain.bid.repository.JPABidRepository;
+import com.skaypal.ebay_clone.domain.bid.validator.steps.BidIsTheHighestValidation;
+import com.skaypal.ebay_clone.domain.bid.validator.steps.OngoingAuctionValidation;
 import com.skaypal.ebay_clone.domain.bid.validator.steps.SelfBidValidation;
 import com.skaypal.ebay_clone.domain.item.validator.ItemValidator;
 import com.skaypal.ebay_clone.utils.validator.ValidationResult;
@@ -11,24 +14,27 @@ import org.springframework.stereotype.Service;
 @Service
 public class BidValidator {
 
-    JPABidRepository JPABidRepository;
+    BidRepository bidRepository;
     ItemValidator itemValidator;
 
     @Autowired
-    public BidValidator(JPABidRepository JPABidRepository,
+    public BidValidator(BidRepository bidRepository,
                         ItemValidator itemValidator){
-        this.JPABidRepository = JPABidRepository;
+        this.bidRepository = bidRepository;
         this.itemValidator = itemValidator;
     }
 
 
     public ValidationResult validateCreateBidDto(CreateBidDto createBidDto) {
 
-        //Validate that the user that owns the Item doesn't submit the bid.
+        //Validate that the user who owns the Item doesn't submit the bid.
         //Validate that the auction that the bid refers to hasn't ended.
         //Validate that the bid has a higher value than the current highest bid.
 
 
-        return new SelfBidValidation(itemValidator).validate(createBidDto);
+        return new SelfBidValidation(itemValidator).
+                linkWith(new OngoingAuctionValidation(itemValidator)).
+                linkWith(new BidIsTheHighestValidation(bidRepository)).
+                validate(createBidDto);
     }
 }

@@ -22,7 +22,6 @@ public class  CreateUserDto {
     @Length(max = 50)
     private String surname;
     @NotNull
-
     private String address;
     @Email
     private String email;

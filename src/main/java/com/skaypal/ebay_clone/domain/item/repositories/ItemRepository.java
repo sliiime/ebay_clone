@@ -24,5 +24,8 @@ public interface ItemRepository {
 
     public Page<Item> findAll(Pageable pageable);
 
+    public Float getBuyoutPrice(Integer id);
+
+    public void itemBought(Integer itemId);
 
 }

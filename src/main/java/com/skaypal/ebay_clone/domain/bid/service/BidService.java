@@ -6,8 +6,8 @@ import com.skaypal.ebay_clone.domain.bid.exceptions.BidBadRequestException;
 import com.skaypal.ebay_clone.domain.bid.exceptions.BidNotFoundException;
 import com.skaypal.ebay_clone.domain.bid.model.Bid;
 import com.skaypal.ebay_clone.domain.bid.repository.BidRepository;
-import com.skaypal.ebay_clone.domain.bid.repository.JPABidRepository;
 import com.skaypal.ebay_clone.domain.bid.validator.BidValidator;
+import com.skaypal.ebay_clone.domain.item.service.ItemService;
 import com.skaypal.ebay_clone.utils.validator.ValidationResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,12 +18,15 @@ import java.util.Optional;
 public class BidService {
     BidRepository bidRepository;
 
+    ItemService itemService;
+
     BidValidator bidValidator;
 
     @Autowired
-    public BidService(BidRepository bidRepository, BidValidator bidValidator) {
+    public BidService(BidRepository bidRepository, BidValidator bidValidator, ItemService itemService) {
         this.bidRepository = bidRepository;
         this.bidValidator = bidValidator;
+        this.itemService = itemService;
 
     }
 
@@ -38,6 +41,8 @@ public class BidService {
         ValidationResult validationResult = bidValidator.validateCreateBidDto(createBidDto);
         if (!validationResult.isValid()) throw new BidBadRequestException(validationResult.getErrorMessage());
         Bid bid = new Bid(createBidDto);
-        return new ViewBidDto(bidRepository.save(bid));
+        ViewBidDto view = new ViewBidDto(bidRepository.save(bid));
+        itemService.newBidSubmitted(bid);
+        return view;
     }
 }

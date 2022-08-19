@@ -30,17 +30,8 @@ public class ItemService {
     public ViewItemDto getItem(Integer id) {
 
         ViewItemDto viewItemDto = new ViewItemDto(itemRepository.findById(id).orElseThrow(() -> new ItemNotFoundException("id",id.toString())));
-        viewItemDto.setNumOfBids(itemRepository.getNumOfBids(id));
 
-        Bid highestBid = itemRepository.getHighestBid(id);
-
-        if (highestBid == null){
-            viewItemDto.setBestBid(null);
-            viewItemDto.setHighestBidderId(null);
-        }else {
-            viewItemDto.setBestBid(highestBid.getPrice());
-            viewItemDto.setHighestBidderId(highestBid.getBidder().getId());
-        }
+        setBidData(viewItemDto);
 
         return viewItemDto;
     }
@@ -65,7 +56,33 @@ public class ItemService {
     public Page<ViewItemDto> getPage(Integer p) {
         Page<Item> itemPage = itemRepository.findAll(PageRequest.of(p,ITEM_PAGE_SIZE));
         Page<ViewItemDto> viewItemDtoPage = itemPage.map(item -> new ViewItemDto(item));
-
+        viewItemDtoPage.forEach(i -> setBidData(i));
         return viewItemDtoPage;
     }
+
+    public boolean newBidSubmitted(Bid bid){
+        Float buyoutPrice = itemRepository.getBuyoutPrice(bid.getItem().getId());
+
+        if (bid.getPrice() >= buyoutPrice) itemRepository.itemBought(bid.getItem().getId());
+
+        return bid.getPrice() >= buyoutPrice;
+
+
+    }
+
+    private void setBidData(ViewItemDto viewItemDto){
+
+        viewItemDto.setNumOfBids(itemRepository.getNumOfBids(viewItemDto.getId()));
+        Bid highestBid = itemRepository.getHighestBid(viewItemDto.getId());
+
+        if (highestBid == null){
+            viewItemDto.setBestBid(null);
+            viewItemDto.setHighestBidderId(null);
+        }else {
+            viewItemDto.setBestBid(highestBid.getPrice());
+            viewItemDto.setHighestBidderId(highestBid.getBidder().getId());
+        }
+
+    }
+
 }

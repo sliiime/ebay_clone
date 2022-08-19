@@ -54,7 +54,31 @@ public class OnStartupConfiguration {
     CommandLineRunner itemRepoInit(JPAItemRepository JPAItemRepository) {
         return args -> {
             Item item1 = (new Item("item1",
-                    3f,
+                    10f,
+                    5f,
+                    50d,
+                    40d,
+                    new Date(),
+                    Date.from(Instant.now().plusSeconds(10000)),
+                    "perigrafh",
+                    "KATHGORIA",
+                    ItemStatusEnum.ONGOING,
+                    new User(1)
+            ));
+            Item item2 = (new Item("item2",
+                    15f,
+                    7f,
+                    50d,
+                    40d,
+                    new Date(),
+                    Date.from(Instant.now().plusSeconds(10000)),
+                    "perigrafh",
+                    "KATHGORIA",
+                    ItemStatusEnum.ONGOING,
+                    new User(1)
+            ));
+            Item item3 = (new Item("item2",
+                    20f,
                     8f,
                     50d,
                     40d,
@@ -62,67 +86,43 @@ public class OnStartupConfiguration {
                     Date.from(Instant.now().plusSeconds(10000)),
                     "perigrafh",
                     "KATHGORIA",
-                    ItemStatusEnum.BOUGHT_BUYOUT,
-                    new User(1)
-            ));
-            Item item2 = (new Item("item2",
-                    1f,
-                    1f,
-                    50d,
-                    40d,
-                    new Date(),
-                    Date.from(Instant.now().plusSeconds(10000)),
-                    "perigrafh",
-                    "KATHGORIA",
-                    ItemStatusEnum.BOUGHT_BUYOUT,
-                    new User(1)
-            ));
-            Item item3 = (new Item("item2",
-                    1f,
-                    1f,
-                    50d,
-                    40d,
-                    new Date(),
-                    Date.from(Instant.now().plusSeconds(10000)),
-                    "perigrafh",
-                    "KATHGORIA",
-                    ItemStatusEnum.BOUGHT_BUYOUT,
+                    ItemStatusEnum.ONGOING,
                     new User(1)
             ));
             Item item4 = (new Item("item3",
-                    1f,
-                    1f,
+                    25f,
+                    10f,
                     50d,
                     40d,
                     new Date(),
-                    Date.from(Instant.now().plusSeconds(10000)),
+                    Date.from(Instant.now().plusSeconds(150)),
                     "perigrafh",
                     "KATHGORIA",
                     ItemStatusEnum.BOUGHT_BUYOUT,
                     new User(1)
             ));
             Item item5 = (new Item("item4",
-                    1f,
-                    1f,
+                    140f,
+                    3f,
                     50d,
                     40d,
                     new Date(),
-                    Date.from(Instant.now().plusSeconds(10000)),
+                    Date.from(Instant.now().plusSeconds(30)),
                     "perigrafh",
                     "KATHGORIA",
-                    ItemStatusEnum.BOUGHT_BUYOUT,
+                    ItemStatusEnum.BOUGHT_TIMEOUT,
                     new User(1)
             ));
             Item item6 = (new Item("item6",
-                    1f,
-                    1f,
+                    20f,
+                    6f,
                     50d,
                     40d,
                     new Date(),
-                    Date.from(Instant.now().plusSeconds(10000)),
+                    Date.from(Instant.now().plusSeconds(10)),
                     "perigrafh",
                     "KATHGORIA",
-                    ItemStatusEnum.BOUGHT_BUYOUT,
+                    ItemStatusEnum.NOT_BOUGHT,
                     new User(1)
             ));
 
@@ -135,15 +135,15 @@ public class OnStartupConfiguration {
         return args -> {
             Bid bid1 = (new Bid(
                     new Date(),
-                    3f,
-                    new Item(1),
+                    5f,
+                    new Item(2),
                     new User(2))
             );
             Bid bid2 = (new Bid(
                     new Date(),
-                    5f,
+                    7f,
                     new Item(2),
-                    new User(1))
+                    new User(2))
             );
 
             JPABidRepository.saveAll(List.of(bid1,bid2));

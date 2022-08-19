@@ -133,13 +133,13 @@ CREATE TABLE IF NOT EXISTS `ebay_clone`.`bid` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `submission_date` DATETIME NULL,
   `price` FLOAT NULL,
-  `Item_id` INT NOT NULL,
+  `item` INT NOT NULL,
   `bidder` INT NOT NULL,
-  PRIMARY KEY (`id`, `Item_id`, `bidder`),
-  INDEX `fk_Bids_Item1_idx` (`Item_id` ASC) VISIBLE,
+  PRIMARY KEY (`id`, `item`, `bidder`),
+  INDEX `fk_Bids_Item1_idx` (`item` ASC) VISIBLE,
   INDEX `fk_Bids_User1_idx` (`bidder` ASC) VISIBLE,
   CONSTRAINT `fk_Bids_Item1`
-    FOREIGN KEY (`Item_id`)
+    FOREIGN KEY (`item`)
     REFERENCES `ebay_clone`.`item` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,

@@ -2,6 +2,7 @@ package com.skaypal.ebay_clone.domain.bid.dto;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
+import java.util.Date;
 
 public class CreateBidDto {
 
@@ -13,6 +14,8 @@ public class CreateBidDto {
 
     @NotNull
     Float price;
+
+    @Null Date submissionDate;
 
 
     public CreateBidDto(){}
@@ -30,6 +33,7 @@ public class CreateBidDto {
         return bidderId;
     }
 
+    public Date getSubmissionDate(){return this.submissionDate;}
     public Integer getItemId(){
         return this.itemId;
     }
@@ -41,4 +45,5 @@ public class CreateBidDto {
     public void setItemId(Integer itemId){this.itemId = itemId;}
     public void setPrice(Float price){this.price = price;}
 
+    public void setSubmissionDate(Date submissionDate){this.submissionDate = submissionDate;}
 }

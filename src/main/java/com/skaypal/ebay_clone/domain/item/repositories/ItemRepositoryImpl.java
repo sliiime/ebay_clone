@@ -2,13 +2,13 @@ package com.skaypal.ebay_clone.domain.item.repositories;
 
 import com.skaypal.ebay_clone.domain.bid.model.Bid;
 import com.skaypal.ebay_clone.domain.bid.repository.BidRepository;
-import com.skaypal.ebay_clone.domain.bid.repository.JPABidRepository;
 import com.skaypal.ebay_clone.domain.item.model.Item;
 import com.skaypal.ebay_clone.domain.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,7 +21,7 @@ public class ItemRepositoryImpl implements ItemRepository {
 
     @Autowired
     public ItemRepositoryImpl(JPAItemRepository jpaItemREpository,
-                              JPABidRepository JPABidRepository){
+                              BidRepository bidRepository){
         this.jpaItemRepository = jpaItemREpository;
         this.bidRepository = bidRepository;
     }
@@ -58,6 +58,16 @@ public class ItemRepositoryImpl implements ItemRepository {
         List<Bid> bids = bidRepository.getBidsOfItem(itemId);
         if (bids.size() == 0) return null;
         return bids.get(0);
+    }
+
+    public Float getBuyoutPrice(Integer itemId){
+        return jpaItemRepository.getBuyoutPrice(itemId);
+    }
+
+    @Override
+    @Transactional
+    public void itemBought(Integer itemId){
+        jpaItemRepository.itemBought(itemId);
     }
 
     @Override

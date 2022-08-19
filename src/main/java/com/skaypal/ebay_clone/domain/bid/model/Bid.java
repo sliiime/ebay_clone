@@ -19,11 +19,11 @@ public class Bid {
 
     Float price;
 
-    @ManyToOne
-    @JoinColumn(name = "item_id")
+    @ManyToOne()
+    @JoinColumn(name = "item")
     Item item;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bidder")
     User bidder;
 
@@ -61,7 +61,7 @@ public class Bid {
         this.item = new Item(createBidDto.getItemId());
         this.bidder = new User(createBidDto.getBidderId());
         this.price = createBidDto.getPrice();
-        this.submissionDate = new Date();
+        this.submissionDate = createBidDto.getSubmissionDate();
     }
 
     public Integer getId(){
