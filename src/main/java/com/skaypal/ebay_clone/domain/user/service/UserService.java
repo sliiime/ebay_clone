@@ -6,6 +6,7 @@ import com.skaypal.ebay_clone.domain.user.dto.ViewUserDto;
 import com.skaypal.ebay_clone.domain.user.exceptions.UserConflictException;
 import com.skaypal.ebay_clone.domain.user.exceptions.UserNotFoundException;
 import com.skaypal.ebay_clone.domain.user.model.User;
+import com.skaypal.ebay_clone.domain.user.repositories.JPAUserRepository;
 import com.skaypal.ebay_clone.domain.user.repositories.UserRepository;
 import com.skaypal.ebay_clone.domain.user.validator.UserValidator;
 import com.skaypal.ebay_clone.utils.validator.ValidationResult;

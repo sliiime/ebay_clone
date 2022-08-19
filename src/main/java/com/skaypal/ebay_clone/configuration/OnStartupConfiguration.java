@@ -7,7 +7,7 @@ import com.skaypal.ebay_clone.domain.item.model.Item;
 import com.skaypal.ebay_clone.domain.item.repositories.JPAItemRepository;
 import com.skaypal.ebay_clone.domain.user.UserRegStatus;
 import com.skaypal.ebay_clone.domain.user.model.User;
-import com.skaypal.ebay_clone.domain.user.repositories.UserRepository;
+import com.skaypal.ebay_clone.domain.user.repositories.JPAUserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,7 +22,7 @@ import java.util.List;
 public class OnStartupConfiguration {
 
     @Bean
-    CommandLineRunner userRepoInit(UserRepository userRepository) {
+    CommandLineRunner userRepoInit(JPAUserRepository JPAUserRepository) {
         return args -> {
             User user1 = (new User(
                     "Bratsaras420",
@@ -46,7 +46,7 @@ public class OnStartupConfiguration {
                     UserRegStatus.PENDING,
                     "12121312"));
 
-            userRepository.saveAll(List.of(user1, user2));
+            JPAUserRepository.saveAll(List.of(user1, user2));
         };
     }
 

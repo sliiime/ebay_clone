@@ -1,11 +1,12 @@
 package com.skaypal.ebay_clone.domain.user.repositories;
 
 import com.skaypal.ebay_clone.domain.user.model.User;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
 import java.util.Optional;
 
-public interface UserRepository {
+public interface JPAUserRepository extends JpaRepository<User,Integer> {
+
 
     public Optional<User> findByAfm(String afm);
     public Optional<User> findByPhone(String phone);
@@ -13,12 +14,4 @@ public interface UserRepository {
     public Optional<User> findByUsername(String username);
 
     public Optional<User> findByEmail(String email);
-
-    public Optional<User> findById(Integer id);
-
-    public List<User> findAll();
-
-    public User save(User user);
-
-    public void delete(User user);
 }
