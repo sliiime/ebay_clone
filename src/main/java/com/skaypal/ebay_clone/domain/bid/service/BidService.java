@@ -6,6 +6,7 @@ import com.skaypal.ebay_clone.domain.bid.exceptions.BidBadRequestException;
 import com.skaypal.ebay_clone.domain.bid.exceptions.BidNotFoundException;
 import com.skaypal.ebay_clone.domain.bid.model.Bid;
 import com.skaypal.ebay_clone.domain.bid.repository.BidRepository;
+import com.skaypal.ebay_clone.domain.bid.repository.JPABidRepository;
 import com.skaypal.ebay_clone.domain.bid.validator.BidValidator;
 import com.skaypal.ebay_clone.utils.validator.ValidationResult;
 import org.springframework.beans.factory.annotation.Autowired;

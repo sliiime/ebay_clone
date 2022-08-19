@@ -2,6 +2,7 @@ package com.skaypal.ebay_clone.domain.item.repositories;
 
 import com.skaypal.ebay_clone.domain.bid.model.Bid;
 import com.skaypal.ebay_clone.domain.bid.repository.BidRepository;
+import com.skaypal.ebay_clone.domain.bid.repository.JPABidRepository;
 import com.skaypal.ebay_clone.domain.item.model.Item;
 import com.skaypal.ebay_clone.domain.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ public class ItemRepositoryImpl implements ItemRepository {
 
     @Autowired
     public ItemRepositoryImpl(JPAItemRepository jpaItemREpository,
-                              BidRepository bidRepository){
+                              JPABidRepository JPABidRepository){
         this.jpaItemRepository = jpaItemREpository;
         this.bidRepository = bidRepository;
     }

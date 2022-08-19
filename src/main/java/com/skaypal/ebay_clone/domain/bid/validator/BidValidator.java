@@ -1,7 +1,7 @@
 package com.skaypal.ebay_clone.domain.bid.validator;
 
 import com.skaypal.ebay_clone.domain.bid.dto.CreateBidDto;
-import com.skaypal.ebay_clone.domain.bid.repository.BidRepository;
+import com.skaypal.ebay_clone.domain.bid.repository.JPABidRepository;
 import com.skaypal.ebay_clone.domain.bid.validator.steps.SelfBidValidation;
 import com.skaypal.ebay_clone.domain.item.validator.ItemValidator;
 import com.skaypal.ebay_clone.utils.validator.ValidationResult;
@@ -11,13 +11,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class BidValidator {
 
-    BidRepository bidRepository;
+    JPABidRepository JPABidRepository;
     ItemValidator itemValidator;
 
     @Autowired
-    public BidValidator(BidRepository bidRepository,
+    public BidValidator(JPABidRepository JPABidRepository,
                         ItemValidator itemValidator){
-        this.bidRepository = bidRepository;
+        this.JPABidRepository = JPABidRepository;
         this.itemValidator = itemValidator;
     }
 

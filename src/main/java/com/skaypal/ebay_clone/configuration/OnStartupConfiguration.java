@@ -1,7 +1,7 @@
 package com.skaypal.ebay_clone.configuration;
 
 import com.skaypal.ebay_clone.domain.bid.model.Bid;
-import com.skaypal.ebay_clone.domain.bid.repository.BidRepository;
+import com.skaypal.ebay_clone.domain.bid.repository.JPABidRepository;
 import com.skaypal.ebay_clone.domain.item.ItemStatusEnum;
 import com.skaypal.ebay_clone.domain.item.model.Item;
 import com.skaypal.ebay_clone.domain.item.repositories.JPAItemRepository;
@@ -131,7 +131,7 @@ public class OnStartupConfiguration {
     }
 
     @Bean
-    CommandLineRunner bidRepoInit(BidRepository bidRepository) {
+    CommandLineRunner bidRepoInit(JPABidRepository JPABidRepository) {
         return args -> {
             Bid bid1 = (new Bid(
                     new Date(),
@@ -146,7 +146,7 @@ public class OnStartupConfiguration {
                     new User(1))
             );
 
-            bidRepository.saveAll(List.of(bid1,bid2));
+            JPABidRepository.saveAll(List.of(bid1,bid2));
         };
     }
 }
