@@ -1,5 +1,8 @@
 package com.skaypal.ebay_clone.domain.user.service;
 
+import com.skaypal.ebay_clone.domain.country.exception.CountryNotFoundException;
+import com.skaypal.ebay_clone.domain.country.model.Country;
+import com.skaypal.ebay_clone.domain.country.service.CountryService;
 import com.skaypal.ebay_clone.domain.user.dto.CreateUserDto;
 import com.skaypal.ebay_clone.domain.user.dto.UpdateUserDto;
 import com.skaypal.ebay_clone.domain.user.dto.ViewUserDto;
@@ -22,18 +25,22 @@ public class UserService {
     UserRepository userRepository;
     UserValidator userValidator;
 
+    CountryService countryService;
+
     @Autowired
     public UserService(UserRepository userRepository,
-                       UserValidator userValidator) {
+                       UserValidator userValidator,
+                       CountryService countryService) {
         this.userRepository = userRepository;
         this.userValidator = userValidator;
+        this.countryService = countryService;
     }
 
     public List<ViewUserDto> getUsers() {
         return userRepository.findAll().stream().map((u) -> new ViewUserDto(u)).collect(Collectors.toList());
     }
 
-    public ViewUserDto getUser(Integer id) throws UserNotFoundException{
+    public ViewUserDto getUser(Integer id) throws UserNotFoundException {
 
         return new ViewUserDto(userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("id", id.toString())));
     }
@@ -46,14 +53,19 @@ public class UserService {
 
         if (!validationResult.isValid()) throw new UserConflictException(validationResult.getErrorMessage());
 
+        Country country = countryService.getCountry(createUserDto.getCountry());
+
+        if (country == null) throw new CountryNotFoundException(createUserDto.getCountry());
+
         User user = new User(createUserDto);
+        user.setCountry(country);
 
         return new ViewUserDto(userRepository.save(user));
 
     }
 
 
-    public void updateUser(UpdateUserDto updateUserDto) throws UserConflictException, UserNotFoundException{
+    public void updateUser(UpdateUserDto updateUserDto) throws UserConflictException, UserNotFoundException {
 
 
         ValidationResult validationResult = userValidator.validateUpdateUserDto(updateUserDto);
@@ -61,7 +73,6 @@ public class UserService {
         if (!validationResult.isValid()) throw new UserConflictException(validationResult.getErrorMessage());
 
         User user = userRepository.findById(updateUserDto.getId()).orElseThrow(() -> new UserNotFoundException("id", updateUserDto.getId().toString()));
-
 
 
         //Checking which fields need to be updated
@@ -84,7 +95,6 @@ public class UserService {
         User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("id", id.toString()));
         userRepository.delete(user);
     }
-
 
 
 }

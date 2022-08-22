@@ -18,6 +18,21 @@ CREATE SCHEMA IF NOT EXISTS `ebay_clone` DEFAULT CHARACTER SET utf8mb4 COLLATE u
 USE `ebay_clone` ;
 
 -- -----------------------------------------------------
+-- Table `ebay_clone`.`country`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `ebay_clone`.`country` ;
+
+CREATE TABLE IF NOT EXISTS `ebay_clone`.`country` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(120) NOT NULL,
+  `iso` VARCHAR(2) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `name_UNIQUE` (`name` ASC) VISIBLE,
+  UNIQUE INDEX `code_UNIQUE` (`iso` ASC) VISIBLE)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Table `ebay_clone`.`user`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `ebay_clone`.`user` ;
@@ -34,22 +49,14 @@ CREATE TABLE IF NOT EXISTS `ebay_clone`.`user` (
   `rating` FLOAT NULL,
   `registered` ENUM("ACCEPTED", "DECLINED", "PENDING") NULL,
   `phone` VARCHAR(45) NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `ebay_clone`.`country`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `ebay_clone`.`country` ;
-
-CREATE TABLE IF NOT EXISTS `ebay_clone`.`country` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(120) NOT NULL,
-  `iso` VARCHAR(2) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `name_UNIQUE` (`name` ASC) VISIBLE,
-  UNIQUE INDEX `code_UNIQUE` (`iso` ASC) VISIBLE)
+  `country_id` INT NOT NULL,
+  PRIMARY KEY (`id`, `country_id`),
+  INDEX `fk_user_country1_idx` (`country_id` ASC) VISIBLE,
+  CONSTRAINT `fk_user_country1`
+    FOREIGN KEY (`country_id`)
+    REFERENCES `ebay_clone`.`country` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
@@ -69,14 +76,14 @@ CREATE TABLE IF NOT EXISTS `ebay_clone`.`item` (
   `end_date` DATETIME NULL,
   `description` VARCHAR(200) NULL,
   `category` VARCHAR(45) NULL,
-  `Country_id` INT NOT NULL DEFAULT 1,
+  `country_id` INT NOT NULL DEFAULT 1,
   `seller` INT NOT NULL DEFAULT 1,
   `status` ENUM("PREVIEW", "ONGOING", "NOT_BOUGHT", "BOUGHT_TIMEOUT", "BOUGHT_BUYOUT") NULL,
-  PRIMARY KEY (`id`, `Country_id`, `seller`),
-  INDEX `fk_Item_Country1_idx` (`Country_id` ASC) VISIBLE,
+  PRIMARY KEY (`id`, `country_id`, `seller`),
+  INDEX `fk_Item_Country1_idx` (`country_id` ASC) VISIBLE,
   INDEX `fk_Item_User1_idx` (`seller` ASC) VISIBLE,
   CONSTRAINT `fk_Item_Country1`
-    FOREIGN KEY (`Country_id`)
+    FOREIGN KEY (`country_id`)
     REFERENCES `ebay_clone`.`country` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
@@ -133,13 +140,13 @@ CREATE TABLE IF NOT EXISTS `ebay_clone`.`bid` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `submission_date` DATETIME NULL,
   `price` FLOAT NULL,
-  `item` INT NOT NULL,
+  `item_id` INT NOT NULL,
   `bidder` INT NOT NULL,
-  PRIMARY KEY (`id`, `item`, `bidder`),
-  INDEX `fk_Bids_Item1_idx` (`item` ASC) VISIBLE,
+  PRIMARY KEY (`id`, `item_id`, `bidder`),
+  INDEX `fk_Bids_Item1_idx` (`item_id` ASC) VISIBLE,
   INDEX `fk_Bids_User1_idx` (`bidder` ASC) VISIBLE,
   CONSTRAINT `fk_Bids_Item1`
-    FOREIGN KEY (`item`)
+    FOREIGN KEY (`item_id`)
     REFERENCES `ebay_clone`.`item` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,

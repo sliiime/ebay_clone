@@ -18,6 +18,7 @@ public class ViewUserDto {
     private String phone;
     private Float rating;
 
+    private String country;
     private List<Integer> itemIds;
 
     public ViewUserDto() {
@@ -34,6 +35,7 @@ public class ViewUserDto {
         this.rating = user.getRating();
         this.password = user.getPassword();
         this.itemIds = user.getItems().stream().map((i) -> i.getId()).collect(Collectors.toList());
+        this.country = user.getCountry().getCountry();
     }
 
     public Integer getId() { return id;}
@@ -74,6 +76,7 @@ public class ViewUserDto {
 
     public Float getRating() { return rating;}
 
+    public String getCountry() {return country;}
 
     public void setAddress(String address) {
         this.address = address;
@@ -112,4 +115,6 @@ public class ViewUserDto {
     }
 
     public void setItemIds(List<Integer> itemIds) { this.itemIds = itemIds;}
+
+    private void setCountry(String country) {this.country = country;}
 }
