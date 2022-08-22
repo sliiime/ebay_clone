@@ -1,0 +1,76 @@
+.signUp {
+    display: block;
+}
+
+.signUpInput {
+    margin-top: 20px;
+}
+
+.signUpInputBox {
+    box-sizing: border-box;
+
+    /* Auto layout */
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0 12px;
+
+    width: 350px;
+    height: 40px;
+
+    background: #F8F8F8;
+    border: 1px solid #D8D8D8;
+    border-radius: 4px;
+
+    margin-top: 5px;
+
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+}
+
+.input--error {
+    font-family: 'Mulish';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 10px;
+    line-height: 15px;
+
+    color: #FF0000;
+}
+
+.signUpInputDiv {
+    display: block;
+    width: 350px;
+}
+
+.signup--register {
+    padding-top: 30px;
+    display: block;
+    width: 450px;
+    align-items: center;
+    justify-content: center;
+}
+
+.correct--signup{
+    font-family: 'Mulish';
+    font-style: normal;
+    font-weight: bold;
+    font-size: 15px;
+    line-height: 15px;
+
+    color: #11AF22;
+}
+
+.wrong--signup {
+    font-family: 'Mulish';
+    font-style: normal;
+    font-weight: bold;
+    font-size: 15px;
+    line-height: 15px;
+    width: 450px;
+    text-align: center;
+
+    color: #FF0000;
+}

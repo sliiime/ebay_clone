@@ -1,0 +1,13 @@
+* {
+    background-color: whitesmoke;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.App {
+    display: block;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+}
