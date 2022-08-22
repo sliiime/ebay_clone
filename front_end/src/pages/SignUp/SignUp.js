@@ -51,12 +51,13 @@ function SignUp() {
                     address  : credentials.address,
                     email    : credentials.email,
                     afm      : credentials.afm,
-                    phone    : credentials.phoneNumber
+                    phone    : credentials.phoneNumber,
+                    country  : credentials.country
                 })
                 .then((response) => {
-                    console.log("response")
+                    console.log(response)
                 })
-                .catch((error) => console.log("error"));
+                .catch((error) => console.log(error));
         }
     }, [submitButtonPressed, errors]);
 

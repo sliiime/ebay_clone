@@ -18,6 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "ebay_clone/api/user")
 @Validated
+@CrossOrigin(origins = "http://localhost:3000",allowCredentials = "true")
 public class UserController {
 
     public static final String location = "ebay_clone/api/user";
