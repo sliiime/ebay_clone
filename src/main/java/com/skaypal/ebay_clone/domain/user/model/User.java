@@ -1,5 +1,6 @@
 package com.skaypal.ebay_clone.domain.user.model;
 
+import com.skaypal.ebay_clone.domain.country.model.Country;
 import com.skaypal.ebay_clone.domain.item.model.Item;
 import com.skaypal.ebay_clone.domain.user.UserRegStatus;
 import com.skaypal.ebay_clone.domain.user.dto.CreateUserDto;
@@ -46,6 +47,8 @@ public class User {
     @OneToMany(mappedBy = "seller",fetch = FetchType.LAZY)
     private List<Item> items;
 
+    @ManyToOne
+    Country country;
     public User() {
     }
 
@@ -61,7 +64,8 @@ public class User {
                 String afm,
                 Float rating,
                 UserRegStatus registrationStatus,
-                String phone) {
+                String phone,
+                Country country) {
 
         this.id = id;
         this.username = username;
@@ -74,6 +78,7 @@ public class User {
         this.rating = rating;
         this.registrationStatus = registrationStatus;
         this.phone = phone;
+        this.country = country;
     }
 
     public User(String username,
@@ -85,7 +90,8 @@ public class User {
                 String afm,
                 Float rating,
                 UserRegStatus registrationStatus,
-                String phone) {
+                String phone,
+                Country country) {
 
         this.username = username;
         this.password = password;
@@ -97,6 +103,7 @@ public class User {
         this.rating = rating;
         this.registrationStatus = registrationStatus;
         this.phone = phone;
+        this.country = country;
     }
 
     public User(CreateUserDto user) {
@@ -153,6 +160,8 @@ public class User {
         return phone;
     }
 
+    public Country getCountry() { return country;}
+
     public UserRegStatus getRegistrationStatus() {
         return registrationStatus;
     }
@@ -205,5 +214,6 @@ public class User {
 
     public void setItems(List<Item> items){this.items = items;}
 
+    public void setCountry(Country country){this.country = country;}
 
 }

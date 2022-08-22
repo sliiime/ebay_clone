@@ -1,18 +1,20 @@
 package com.skaypal.ebay_clone.domain.user.dto;
 
+import com.skaypal.ebay_clone.domain.country.model.Country;
 import org.hibernate.validator.constraints.Length;
 
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
-public class  CreateUserDto {
+public class CreateUserDto {
     @NotNull
     @Length(max = 15)
     private String username;
     @NotNull
-    @Length(min = 8,max =30)
+    @Length(min = 8, max = 30)
     @Pattern(regexp = "^(?=.*[A-Z])(?=.*[\\[-`!-//:-@-'{-~])(?=.*\\d).*$")
     private String password;
     @NotNull
@@ -31,9 +33,13 @@ public class  CreateUserDto {
     private String afm;
 
     @NotBlank
-    @Length(min = 8 ,max = 12)
+    @Length(min = 8, max = 12)
     @Pattern(regexp = "[0-9]*")
     private String phone;
+
+    @NotNull
+    private String country;
+
 
     public CreateUserDto() {
     }
@@ -46,7 +52,8 @@ public class  CreateUserDto {
                          String address,
                          String email,
                          String afm,
-                         String phoneNumber) {
+                         String phoneNumber,
+                         String country) {
 
         this.username = username;
         this.password = password;
@@ -56,16 +63,18 @@ public class  CreateUserDto {
         this.email = email;
         this.afm = afm;
         this.phone = phoneNumber;
+        this.country = country;
     }
 
     public CreateUserDto(String username,
-                        String password,
-                        String name,
-                        String surname,
-                        String address,
-                        String email,
-                        String afm,
-                        String phoneNumber) {
+                         String password,
+                         String name,
+                         String surname,
+                         String address,
+                         String email,
+                         String afm,
+                         String phoneNumber,
+                         String country) {
 
         this.username = username;
         this.password = password;
@@ -75,6 +84,7 @@ public class  CreateUserDto {
         this.email = email;
         this.afm = afm;
         this.phone = phoneNumber;
+        this.country = country;
     }
 
     public String getUsername() {
@@ -109,6 +119,9 @@ public class  CreateUserDto {
         return phone;
     }
 
+    public String getCountry(){
+        return country;
+    }
 
     public void setAddress(String address) {
         this.address = address;
@@ -143,5 +156,8 @@ public class  CreateUserDto {
         this.username = username;
     }
 
+    public void setCountry(String country){
+        this.country = country;
+    }
 
 }

@@ -9,15 +9,19 @@ public class Country {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Integer id;
+    private Integer id;
 
     @Column(name = "name")
-    public String country;
+    private String country;
 
     @Column
-    public String iso;
+    private String iso;
 
     public Country() {
+    }
+
+    public Country(Integer id){
+        this.id = id;
     }
 
     public Country(Integer id,

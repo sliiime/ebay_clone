@@ -2,6 +2,7 @@ package com.skaypal.ebay_clone.configuration;
 
 import com.skaypal.ebay_clone.domain.bid.model.Bid;
 import com.skaypal.ebay_clone.domain.bid.repository.JPABidRepository;
+import com.skaypal.ebay_clone.domain.country.model.Country;
 import com.skaypal.ebay_clone.domain.item.ItemStatusEnum;
 import com.skaypal.ebay_clone.domain.item.model.Item;
 import com.skaypal.ebay_clone.domain.item.repositories.JPAItemRepository;
@@ -33,7 +34,9 @@ public class OnStartupConfiguration {
                     "kke@youjizz.com",
                     "123456789", 1F,
                     UserRegStatus.PENDING,
-                    "69696969"));
+                    "69696969",
+                    new Country(5)
+            ));
 
             User user2 = (new User(
                     "Boubounis666",
@@ -44,7 +47,9 @@ public class OnStartupConfiguration {
                     "syriza@sugarbabes.com",
                     "123456788", 1F,
                     UserRegStatus.PENDING,
-                    "12121312"));
+                    "12121312",
+                    new Country(88))
+            );
 
             JPAUserRepository.saveAll(List.of(user1, user2));
         };

@@ -4,12 +4,11 @@ package com.skaypal.ebay_clone.domain.country.service;
 import com.skaypal.ebay_clone.domain.country.exception.CountryNotFoundException;
 import com.skaypal.ebay_clone.domain.country.model.Country;
 import com.skaypal.ebay_clone.domain.country.repository.CountryRepository;
-import com.skaypal.ebay_clone.domain.item.exceptions.ItemNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+
 
 @Service
 public class CountryService {

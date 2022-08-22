@@ -20,7 +20,7 @@ public class Bid {
     Float price;
 
     @ManyToOne()
-    @JoinColumn(name = "item")
+    @JoinColumn(name = "item_id")
     Item item;
 
     @ManyToOne(fetch = FetchType.LAZY)
