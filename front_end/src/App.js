@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter, Routes, Route} from "react-router-dom";
 import Login from "./pages/Login/Login";
 import SignUp from "./pages/SignUp/SignUp";
-import WelcomeScreen from "./pages/1. Welcome Screen/WelcomeScreen";
+import WelcomeScreen from "./pages/Welcome Screen/WelcomeScreen";
 
 function App() {
   return (
