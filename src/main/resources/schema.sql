@@ -224,6 +224,42 @@ CREATE TABLE IF NOT EXISTS `ebay_clone`.`admin` (
 ENGINE = InnoDB;
 
 
+-- -----------------------------------------------------
+-- Table `ebay_clone`.`role`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `ebay_clone`.`role` ;
+
+CREATE TABLE IF NOT EXISTS `ebay_clone`.`role` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `role` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `ebay_clone`.`user_has_role`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `ebay_clone`.`user_has_role` ;
+
+CREATE TABLE IF NOT EXISTS `ebay_clone`.`user_has_role` (
+  `user_id` INT NOT NULL,
+  `role_id` INT NOT NULL,
+  PRIMARY KEY (`user_id`, `role_id`),
+  INDEX `fk_user_has_role_role1_idx` (`role_id` ASC) VISIBLE,
+  INDEX `fk_user_has_role_user1_idx` (`user_id` ASC) VISIBLE,
+  CONSTRAINT `fk_user_has_role_user1`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `ebay_clone`.`user` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_user_has_role_role1`
+    FOREIGN KEY (`role_id`)
+    REFERENCES `ebay_clone`.`role` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

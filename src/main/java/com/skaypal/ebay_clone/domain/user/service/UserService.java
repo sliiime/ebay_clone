@@ -3,6 +3,8 @@ package com.skaypal.ebay_clone.domain.user.service;
 import com.skaypal.ebay_clone.domain.country.exception.CountryNotFoundException;
 import com.skaypal.ebay_clone.domain.country.model.Country;
 import com.skaypal.ebay_clone.domain.country.service.CountryService;
+import com.skaypal.ebay_clone.domain.role.model.Role;
+import com.skaypal.ebay_clone.domain.role.repository.RoleRepository;
 import com.skaypal.ebay_clone.domain.user.dto.CreateUserDto;
 import com.skaypal.ebay_clone.domain.user.dto.UpdateUserDto;
 import com.skaypal.ebay_clone.domain.user.dto.ViewUserDto;
@@ -17,23 +19,31 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class UserService {
 
-    UserRepository userRepository;
-    UserValidator userValidator;
+    private UserRepository userRepository;
+    private UserValidator userValidator;
+    private CountryService countryService;
+    private RoleRepository roleRepository;
 
-    CountryService countryService;
+    private final Role USER_ROLE;
+
 
     @Autowired
     public UserService(UserRepository userRepository,
                        UserValidator userValidator,
-                       CountryService countryService) {
+                       CountryService countryService,
+                       RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.userValidator = userValidator;
         this.countryService = countryService;
+        this.roleRepository = roleRepository;
+
+        this.USER_ROLE =roleRepository.getRole("user").orElseThrow(() -> new RuntimeException("User role does not exist : FATAL"));
     }
 
     public List<ViewUserDto> getUsers() {
@@ -59,6 +69,7 @@ public class UserService {
 
         User user = new User(createUserDto);
         user.setCountry(country);
+        user.setRoles(List.of(USER_ROLE));
 
         return new ViewUserDto(userRepository.save(user));
 
