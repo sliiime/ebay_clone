@@ -16,7 +16,6 @@ import com.skaypal.ebay_clone.domain.user.repositories.UserRepository;
 import com.skaypal.ebay_clone.domain.user.validator.UserValidator;
 import com.skaypal.ebay_clone.utils.validator.ValidationResult;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,8 +30,6 @@ public class UserService {
     private CountryService countryService;
     private RoleRepository roleRepository;
 
-    private PasswordEncoder passwordEncoder;
-
     private final Role USER_ROLE;
 
 
@@ -40,13 +37,11 @@ public class UserService {
     public UserService(UserRepository userRepository,
                        UserValidator userValidator,
                        CountryService countryService,
-                       RoleRepository roleRepository,
-                       PasswordEncoder passwordEncoder) {
+                       RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.userValidator = userValidator;
         this.countryService = countryService;
         this.roleRepository = roleRepository;
-        this.passwordEncoder = passwordEncoder;
 
         this.USER_ROLE =roleRepository.getRole("user").orElseThrow(() -> new RuntimeException("User role does not exist : FATAL"));
     }
@@ -75,7 +70,6 @@ public class UserService {
         User user = new User(createUserDto);
         user.setCountry(country);
         user.setRoles(List.of(USER_ROLE));
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         return new ViewUserDto(userRepository.save(user));
 
@@ -96,7 +90,7 @@ public class UserService {
         if (updateUserDto.getUsername() != null)
             user.setUsername(updateUserDto.getUsername());
         if (updateUserDto.getPassword() != null)
-            user.setPassword(passwordEncoder.encode(updateUserDto.getPassword()));
+            user.setPassword(updateUserDto.getPassword());
         if (updateUserDto.getEmail() != null)
             user.setEmail(updateUserDto.getEmail());
         if (updateUserDto.getPhone() != null)

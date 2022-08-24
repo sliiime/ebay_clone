@@ -9,11 +9,9 @@ import com.skaypal.ebay_clone.domain.item.repositories.JPAItemRepository;
 import com.skaypal.ebay_clone.domain.user.UserRegStatus;
 import com.skaypal.ebay_clone.domain.user.model.User;
 import com.skaypal.ebay_clone.domain.user.repositories.JPAUserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.Instant;
 import java.util.Date;
@@ -24,17 +22,12 @@ import java.util.List;
 @Configuration
 public class OnStartupConfiguration {
 
-    PasswordEncoder passwordEncoder;
-    @Autowired
-    public OnStartupConfiguration(PasswordEncoder passwordEncoder){
-        this.passwordEncoder = passwordEncoder;
-    }
     @Bean
     CommandLineRunner userRepoInit(JPAUserRepository JPAUserRepository) {
         return args -> {
             User user1 = (new User(
                     "Bratsaras420",
-                    passwordEncoder.encode("Psemouto4"),
+                    "Psemouto4",
                     "Kostis",
                     "Palamidas",
                     "Spiti sou 3",
@@ -47,7 +40,7 @@ public class OnStartupConfiguration {
 
             User user2 = (new User(
                     "Boubounis666",
-                    passwordEncoder.encode( "TzouraApoTzina"),
+                    "TzouraApoTzina",
                     "Kyrios",
                     "Eugenios",
                     "Lilipoupoli 2",
