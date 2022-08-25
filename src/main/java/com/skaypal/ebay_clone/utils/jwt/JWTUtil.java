@@ -33,4 +33,9 @@ public class JWTUtil {
         DecodedJWT jwt = verifier.verify(token);
         return jwt.getClaim("username").asString();
     }
+
+    public Integer retrieveUserId(String token) {
+        return JWT.decode(token.substring(7)).getClaim("userId").asInt();
+
+    }
 }

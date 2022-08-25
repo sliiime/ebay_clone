@@ -16,6 +16,7 @@ import com.skaypal.ebay_clone.domain.user.repositories.UserRepository;
 import com.skaypal.ebay_clone.domain.user.validator.UserValidator;
 import com.skaypal.ebay_clone.utils.validator.ValidationResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,6 +31,7 @@ public class UserService {
     private CountryService countryService;
     private RoleRepository roleRepository;
 
+    private PasswordEncoder passwordEncoder;
     private final Role USER_ROLE;
 
 
@@ -37,11 +39,13 @@ public class UserService {
     public UserService(UserRepository userRepository,
                        UserValidator userValidator,
                        CountryService countryService,
-                       RoleRepository roleRepository) {
+                       RoleRepository roleRepository,
+                       PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.userValidator = userValidator;
         this.countryService = countryService;
         this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
 
         this.USER_ROLE =roleRepository.getRole("ROLE_USER").orElseThrow(() -> new RuntimeException("User role does not exist : FATAL"));
     }
@@ -63,6 +67,7 @@ public class UserService {
 
         if (!validationResult.isValid()) throw new UserConflictException(validationResult.getErrorMessage());
 
+
         Country country = countryService.getCountry(createUserDto.getCountry());
 
         if (country == null) throw new CountryNotFoundException(createUserDto.getCountry());
@@ -70,6 +75,7 @@ public class UserService {
         User user = new User(createUserDto);
         user.setCountry(country);
         user.setRoles(List.of(USER_ROLE));
+        user.setPassword(passwordEncoder.encode(createUserDto.getPassword()));
 
         return new ViewUserDto(userRepository.save(user));
 

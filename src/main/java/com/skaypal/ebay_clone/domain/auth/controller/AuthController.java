@@ -1,7 +1,9 @@
 package com.skaypal.ebay_clone.domain.auth.controller;
 
 
+import com.skaypal.ebay_clone.domain.auth.dto.AuthenticationResult;
 import com.skaypal.ebay_clone.domain.auth.dto.LoginFormDto;
+import com.skaypal.ebay_clone.domain.auth.service.AuthService;
 import com.skaypal.ebay_clone.domain.user.exceptions.UserNotFoundException;
 import com.skaypal.ebay_clone.domain.user.model.User;
 import com.skaypal.ebay_clone.domain.user.repositories.UserRepository;
@@ -21,27 +23,25 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/ebay_clone/api/auth")
 public class AuthController {
+    AuthService authService;
+
 
     @Autowired
-    UserRepository userRepository;
-    @Autowired
-    AuthenticationManager authenticationManager;
-
-    @Autowired
-    JWTUtil jwtUtil;
+    public AuthController(AuthService authService){
+        this.authService = authService;
+    }
 
     @PostMapping
     public ResponseEntity<?> loginHandler(@RequestBody LoginFormDto loginFormDto) {
 
-        UsernamePasswordAuthenticationToken authInputToken = new UsernamePasswordAuthenticationToken(loginFormDto.getUsername(),
-                loginFormDto.getPassword());
+        AuthenticationResult<String> hopefullyToken = authService.authenticate(loginFormDto);
 
-        authenticationManager.authenticate(authInputToken);
-        Optional<User> user = userRepository.findByUsername(loginFormDto.getUsername());
+        String token = hopefullyToken.hopefully();
 
-        String token = jwtUtil.generateToken(user.orElseThrow(() -> new UserNotFoundException("username",loginFormDto.getUsername())));
 
-        return ResponseEntity.ok(token);
+        //Needs to provide a more explanatory message in case of authentication failure
+        return token == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(token);
+
     }
 
 }

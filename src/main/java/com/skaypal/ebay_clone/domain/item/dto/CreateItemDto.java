@@ -4,19 +4,20 @@ import com.skaypal.ebay_clone.domain.item.validator.controllerValidators.EndDate
 import com.skaypal.ebay_clone.domain.item.validator.controllerValidators.MinBidBuyPriceValidation;
 import org.hibernate.validator.constraints.Length;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 import java.util.Date;
 
-@EndDateValidation(
+/*@EndDateValidation(
         startDate = "startDate",
         endDate = "endDate"
-)
-@MinBidBuyPriceValidation(
+)*/
+/*@MinBidBuyPriceValidation(
         minBid = "minBid",
         buyPrice = "buyPrice"
-)
+)*/
 public class CreateItemDto {
 
     @NotNull
@@ -41,6 +42,9 @@ public class CreateItemDto {
     @Null
     private Date startDate;
 
+    @Null
+    Integer ownerId;
+
     public CreateItemDto() {}
 
     public CreateItemDto(String name,
@@ -59,6 +63,24 @@ public class CreateItemDto {
         this.startDate = startDate;
     }
 
+    public CreateItemDto(String name,
+                         Float buyPrice,
+                         Float minBid,
+                         String description,
+                         String category,
+                         Date endDate,
+                         Date startDate,
+                         Integer ownerId) {
+        this.name = name;
+        this.buyPrice = buyPrice;
+        this.description = description;
+        this.category = category;
+        this.minBid = minBid;
+        this.endDate = endDate;
+        this.startDate = startDate;
+        this.ownerId = ownerId;
+    }
+
     public String getName() {return name;}
     public Float getBuyPrice() {return buyPrice;}
     public String getDescription() {return description;}
@@ -67,6 +89,8 @@ public class CreateItemDto {
     public Date getEndDate() { return endDate;}
 
     public Float getMinBid() { return minBid; }
+
+    public Integer getOwnerId(){return ownerId;}
     public void setName(String name) {this.name = name;}
     public void setBuyPrice(Float buyPrice) {this.buyPrice = buyPrice; }
     public void setDescription(String description) {this.description = description; }
@@ -74,4 +98,6 @@ public class CreateItemDto {
     public void setMinBid(Float minBid) {this.minBid = minBid;}
     public void setEndDate(Date endDate){this.endDate = endDate;}
     public void setStartDate(Date startDate) {this.startDate = startDate;}
+
+    public void setOwnerId(Integer ownerId){this.ownerId = ownerId;}
 }

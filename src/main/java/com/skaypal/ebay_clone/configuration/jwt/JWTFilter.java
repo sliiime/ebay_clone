@@ -19,11 +19,16 @@ import java.io.IOException;
 @Component
 public class JWTFilter extends OncePerRequestFilter {
 
-    @Autowired
     private LoginForm loginForm;
 
-    @Autowired
     private JWTUtil jwtUtil;
+
+    @Autowired
+    public JWTFilter(LoginForm loginForm,
+                     JWTUtil jwtUtil){
+        this.jwtUtil = jwtUtil;
+        this.loginForm = loginForm;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,

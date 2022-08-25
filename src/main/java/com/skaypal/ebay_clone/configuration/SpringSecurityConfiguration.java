@@ -26,10 +26,17 @@ import java.util.Arrays;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    LoginForm loginForm;
 
     @Autowired
+    public SpringSecurityConfiguration(
+            LoginForm loginForm,
+            JWTFilter jwtFilter
+    ){
+        this.loginForm = loginForm;
+        this.jwtFilter = jwtFilter;
+    }
+    LoginForm loginForm;
+
     JWTFilter jwtFilter;
 
     @Override
@@ -37,6 +44,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/ebay_clone/api/auth").permitAll()
+                .antMatchers("POST","/ebay_clone/api/user/").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .userDetailsService(loginForm)

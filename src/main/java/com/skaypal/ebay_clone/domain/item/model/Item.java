@@ -104,6 +104,7 @@ public class Item {
         this.buyPrice = createItemDto.getBuyPrice();
         this.category = createItemDto.getCategory();
         this.description = createItemDto.getDescription();
+        this.seller = new User(createItemDto.getOwnerId());
     }
 
     public Item(Integer id) {
