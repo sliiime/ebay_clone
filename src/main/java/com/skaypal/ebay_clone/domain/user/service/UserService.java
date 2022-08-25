@@ -43,7 +43,7 @@ public class UserService {
         this.countryService = countryService;
         this.roleRepository = roleRepository;
 
-        this.USER_ROLE =roleRepository.getRole("user").orElseThrow(() -> new RuntimeException("User role does not exist : FATAL"));
+        this.USER_ROLE =roleRepository.getRole("ROLE_USER").orElseThrow(() -> new RuntimeException("User role does not exist : FATAL"));
     }
 
     public List<ViewUserDto> getUsers() {

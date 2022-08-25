@@ -227,5 +227,5 @@ INSERT INTO country (name, iso) VALUES ('Yemen', 'YE');
 INSERT INTO country (name, iso) VALUES ('Zambia', 'ZM');
 INSERT INTO country (name, iso) VALUES ('Zimbabwe', 'ZW');
 
-INSERT INTO role (role) VALUES ('USER');
-INSERT INTO role (role) VALUES ('ADMIN');
+INSERT INTO role (role) VALUES ('ROLE_USER');
+INSERT INTO role (role) VALUES ('ROLE_ADMIN');

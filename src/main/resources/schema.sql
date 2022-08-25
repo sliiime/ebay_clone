@@ -40,7 +40,7 @@ DROP TABLE IF EXISTS `ebay_clone`.`user` ;
 CREATE TABLE IF NOT EXISTS `ebay_clone`.`user` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `username` VARCHAR(45) NULL,
-  `password` VARCHAR(45) NULL,
+  `password` VARCHAR(70) NULL,
   `name` VARCHAR(45) NULL,
   `surname` VARCHAR(45) NULL,
   `address` VARCHAR(45) NULL,
