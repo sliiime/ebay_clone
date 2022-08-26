@@ -22,9 +22,10 @@ public class MessageValidator {
     ItemValidator itemValidator;
 
     @Autowired
-    public MessageValidator(MessageRepository messageRepository, UserValidator userRepository){
+    public MessageValidator(MessageRepository messageRepository, UserValidator userRepository,ItemValidator itemValidator){
         this.messageRepository = messageRepository;
         this.userValidator = userRepository;
+        this.itemValidator = itemValidator;
     }
 
     public ValidationResult validateCreateMessageDto(CreateMessageDto createMessageDto){
