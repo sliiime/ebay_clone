@@ -2,6 +2,7 @@ package com.skaypal.ebay_clone.domain.user.model;
 
 import com.skaypal.ebay_clone.domain.country.model.Country;
 import com.skaypal.ebay_clone.domain.item.model.Item;
+import com.skaypal.ebay_clone.domain.role.model.Role;
 import com.skaypal.ebay_clone.domain.user.UserRegStatus;
 import com.skaypal.ebay_clone.domain.user.dto.CreateUserDto;
 import org.hibernate.boot.model.source.spi.FetchCharacteristics;
@@ -41,18 +42,29 @@ public class User {
     @Column(name = "registered")
     @Enumerated(EnumType.STRING)
     private UserRegStatus registrationStatus;
-    @Column(name = "phone",unique = true)
+    @Column(name = "phone", unique = true)
     private String phone;
 
-    @OneToMany(mappedBy = "seller",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "seller", fetch = FetchType.LAZY)
     private List<Item> items;
 
     @ManyToOne
-    Country country;
-    public User() {
-    }
+    private Country country;
 
-    public User(Integer id){ this.id = id; }
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_has_role",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id")
+    )
+
+    private List<Role> roles = List.of(new Role(1,"USER"));
+
+    public User() {}
+
+    public User(Integer id) {
+        this.id = id;
+    }
 
     public User(Integer id,
                 String username,
@@ -160,13 +172,21 @@ public class User {
         return phone;
     }
 
-    public Country getCountry() { return country;}
+    public Country getCountry() {
+        return country;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
 
     public UserRegStatus getRegistrationStatus() {
         return registrationStatus;
     }
 
-    public List<Item> getItems(){ return this.items;}
+    public List<Item> getItems() {
+        return this.items;
+    }
 
     public void setAddress(String address) {
         this.address = address;
@@ -212,8 +232,16 @@ public class User {
         this.username = username;
     }
 
-    public void setItems(List<Item> items){this.items = items;}
+    public void setItems(List<Item> items) {
+        this.items = items;
+    }
 
-    public void setCountry(Country country){this.country = country;}
+    public void setCountry(Country country) {
+        this.country = country;
+    }
+
+    public void setRoles(List<Role> roles){
+        this.roles = roles;
+    }
 
 }

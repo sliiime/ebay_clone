@@ -43,6 +43,9 @@ public class Item {
 
     @OneToMany(fetch = FetchType.LAZY)
     private List<Bid> bids;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bought_by")
+    private User boughtBy;
 
     public Item() {
     }
@@ -72,6 +75,33 @@ public class Item {
         this.status = status;
     }
 
+    public Item(Integer id,
+                String name,
+                Float buyPrice,
+                Float minBid,
+                Double latitude,
+                Double longitude,
+                Date startDate,
+                Date endDate,
+                String description,
+                String category,
+                ItemStatusEnum status,
+                User boughtBy) {
+
+        this.id = id;
+        this.name = name;
+        this.buyPrice = buyPrice;
+        this.minBid = minBid;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.description = description;
+        this.category = category;
+        this.status = status;
+        this.boughtBy = boughtBy;
+    }
+
     public Item(String name,
                 Float buyPrice,
                 Float minBid,
@@ -96,6 +126,32 @@ public class Item {
         this.status = status;
         this.seller = seller;
     }
+    public Item(String name,
+                Float buyPrice,
+                Float minBid,
+                Double latitude,
+                Double longitude,
+                Date startDate,
+                Date endDate,
+                String description,
+                String category,
+                ItemStatusEnum status,
+                User seller,
+                User boughtBy) {
+
+        this.name = name;
+        this.buyPrice = buyPrice;
+        this.minBid = minBid;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.description = description;
+        this.category = category;
+        this.status = status;
+        this.seller = seller;
+        this.boughtBy = boughtBy;
+    }
 
     
 
@@ -104,6 +160,11 @@ public class Item {
         this.buyPrice = createItemDto.getBuyPrice();
         this.category = createItemDto.getCategory();
         this.description = createItemDto.getDescription();
+        this.seller = new User(createItemDto.getOwnerId());
+        this.startDate = createItemDto.getStartDate();
+        this.minBid = createItemDto.getMinBid() == null ? 0 : createItemDto.getMinBid();
+        this.endDate = createItemDto.getEndDate();
+        this.status = createItemDto.getStartDate().compareTo(new Date()) <= 0 ? ItemStatusEnum.ONGOING : ItemStatusEnum.PREVIEW;
     }
 
     public Item(Integer id) {
@@ -156,6 +217,8 @@ public class Item {
         return status;
     }
 
+    public User getBoughtBy(){ return boughtBy;}
+
     public void setId(Integer id) {
         this.id = id;
     }
@@ -199,6 +262,8 @@ public class Item {
     public void setStatus(ItemStatusEnum status) {
         this.status = status;
     }
+
+    public void setBoughtBy(User boughtBy){this.boughtBy = boughtBy;}
 
     public void updateItemWithDto(UpdateItemDto updateItemDto) {
         if (updateItemDto.getName() != null)

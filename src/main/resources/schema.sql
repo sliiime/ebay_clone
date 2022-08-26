@@ -40,7 +40,7 @@ DROP TABLE IF EXISTS `ebay_clone`.`user` ;
 CREATE TABLE IF NOT EXISTS `ebay_clone`.`user` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `username` VARCHAR(45) NULL,
-  `password` VARCHAR(45) NULL,
+  `password` VARCHAR(70) NULL,
   `name` VARCHAR(45) NULL,
   `surname` VARCHAR(45) NULL,
   `address` VARCHAR(45) NULL,
@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS `ebay_clone`.`user` (
   `registered` ENUM("ACCEPTED", "DECLINED", "PENDING") NULL,
   `phone` VARCHAR(45) NULL,
   `country_id` INT NOT NULL,
-  PRIMARY KEY (`id`, `country_id`),
+  PRIMARY KEY (`id`),
   INDEX `fk_user_country1_idx` (`country_id` ASC) VISIBLE,
   CONSTRAINT `fk_user_country1`
     FOREIGN KEY (`country_id`)
@@ -66,9 +66,9 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `ebay_clone`.`item` ;
 
 CREATE TABLE IF NOT EXISTS `ebay_clone`.`item` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(45) NULL,
   `buy_price` FLOAT NULL,
+  `name` VARCHAR(45) NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `min_bid` FLOAT NULL,
   `latitude` DECIMAL(10,8) NULL,
   `longitude` DECIMAL(10,8) NULL,
@@ -79,16 +79,24 @@ CREATE TABLE IF NOT EXISTS `ebay_clone`.`item` (
   `country_id` INT NOT NULL DEFAULT 1,
   `seller` INT NOT NULL DEFAULT 1,
   `status` ENUM("PREVIEW", "ONGOING", "NOT_BOUGHT", "BOUGHT_TIMEOUT", "BOUGHT_BUYOUT") NULL,
-  PRIMARY KEY (`id`, `country_id`, `seller`),
+  `itemcol` INT NULL,
+  `bought_by` INT NULL,
+  PRIMARY KEY (`id`),
   INDEX `fk_Item_Country1_idx` (`country_id` ASC) VISIBLE,
-  INDEX `fk_Item_User1_idx` (`seller` ASC) VISIBLE,
+  INDEX `fk_Item_seller_idx` (`seller` ASC) VISIBLE,
+  INDEX `fk_item_boughtBy_idx` (`bought_by` ASC) VISIBLE,
   CONSTRAINT `fk_Item_Country1`
     FOREIGN KEY (`country_id`)
     REFERENCES `ebay_clone`.`country` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Item_User1`
+  CONSTRAINT `fk_Item_seller`
     FOREIGN KEY (`seller`)
+    REFERENCES `ebay_clone`.`user` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_item_boughtBy`
+    FOREIGN KEY (`bought_by`)
     REFERENCES `ebay_clone`.`user` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -221,6 +229,42 @@ CREATE TABLE IF NOT EXISTS `ebay_clone`.`admin` (
   `username` VARCHAR(45) NULL,
   `password` VARCHAR(45) NULL,
   PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `ebay_clone`.`role`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `ebay_clone`.`role` ;
+
+CREATE TABLE IF NOT EXISTS `ebay_clone`.`role` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `role` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `ebay_clone`.`user_has_role`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `ebay_clone`.`user_has_role` ;
+
+CREATE TABLE IF NOT EXISTS `ebay_clone`.`user_has_role` (
+  `user_id` INT NOT NULL,
+  `role_id` INT NOT NULL,
+  PRIMARY KEY (`user_id`, `role_id`),
+  INDEX `fk_user_has_role_role1_idx` (`role_id` ASC) VISIBLE,
+  INDEX `fk_user_has_role_user1_idx` (`user_id` ASC) VISIBLE,
+  CONSTRAINT `fk_user_has_role_user1`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `ebay_clone`.`user` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_user_has_role_role1`
+    FOREIGN KEY (`role_id`)
+    REFERENCES `ebay_clone`.`role` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 

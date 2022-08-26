@@ -1,6 +1,7 @@
 package com.skaypal.ebay_clone.domain.item.validator.controllerValidators;
 
 import javax.validation.Constraint;
+import javax.validation.Payload;
 import java.lang.annotation.*;
 
 @Documented
@@ -11,9 +12,9 @@ public @interface EndDateValidation {
 
     String message() default "Invalid End Date";
 
-    String startDate();
+    Class<?>[] groups() default {};
 
-    String endDate();
+    Class<? extends Payload>[] payload() default {};
 
     @Target({ElementType.TYPE})
     @Retention(RetentionPolicy.RUNTIME)

@@ -3,6 +3,8 @@ package com.skaypal.ebay_clone.domain.user.service;
 import com.skaypal.ebay_clone.domain.country.exception.CountryNotFoundException;
 import com.skaypal.ebay_clone.domain.country.model.Country;
 import com.skaypal.ebay_clone.domain.country.service.CountryService;
+import com.skaypal.ebay_clone.domain.role.model.Role;
+import com.skaypal.ebay_clone.domain.role.repository.RoleRepository;
 import com.skaypal.ebay_clone.domain.user.dto.CreateUserDto;
 import com.skaypal.ebay_clone.domain.user.dto.UpdateUserDto;
 import com.skaypal.ebay_clone.domain.user.dto.ViewUserDto;
@@ -14,26 +16,38 @@ import com.skaypal.ebay_clone.domain.user.repositories.UserRepository;
 import com.skaypal.ebay_clone.domain.user.validator.UserValidator;
 import com.skaypal.ebay_clone.utils.validator.ValidationResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class UserService {
 
-    UserRepository userRepository;
-    UserValidator userValidator;
+    private UserRepository userRepository;
+    private UserValidator userValidator;
+    private CountryService countryService;
+    private RoleRepository roleRepository;
 
-    CountryService countryService;
+    private PasswordEncoder passwordEncoder;
+    private final Role USER_ROLE;
+
 
     @Autowired
     public UserService(UserRepository userRepository,
                        UserValidator userValidator,
-                       CountryService countryService) {
+                       CountryService countryService,
+                       RoleRepository roleRepository,
+                       PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.userValidator = userValidator;
         this.countryService = countryService;
+        this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
+
+        this.USER_ROLE =roleRepository.getRole("ROLE_USER").orElseThrow(() -> new RuntimeException("User role does not exist : FATAL"));
     }
 
     public List<ViewUserDto> getUsers() {
@@ -53,12 +67,15 @@ public class UserService {
 
         if (!validationResult.isValid()) throw new UserConflictException(validationResult.getErrorMessage());
 
+
         Country country = countryService.getCountry(createUserDto.getCountry());
 
         if (country == null) throw new CountryNotFoundException(createUserDto.getCountry());
 
         User user = new User(createUserDto);
         user.setCountry(country);
+        user.setRoles(List.of(USER_ROLE));
+        user.setPassword(passwordEncoder.encode(createUserDto.getPassword()));
 
         return new ViewUserDto(userRepository.save(user));
 

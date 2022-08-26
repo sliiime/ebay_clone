@@ -1,0 +1,75 @@
+.navbar {
+    display: flex;
+    align-items: center;
+    background-color: lightblue;
+    height: 100px;
+}
+
+.left-side-items {
+    margin-left: -500px;
+    background-color: lightblue;
+    align-items: center;
+    justify-content: center;
+}
+
+.right-side-items {
+    margin-right: 50px;
+    background-color: lightblue;
+}
+
+.marketPlaceIcon {
+    background-color: lightblue;
+    margin-left: 20px;
+}
+
+.navbar--homeLink {
+    background-color: lightblue;
+
+    font-family: 'Mulish';
+    font-style: normal;
+    font-weight: bold;
+    font-size: 23px;
+    line-height: 15px;
+
+    color: #000000;
+}
+
+.navbar--searchLink {
+    background-color: lightblue;
+
+    font-family: 'Mulish';
+    font-style: normal;
+    font-weight: bold;
+    font-size: 23px;
+    line-height: 15px;
+
+    padding-left: 10px;
+
+    color: #000000;
+}
+.navbar--loginLink {
+    background-color: lightblue;
+
+    font-family: 'Mulish';
+    font-style: normal;
+    font-weight: bold;
+    font-size: 23px;
+    line-height: 15px;
+
+    padding-right: 20px;
+
+    color: #000000;
+}
+.navbar--signupLink {
+    background-color: lightblue;
+
+    font-family: 'Mulish';
+    font-style: normal;
+    font-weight: bold;
+    font-size: 23px;
+    line-height: 15px;
+
+    color: #000000;
+}
+
+

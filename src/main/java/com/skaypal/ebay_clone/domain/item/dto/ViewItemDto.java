@@ -25,6 +25,8 @@ public class ViewItemDto {
 
     private Integer highestBidderId;
 
+    private Integer boughtById;
+
 
     public ViewItemDto(Item item) {
         this.id = item.getId();
@@ -39,7 +41,10 @@ public class ViewItemDto {
         this.category = item.getCategory();
         this.status = item.getStatus();
         this.sellerId = item.getSeller().getId();
+        this.boughtById = item.getBoughtBy() == null? null : item.getBoughtBy().getId();
     }
+
+
 
     public Integer getId() {
         return id;
@@ -96,6 +101,8 @@ public class ViewItemDto {
         return status;
     }
 
+    public Integer getBoughtById(){return boughtById;}
+
     public void setId(Integer id) {
         this.id = id;
     }
@@ -150,4 +157,6 @@ public class ViewItemDto {
 
     public void setHighestBidderId(Integer id){this.highestBidderId = id;}
     public void setSellerId(Integer sellerId){this.sellerId = sellerId;}
+
+    public void setBoughtById(Integer boughtById){this.boughtById = boughtById;}
 }

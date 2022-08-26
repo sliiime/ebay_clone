@@ -1,17 +1,19 @@
 package com.skaypal.ebay_clone.domain.message.controller;
 
 
+import com.auth0.jwt.JWT;
 import com.skaypal.ebay_clone.domain.message.dto.CreateMessageDto;
+import com.skaypal.ebay_clone.domain.message.dto.DeleteMessageDto;
 import com.skaypal.ebay_clone.domain.message.dto.UpdateMessageDto;
 import com.skaypal.ebay_clone.domain.message.dto.ViewMessageDto;
-import com.skaypal.ebay_clone.domain.message.model.Message;
 import com.skaypal.ebay_clone.domain.message.service.MessageService;
 import com.skaypal.ebay_clone.utils.Responses;
+import com.skaypal.ebay_clone.utils.jwt.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Path;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -20,12 +22,16 @@ import java.util.List;
 public class MessageController {
 
     private MessageService messageService;
+    private JWTUtil jwtUtil;
 
     private final String location = "ebay_clone/api/message";
 
     @Autowired
-    public MessageController(MessageService messageService) {
+    public MessageController(MessageService messageService,
+                             JWTUtil jwtUtil) {
+
         this.messageService = messageService;
+        this.jwtUtil = jwtUtil;
     }
 
     @GetMapping
@@ -40,25 +46,42 @@ public class MessageController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createMessage(@Valid @RequestBody CreateMessageDto createMessageDto) {
+    public ResponseEntity<?> createMessage(@Valid @RequestBody CreateMessageDto createMessageDto, HttpServletRequest request) {
 
-        createMessageDto.setSenderId(1); //Should be set by some token probably
+        String token = request.getHeader("Authorization");
+
+        createMessageDto.setSenderId(jwtUtil.retrieveUserId(token));
+
         ViewMessageDto message = messageService.createMessage(createMessageDto);
 
         return Responses.created(String.format("%s/%s", location, message.getId().toString()));
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity<?> updateMessage(@Valid @RequestBody UpdateMessageDto updateMessageDto, @PathVariable Integer id){
+    public ResponseEntity<?> updateMessage(@Valid @RequestBody UpdateMessageDto updateMessageDto,
+                                           @PathVariable Integer id,
+                                           HttpServletRequest request){
+
+        String token = request.getHeader("Authorization");
+
+
         updateMessageDto.setId(id);
+        updateMessageDto.setSenderId(jwtUtil.retrieveUserId(token));
+
         messageService.updateMessage(updateMessageDto);
+
         return ResponseEntity.ok().build();
 
     }
 
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<?> deleteMessage(@PathVariable Integer id){
-        messageService.deleteMessage(id);
+    public ResponseEntity<?> deleteMessage(@PathVariable Integer id,HttpServletRequest request){
+
+        String token = request.getHeader("Authorization");
+
+        DeleteMessageDto deleteMessageDto = new DeleteMessageDto(id, jwtUtil.retrieveUserId(token));
+
+        messageService.deleteMessage(deleteMessageDto);
 
         return ResponseEntity.ok().build();
     }

@@ -6,12 +6,14 @@ import com.skaypal.ebay_clone.domain.item.dto.ViewItemDto;
 import com.skaypal.ebay_clone.domain.item.model.Item;
 import com.skaypal.ebay_clone.domain.item.service.ItemService;
 import com.skaypal.ebay_clone.utils.Responses;
+import com.skaypal.ebay_clone.utils.jwt.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
@@ -25,8 +27,15 @@ public class ItemController {
 
     private final ItemService itemService;
 
+    private final JWTUtil jwtUtil;
+
     @Autowired
-    public ItemController(ItemService itemService) { this.itemService = itemService; }
+    public ItemController(ItemService itemService,
+                          JWTUtil jwtUtil) {
+
+        this.itemService = itemService;
+        this.jwtUtil = jwtUtil;
+    }
 
     /*@GetMapping
     public ResponseEntity<List<ViewItemDto>> getItems() {
@@ -35,29 +44,36 @@ public class ItemController {
     }*/
 
     @GetMapping
-    public ResponseEntity<Page<ViewItemDto>> getItemsPage(@RequestParam Integer p){
+    public ResponseEntity<Page<ViewItemDto>> getItemsPage(@RequestParam Integer p) {
         return ResponseEntity.ok(itemService.getPage(p));
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<ViewItemDto> getItem(@PathVariable Integer id) { return ResponseEntity.ok(itemService.getItem(id)); }
+    public ResponseEntity<ViewItemDto> getItem(@PathVariable Integer id) {
+        return ResponseEntity.ok(itemService.getItem(id));
+    }
 
     @PostMapping
-    public ResponseEntity<?> createItem(@Valid @RequestBody CreateItemDto createItemDto){
-        createItemDto.setStartDate(new Date());
+    public ResponseEntity<?> createItem(@Valid @RequestBody CreateItemDto createItemDto, HttpServletRequest request) {
+
+        String token = request.getHeader("Authorization"); //Check whether this header exists;
+        Integer userId = jwtUtil.retrieveUserId(token);       //Throws invalid token exception
+        createItemDto.setOwnerId(userId);
+        Date startDate = createItemDto.getStartDate() == null ? new Date() : createItemDto.getStartDate();
+        createItemDto.setStartDate(startDate);
         ViewItemDto item = itemService.createItem(createItemDto);
         return Responses.created(location + "/" + item.getId());
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity<?> updateItem(@PathVariable Integer id,@Valid @RequestBody UpdateItemDto updateItemDto){
+    public ResponseEntity<?> updateItem(@PathVariable Integer id, @Valid @RequestBody UpdateItemDto updateItemDto) {
         updateItemDto.setId(id);
         itemService.updateItem(updateItemDto);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<?> deleteItem(@PathVariable Integer id){
+    public ResponseEntity<?> deleteItem(@PathVariable Integer id) {
         itemService.deleteItem(id);
         return ResponseEntity.ok().build();
 

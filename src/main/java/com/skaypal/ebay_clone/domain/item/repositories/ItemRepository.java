@@ -26,6 +26,7 @@ public interface ItemRepository {
 
     public Float getBuyoutPrice(Integer id);
 
-    public void itemBought(Integer itemId);
+    public void itemBought(Integer itemId,Integer boughtById);
 
+    int xBoughtFromYCount(Integer receiverId, Integer senderId);
 }

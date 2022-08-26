@@ -2,12 +2,12 @@ package com.skaypal.ebay_clone.domain.message.service;
 
 
 import com.skaypal.ebay_clone.domain.message.dto.CreateMessageDto;
+import com.skaypal.ebay_clone.domain.message.dto.DeleteMessageDto;
 import com.skaypal.ebay_clone.domain.message.dto.UpdateMessageDto;
 import com.skaypal.ebay_clone.domain.message.dto.ViewMessageDto;
 import com.skaypal.ebay_clone.domain.message.exceptions.BadRequestMessageException;
 import com.skaypal.ebay_clone.domain.message.exceptions.MessageNotFoundException;
 import com.skaypal.ebay_clone.domain.message.model.Message;
-import com.skaypal.ebay_clone.domain.message.repository.JPAMessageRepository;
 import com.skaypal.ebay_clone.domain.message.repository.MessageRepository;
 import com.skaypal.ebay_clone.domain.message.validator.MessageValidator;
 import com.skaypal.ebay_clone.utils.validator.ValidationResult;
@@ -40,7 +40,6 @@ public class MessageService {
     public ViewMessageDto createMessage(CreateMessageDto createMessageDto) {
 
         ValidationResult validationResult = messageValidator.validateCreateMessageDto(createMessageDto);
-
         if (!validationResult.isValid()) throw new BadRequestMessageException(validationResult.getErrorMessage());
 
         Message message = new Message(createMessageDto);
@@ -50,14 +49,23 @@ public class MessageService {
 
 
     public void updateMessage(UpdateMessageDto updateMessageDto) {
+
+        ValidationResult validationResult = messageValidator.validateModifyingMessageDto(updateMessageDto);
+        if(!validationResult.isValid()) throw new BadRequestMessageException(validationResult.getErrorMessage());
+
        Message message = messageRepository.findById(updateMessageDto.getId()).orElseThrow(() -> new MessageNotFoundException(String.format("Message with id [%s] was not found",updateMessageDto.getId().toString())));
        message.setBody(updateMessageDto.getBody());
        messageRepository.save(message);
     }
 
-    public void deleteMessage(Integer id) {
-        messageRepository.findById(id).orElseThrow(() -> new MessageNotFoundException(String.format("Message with id [%s] was not found",id)));
+    public void deleteMessage(DeleteMessageDto deleteMessageDto) {
 
-        messageRepository.deleteById(id);
+        ValidationResult validationResult = messageValidator.validateModifyingMessageDto(deleteMessageDto);
+
+        if (!validationResult.isValid()) throw new BadRequestMessageException(validationResult.getErrorMessage());
+
+        messageRepository.findById(deleteMessageDto.getId()).orElseThrow(() -> new MessageNotFoundException(String.format("Message with id [%s] was not found",deleteMessageDto.getId())));
+
+        messageRepository.deleteById(deleteMessageDto.getId());
     }
 }

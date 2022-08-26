@@ -9,9 +9,11 @@ import com.skaypal.ebay_clone.domain.item.repositories.JPAItemRepository;
 import com.skaypal.ebay_clone.domain.user.UserRegStatus;
 import com.skaypal.ebay_clone.domain.user.model.User;
 import com.skaypal.ebay_clone.domain.user.repositories.JPAUserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.Instant;
 import java.util.Date;
@@ -22,31 +24,33 @@ import java.util.List;
 @Configuration
 public class OnStartupConfiguration {
 
+    @Autowired
+    PasswordEncoder encoder;
     @Bean
     CommandLineRunner userRepoInit(JPAUserRepository JPAUserRepository) {
         return args -> {
             User user1 = (new User(
                     "Bratsaras420",
-                    "Psemouto4",
+                    encoder.encode( "Psemouto4"),
                     "Kostis",
                     "Palamidas",
                     "Spiti sou 3",
                     "kke@youjizz.com",
                     "123456789", 1F,
-                    UserRegStatus.PENDING,
+                    UserRegStatus.ACCEPTED,
                     "69696969",
                     new Country(5)
             ));
 
             User user2 = (new User(
                     "Boubounis666",
-                    "TzouraApoTzina",
+                    encoder.encode( "TzouraApoTzina"),
                     "Kyrios",
                     "Eugenios",
                     "Lilipoupoli 2",
                     "syriza@sugarbabes.com",
                     "123456788", 1F,
-                    UserRegStatus.PENDING,
+                    UserRegStatus.ACCEPTED,
                     "12121312",
                     new Country(88))
             );
@@ -104,7 +108,8 @@ public class OnStartupConfiguration {
                     "perigrafh",
                     "KATHGORIA",
                     ItemStatusEnum.BOUGHT_BUYOUT,
-                    new User(1)
+                    new User(1),
+                    new User(2)
             ));
             Item item5 = (new Item("item4",
                     140f,
@@ -116,7 +121,8 @@ public class OnStartupConfiguration {
                     "perigrafh",
                     "KATHGORIA",
                     ItemStatusEnum.BOUGHT_TIMEOUT,
-                    new User(1)
+                    new User(1),
+                    new User(2)
             ));
             Item item6 = (new Item("item6",
                     20f,
@@ -146,7 +152,7 @@ public class OnStartupConfiguration {
             );
             Bid bid2 = (new Bid(
                     new Date(),
-                    7f,
+                    20f,
                     new Item(2),
                     new User(2))
             );

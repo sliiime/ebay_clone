@@ -21,6 +21,7 @@ public class ViewUserDto {
     private String country;
     private List<Integer> itemIds;
 
+
     public ViewUserDto() {
     }
     public ViewUserDto(User user){
