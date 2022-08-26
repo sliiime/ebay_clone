@@ -10,14 +10,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 import java.util.Date;
 
-/*@EndDateValidation(
-        startDate = "startDate",
-        endDate = "endDate"
-)*/
-/*@MinBidBuyPriceValidation(
-        minBid = "minBid",
-        buyPrice = "buyPrice"
-)*/
+
+@MinBidBuyPriceValidation
+@EndDateValidation
 public class CreateItemDto {
 
     @NotNull
@@ -27,7 +22,8 @@ public class CreateItemDto {
     @NotNull
     private Float buyPrice;
 
-    @NotNull Float minBid;
+    @NotNull
+    Float minBid;
 
     @Length(max = 200)
     private String description;
@@ -39,7 +35,6 @@ public class CreateItemDto {
     @NotNull
     private Date endDate;
 
-    @Null
     private Date startDate;
 
     @Null
@@ -91,6 +86,8 @@ public class CreateItemDto {
     public Float getMinBid() { return minBid; }
 
     public Integer getOwnerId(){return ownerId;}
+
+    public Date getStartDate(){return startDate;}
     public void setName(String name) {this.name = name;}
     public void setBuyPrice(Float buyPrice) {this.buyPrice = buyPrice; }
     public void setDescription(String description) {this.description = description; }
@@ -98,6 +95,5 @@ public class CreateItemDto {
     public void setMinBid(Float minBid) {this.minBid = minBid;}
     public void setEndDate(Date endDate){this.endDate = endDate;}
     public void setStartDate(Date startDate) {this.startDate = startDate;}
-
     public void setOwnerId(Integer ownerId){this.ownerId = ownerId;}
 }

@@ -12,7 +12,7 @@ public interface JPABidRepository extends JpaRepository<Bid,Integer> {
     @Query("SELECT COUNT(b) FROM Bid b WHERE b.item.id  = ?1")
     public Integer getTotalBidsOfItem(Integer itemId);
 
-    @Query("SELECT b FROM Bid b ORDER BY b.price DESC ")
+    @Query("SELECT b FROM Bid b WHERE b.item.id = ?1 ORDER BY b.price DESC  ")
     public List<Bid> getBidsOfItem(Integer itemId);
 
 

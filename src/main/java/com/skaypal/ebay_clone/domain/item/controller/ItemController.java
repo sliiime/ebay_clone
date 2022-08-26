@@ -59,7 +59,8 @@ public class ItemController {
         String token = request.getHeader("Authorization"); //Check whether this header exists;
         Integer userId = jwtUtil.retrieveUserId(token);       //Throws invalid token exception
         createItemDto.setOwnerId(userId);
-        createItemDto.setStartDate(new Date());
+        Date startDate = createItemDto.getStartDate() == null ? new Date() : createItemDto.getStartDate();
+        createItemDto.setStartDate(startDate);
         ViewItemDto item = itemService.createItem(createItemDto);
         return Responses.created(location + "/" + item.getId());
     }

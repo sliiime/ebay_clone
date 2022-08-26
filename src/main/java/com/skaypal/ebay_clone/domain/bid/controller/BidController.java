@@ -4,10 +4,13 @@ import com.skaypal.ebay_clone.domain.bid.dto.CreateBidDto;
 import com.skaypal.ebay_clone.domain.bid.dto.ViewBidDto;
 import com.skaypal.ebay_clone.domain.bid.service.BidService;
 import com.skaypal.ebay_clone.utils.Responses;
+import com.skaypal.ebay_clone.utils.jwt.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.xml.bind.JAXBContext;
 import java.util.Date;
 
 @RestController
@@ -15,12 +18,16 @@ import java.util.Date;
 public class BidController {
 
     BidService bidService;
+    JWTUtil jwtUtil;
 
     private final String location = "ebay_clone/api/bid";
 
     @Autowired
-    public BidController(BidService bidService){
+    public BidController(BidService bidService,
+                         JWTUtil jwtUtil){
+
         this.bidService = bidService;
+        this.jwtUtil = jwtUtil;
     }
 
     @GetMapping(path = "/{id}")
@@ -29,8 +36,10 @@ public class BidController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createBid(@RequestBody CreateBidDto createBidDto){
-        createBidDto.setBidderId(2);
+    public ResponseEntity<?> createBid(@RequestBody CreateBidDto createBidDto, HttpServletRequest request){
+        String token = request.getHeader("Authorization");
+        
+        createBidDto.setBidderId(jwtUtil.retrieveUserId(token));
         createBidDto.setSubmissionDate(new Date());
         ViewBidDto viewBidDto = bidService.createBid(createBidDto);
 

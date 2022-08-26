@@ -37,7 +37,7 @@ public class OnStartupConfiguration {
                     "Spiti sou 3",
                     "kke@youjizz.com",
                     "123456789", 1F,
-                    UserRegStatus.PENDING,
+                    UserRegStatus.ACCEPTED,
                     "69696969",
                     new Country(5)
             ));
@@ -50,7 +50,7 @@ public class OnStartupConfiguration {
                     "Lilipoupoli 2",
                     "syriza@sugarbabes.com",
                     "123456788", 1F,
-                    UserRegStatus.PENDING,
+                    UserRegStatus.ACCEPTED,
                     "12121312",
                     new Country(88))
             );
@@ -108,7 +108,8 @@ public class OnStartupConfiguration {
                     "perigrafh",
                     "KATHGORIA",
                     ItemStatusEnum.BOUGHT_BUYOUT,
-                    new User(1)
+                    new User(1),
+                    new User(2)
             ));
             Item item5 = (new Item("item4",
                     140f,
@@ -120,7 +121,8 @@ public class OnStartupConfiguration {
                     "perigrafh",
                     "KATHGORIA",
                     ItemStatusEnum.BOUGHT_TIMEOUT,
-                    new User(1)
+                    new User(1),
+                    new User(2)
             ));
             Item item6 = (new Item("item6",
                     20f,
@@ -150,7 +152,7 @@ public class OnStartupConfiguration {
             );
             Bid bid2 = (new Bid(
                     new Date(),
-                    7f,
+                    20f,
                     new Item(2),
                     new User(2))
             );

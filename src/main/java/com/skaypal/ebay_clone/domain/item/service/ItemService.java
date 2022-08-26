@@ -63,7 +63,7 @@ public class ItemService {
     public boolean newBidSubmitted(Bid bid){
         Float buyoutPrice = itemRepository.getBuyoutPrice(bid.getItem().getId());
 
-        if (bid.getPrice() >= buyoutPrice) itemRepository.itemBought(bid.getItem().getId());
+        if (bid.getPrice() >= buyoutPrice) itemRepository.itemBought(bid.getItem().getId(),bid.getBidder().getId());
 
         return bid.getPrice() >= buyoutPrice;
 

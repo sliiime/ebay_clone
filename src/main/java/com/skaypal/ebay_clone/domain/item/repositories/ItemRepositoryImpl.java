@@ -66,8 +66,13 @@ public class ItemRepositoryImpl implements ItemRepository {
 
     @Override
     @Transactional
-    public void itemBought(Integer itemId){
-        jpaItemRepository.itemBought(itemId);
+    public void itemBought(Integer itemId,Integer boughtBy){
+        jpaItemRepository.itemBought(itemId,new User(boughtBy));
+    }
+
+    @Override
+    public int xBoughtFromYCount(Integer receiverId, Integer senderId) {
+        return jpaItemRepository.xBoughtFromYCount(receiverId,senderId);
     }
 
     @Override
