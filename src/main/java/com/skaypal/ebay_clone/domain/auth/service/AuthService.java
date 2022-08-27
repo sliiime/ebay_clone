@@ -12,6 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.Optional;
 @Service
 public class AuthService {
@@ -30,17 +31,26 @@ public class AuthService {
         this.authenticationManager = authenticationManager;
     }
 
-    public AuthenticationResult authenticate(LoginFormDto loginFormDto){
+    public AuthenticationResult<HashMap<String,Object>> authenticate(LoginFormDto loginFormDto){
         UsernamePasswordAuthenticationToken authInputToken = new UsernamePasswordAuthenticationToken(loginFormDto.getUsername(),
                 loginFormDto.getPassword());
 
         authenticationManager.authenticate(authInputToken);
         Optional<User> user = userRepository.findByUsername(loginFormDto.getUsername());
 
-        return user.isPresent() ?
-                AuthenticationResult.of(jwtUtil.generateToken(user.get())) :
-                AuthenticationResult.of(ServiceResultStatus.NOT_FOUND);
+       HashMap<String,Object> map = new HashMap<>();
 
+       AuthenticationResult<HashMap<String,Object>> result;
+
+       if (user.isPresent()){
+           User u = user.get();
+           map.put("token",jwtUtil.generateToken(u));
+           if (u.isAdmin()) map.put("role","admin");
+           else map.put("role","user");
+           result = AuthenticationResult.of(map);
+       }else result = AuthenticationResult.of(ServiceResultStatus.NOT_FOUND);
+
+        return result;
 
     }
 }

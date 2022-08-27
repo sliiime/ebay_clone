@@ -9,5 +9,6 @@ public interface RatingRepository {
     public List<Rating> findAll();
     public Optional<Rating> findById(Integer id);
 
+    public int ratingsOf(Integer user1, Integer user2);
     public Rating save(Rating rating);
 }

@@ -30,4 +30,6 @@ public class RatingRepositoryImpl implements RatingRepository{
     public Rating save(Rating rating){
         return jpaRatingRepository.save(rating);
     }
+
+    public int ratingsOf(Integer user1,Integer user2){ return jpaRatingRepository.ratingsOf(user1,user2);}
 }

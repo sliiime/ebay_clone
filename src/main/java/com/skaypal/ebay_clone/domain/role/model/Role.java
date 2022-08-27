@@ -1,6 +1,7 @@
 package com.skaypal.ebay_clone.domain.role.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 
 @Entity
