@@ -9,7 +9,8 @@ const errorsExist = (submitButtonPressed, errors) => {
         && errors.phoneNumber === ""
         && errors.address === ""
         && errors.country === ""
-        && errors.password === "" ) {errorExist = false}
+        && errors.password === ""
+        && errors.confirmPassword === "") {errorExist = false}
     return errorExist
 }
 

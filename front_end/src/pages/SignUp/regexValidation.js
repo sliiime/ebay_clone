@@ -33,6 +33,13 @@ const regexValidation = (credentials) => {
     if(!credentials.country){
         errors.country="Country is required."
     } else { errors.country = "" }
+    if(!credentials.confirmPassword) {
+        errors.confirmPassword = "Confirm password is required"
+    } else { errors.confirmPassword = "" }
+    if(!errors.password && !errors.confirmPassword && (credentials.password !== credentials.confirmPassword)) {
+        errors.password = "Passwords do not match!"
+        errors.confirmPassword = "Passwords do not match!"
+    }
 
     return errors;
 }

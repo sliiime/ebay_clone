@@ -1,3 +1,7 @@
+body {
+    margin: 0px;
+}
+
 .navbar {
     display: flex;
     align-items: center;
@@ -6,20 +10,20 @@
 }
 
 .left-side-items {
-    margin-left: -500px;
+    width: 70%;
+    horiz-align: left;
     background-color: lightblue;
-    align-items: center;
-    justify-content: center;
 }
 
 .right-side-items {
-    margin-right: 50px;
+    width: 30%;
+    padding-left: 20px;
     background-color: lightblue;
 }
 
 .marketPlaceIcon {
     background-color: lightblue;
-    margin-left: 20px;
+    padding-left: 20px;
 }
 
 .navbar--homeLink {
@@ -30,6 +34,8 @@
     font-weight: bold;
     font-size: 23px;
     line-height: 15px;
+
+    padding-left: 20px;
 
     color: #000000;
 }
@@ -43,7 +49,7 @@
     font-size: 23px;
     line-height: 15px;
 
-    padding-left: 10px;
+    padding-left: 20px;
 
     color: #000000;
 }
@@ -56,10 +62,11 @@
     font-size: 23px;
     line-height: 15px;
 
-    padding-right: 20px;
+    padding-left: 150px;
 
     color: #000000;
 }
+
 .navbar--signupLink {
     background-color: lightblue;
 
@@ -69,7 +76,50 @@
     font-size: 23px;
     line-height: 15px;
 
+    padding-left: 20px;
+
     color: #000000;
+}
+
+.navbar--logoutLink {
+    background-color: lightblue;
+
+    font-family: 'Mulish';
+    font-style: normal;
+    font-weight: bold;
+    font-size: 23px;
+    line-height: 15px;
+
+    padding-left: 150px;
+
+    color: #000000;
+}
+
+.homescreen-continue-links {
+    width: 400px;
+    display: flex;
+    padding-top: 30px;
+}
+
+.homescreen-continue-links-button {
+    height: 40px;
+    width: 150px;
+
+    font-family: 'Mulish';
+    font-style: normal;
+    font-weight: bolder;
+    font-size: 16px;
+    line-height: 15px;
+    /* identical to box height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: whitesmoke;
+    border: 1px solid black;
+    border-radius: 2px;
+
+    color: black;
 }
 
 

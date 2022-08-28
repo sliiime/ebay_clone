@@ -5,13 +5,14 @@ import regexValidation from "./regexValidation";
 import loginErrorsExist from "./errorsExist";
 import axios from "axios";
 import useAuth from "../../context/useAuth";
+import '../../css/login.css';
 
 function Login() {
 
     const { setAuth } = useAuth();
 
     const [credentials, setCredentials] = useState({
-        email:"",
+        username:"",
         password:""
     });
 
@@ -44,46 +45,33 @@ function Login() {
         setSubmitButtonPressed(true)
     };
 
+    useEffect( () => {
+        setAuth({});
+        localStorage.clear();
+    },[])
+
     useEffect(() => {
         if(!loginErrorsExist(submitButtonPressed,errors)) {
-            const username = "tsala";
-            const password = credentials.password;
-            const role = 2001;
-            const accessToken = "isafdivobdfsisvbdfv";
-            setAuth({ username, password, role, accessToken });
-            localStorage.setItem("username", JSON.stringify(username));
-            localStorage.setItem("email", JSON.stringify(credentials.email));
-            localStorage.setItem("role", JSON.stringify(role));
-            localStorage.setItem("accessToken", JSON.stringify(accessToken));
-            setCredentials({
-                email: "",
-                password: ""
-            })
-            setIsCorrectSubmission(1);
-            setDisableButton(true);
-            const timer = setTimeout(() => navigate(from, {replace: true}), 7000);
-            return () => clearTimeout(timer);
-            /*
             axios
-                .post("http://localhost:8080/ebay_clone/api/auth/", {
-                    email    : credentials.email,
+                .post("http://localhost:8080/ebay_clone/api/auth", {
+                    username : credentials.username,
                     password : credentials.password
                 })
                 .then((response) => {
-                    const username = response?.data?.username;
+                    console.log(response)
+                    console.log(response.data)
+                    const username = credentials.username;
                     const password = credentials.password
-                    const accessToken = response?.data?.accessToken;
-                    const role = response?.data?.role;
-                    setAuth({ username, password, role, accessToken });
-                    const localStorageData = {
-                        username: username,
-                        email: credentials.email,
-                        role: role,
-                        accessToken: accessToken
-                    }
-                    localStorage.setItem("userData", JSON.stringify(localStorageData));
+                    const roles = [2001,5150]//response?.data?.role;
+                    const accessToken = response?.data//response?.data?.accessToken;
+                    const email = "pal@test.com"//response?.data?.email;
+                    setAuth({ username, password, roles, accessToken });
+                    localStorage.setItem("username", JSON.stringify(credentials.username));
+                    localStorage.setItem("email", JSON.stringify(email));
+                    localStorage.setItem("role", JSON.stringify(roles));
+                    localStorage.setItem("accessToken", JSON.stringify(accessToken));
                     setCredentials({
-                        email: "",
+                        username: "",
                         password: ""
                     })
                     setIsCorrectSubmission(1);
@@ -93,9 +81,9 @@ function Login() {
                 })
                 .catch((error) => {
                     console.log(error)
-                    setLoginError(error.response.data);
+                    setLoginError("Either username or password is incorrect!");
                     setIsCorrectSubmission(2);
-                });*/
+                });
         }
     }, [submitButtonPressed, errors]);
 
@@ -107,8 +95,8 @@ function Login() {
             <div className="credentialsInput">
                 <p className="overInputText">Email</p>
                 <div className="loginInputDiv">
-                    <input className="login--inputBox" placeholder="Enter Email" type="email" name="email" value={credentials.email} onChange={handleChange} />
-                    {errors.email && <p className="input--error">{errors.email}</p>}
+                    <input className="login--inputBox" placeholder="Enter Username" type="username" name="username" value={credentials.username} onChange={handleChange} />
+                    {errors.username && <p className="input--error">{errors.username}</p>}
                 </div>
                 <p className="overInputText">Password</p>
                 <div className="loginInputDiv">

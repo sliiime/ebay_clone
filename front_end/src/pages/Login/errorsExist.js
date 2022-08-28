@@ -1,7 +1,7 @@
 const errorsExist = (submitButtonPressed, errors) => {
     let errorExist = true
     if( submitButtonPressed
-        && errors.email === ""
+        && errors.username === ""
         && errors.password === "" ) {errorExist = false}
     return errorExist
 }

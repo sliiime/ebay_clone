@@ -2,9 +2,9 @@ const regexValidation = (credentials) => {
 
     let errors={}
 
-    if(!credentials.email){
-        errors.email="Email is required."
-    } else { errors.email = "" }
+    if(!credentials.username){
+        errors.username="Username is required."
+    } else { errors.username = "" }
     if(!credentials.password) {
         errors.password="Password is required."
     } else { errors.password = "" }

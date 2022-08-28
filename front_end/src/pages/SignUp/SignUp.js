@@ -4,6 +4,7 @@ import {useNavigate} from "react-router-dom";
 import regexValidation from "./regexValidation";
 import errorsExist from "./errorsExist";
 import axios from "axios";
+import '../../css/signup.css';
 
 function SignUp() {
 
@@ -16,6 +17,7 @@ function SignUp() {
         phoneNumber:"",
         address:"",
         password:"",
+        confirmPassword:"",
         country:""
     });
 
@@ -41,9 +43,7 @@ function SignUp() {
     };
 
     useEffect(() => {
-        if(errorsExist(submitButtonPressed,errors)) {
-            return;
-        } else {
+        if(!errorsExist(submitButtonPressed,errors)) {
             axios
                 .post("http://localhost:8080/ebay_clone/api/user/", {
                     username : credentials.username,
@@ -108,6 +108,10 @@ function SignUp() {
                 <div className="signUpInputDiv">
                     <input className="signUpInputBox" placeholder="Password" type="password" name="password" value={credentials.password} onChange={handleChange}/>
                     {errors.password && <p className="input--error">{errors.password}</p>}
+                </div>
+                <div className="signUpInputDiv">
+                    <input className="signUpInputBox" placeholder="Confirm password" type="password" name="confirmPassword" value={credentials.confirmPassword} onChange={handleChange}/>
+                    {errors.confirmPassword && <p className="input--error">{errors.confirmPassword}</p>}
                 </div>
             </form>
             <div className="signup--register">
