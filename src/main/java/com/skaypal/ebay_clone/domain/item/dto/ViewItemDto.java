@@ -41,7 +41,7 @@ public class ViewItemDto {
         this.category = item.getCategory();
         this.status = item.getStatus();
         this.sellerId = item.getSeller().getId();
-        this.boughtById = item.getBoughtBy() == null? null : item.getBoughtBy().getId();
+        this.boughtById = item.getBoughtBy() == null ? null : item.getBoughtBy().getId();
     }
 
 

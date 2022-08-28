@@ -4,7 +4,6 @@ import com.skaypal.ebay_clone.domain.country.model.Country;
 import com.skaypal.ebay_clone.domain.item.model.Item;
 import com.skaypal.ebay_clone.domain.role.model.Role;
 import com.skaypal.ebay_clone.domain.role.model.RoleEnum;
-import com.skaypal.ebay_clone.domain.role.repository.RoleRepositoryImpl;
 import com.skaypal.ebay_clone.domain.user.UserRegStatus;
 import com.skaypal.ebay_clone.domain.user.dto.CreateUserDto;
 import static com.skaypal.ebay_clone.domain.role.model.RoleEnum.*;
@@ -106,7 +105,8 @@ public class User {
                 Float rating,
                 UserRegStatus registrationStatus,
                 String phone,
-                Country country) {
+                Country country,
+                List<Role> roles) {
 
         this.username = username;
         this.password = password;
@@ -119,6 +119,7 @@ public class User {
         this.registrationStatus = registrationStatus;
         this.phone = phone;
         this.country = country;
+        this.roles = roles;
     }
     public User(String username,
                 String password,
@@ -144,7 +145,7 @@ public class User {
         this.registrationStatus = registrationStatus;
         this.phone = phone;
         this.country = country;
-        this.roles = role == ADMIN ? List.of(new Role(2,"ADMIN"),new Role(1,"USER")) : List.of(new Role(1,"USER"));
+        this.roles = ADMIN.equals(role) ? List.of(new Role(3,"ADMIN")) : List.of(new Role(1,"UNAUTHORIZED_USER"));
     }
 
     public User(CreateUserDto user) {
@@ -159,6 +160,7 @@ public class User {
         this.registrationStatus = UserRegStatus.PENDING;
         this.phone = user.getPhone();
         this.items = new ArrayList<>();
+        this.roles = List.of(new Role(1,"UNAUTHORIZED_USER"));
     }
 
     public Integer getId() {

@@ -45,8 +45,7 @@ public class AuthService {
        if (user.isPresent()){
            User u = user.get();
            map.put("token",jwtUtil.generateToken(u));
-           if (u.isAdmin()) map.put("role","admin");
-           else map.put("role","user");
+           map.put("roles",u.getRoles());
            result = AuthenticationResult.of(map);
        }else result = AuthenticationResult.of(ServiceResultStatus.NOT_FOUND);
 

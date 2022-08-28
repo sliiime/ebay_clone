@@ -8,8 +8,15 @@ public class AuthenticationResult<T> {
     private ServiceResultStatus serviceResultStatus = ServiceResultStatus.OK;
     private T t;
 
+    private String errorMessage;
+
     public AuthenticationResult(ServiceResultStatus serviceResultStatus){
         this.serviceResultStatus = serviceResultStatus;
+    }
+
+    public AuthenticationResult(ServiceResultStatus serviceResultStatus,String errorMessage){
+        this.serviceResultStatus = serviceResultStatus;
+        this.errorMessage = errorMessage;
     }
 
     public AuthenticationResult(T t){
@@ -24,6 +31,10 @@ public class AuthenticationResult<T> {
         return new AuthenticationResult<>(serviceResultStatus);
     }
 
+    public static <T> AuthenticationResult<T> of(ServiceResultStatus serviceResultStatus, String errorMessage){
+        return new AuthenticationResult<>(serviceResultStatus,errorMessage);
+    }
+
     public static <T> AuthenticationResult<T> of(T t){
         return new AuthenticationResult<>(t);
     }
@@ -32,6 +43,8 @@ public class AuthenticationResult<T> {
         return this.serviceResultStatus;
     }
 
+    public String getErrorMessage(){return this.errorMessage;}
+    public void setErrorMessage(String errorMessage){this.errorMessage = errorMessage;}
 
 
 }
