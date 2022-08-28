@@ -1,6 +1,7 @@
 package com.skaypal.ebay_clone.domain.item.service;
 
 import com.skaypal.ebay_clone.domain.bid.model.Bid;
+import com.skaypal.ebay_clone.domain.item.ItemStatusEnum;
 import com.skaypal.ebay_clone.domain.item.dto.CreateItemDto;
 import com.skaypal.ebay_clone.domain.item.dto.UpdateItemDto;
 import com.skaypal.ebay_clone.domain.item.dto.ViewItemDto;
@@ -55,6 +56,12 @@ public class ItemService {
 
     public Page<ViewItemDto> getPage(Integer p) {
         Page<Item> itemPage = itemRepository.findAll(PageRequest.of(p,ITEM_PAGE_SIZE));
+        itemPage.forEach((i) -> {
+            if (i.hasExpired()){
+                i.setStatus(ItemStatusEnum.BOUGHT_TIMEOUT);
+                itemRepository.save(i);
+            }
+        });
         Page<ViewItemDto> viewItemDtoPage = itemPage.map(item -> new ViewItemDto(item));
         viewItemDtoPage.forEach(i -> setBidData(i));
         return viewItemDtoPage;

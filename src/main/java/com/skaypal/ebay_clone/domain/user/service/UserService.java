@@ -46,7 +46,6 @@ public class UserService {
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
 
-         roleRepository.getRole("USER").orElseThrow(() -> new RuntimeException("User role does not exist : FATAL"));
     }
 
     public List<ViewUserDto> getUsers() {

@@ -7,6 +7,7 @@ import com.skaypal.ebay_clone.domain.country.model.Country;
 import com.skaypal.ebay_clone.domain.item.ItemStatusEnum;
 import com.skaypal.ebay_clone.domain.item.model.Item;
 import com.skaypal.ebay_clone.domain.item.repositories.JPAItemRepository;
+import com.skaypal.ebay_clone.domain.role.model.Role;
 import com.skaypal.ebay_clone.domain.role.model.RoleEnum;
 import com.skaypal.ebay_clone.domain.user.UserRegStatus;
 import com.skaypal.ebay_clone.domain.user.model.User;
@@ -41,7 +42,8 @@ public class OnStartupConfiguration {
                     "123456789", 1F,
                     UserRegStatus.ACCEPTED,
                     "69696969",
-                    new Country(5)
+                    new Country(5),
+                    List.of(new Role(2,"AUTHORIZED_USER"))
             ));
 
             User user2 = (new User(
@@ -55,8 +57,9 @@ public class OnStartupConfiguration {
                     1F,
                     UserRegStatus.ACCEPTED,
                     "12121312",
-                    new Country(88))
-            );
+                    new Country(88),
+                    List.of(new Role(1,"UNAUTHORIZED_USER"))
+            ));
 
             User admin = ( AdminFactory.admin(
                     "Katsikas",

@@ -274,4 +274,7 @@ public class Item {
             this.category = updateItemDto.getCategory();
     }
 
+    public boolean hasExpired() {
+        return new Date().compareTo(endDate) >= 0;
+    }
 }
