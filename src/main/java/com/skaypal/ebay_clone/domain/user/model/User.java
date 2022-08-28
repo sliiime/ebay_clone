@@ -145,7 +145,7 @@ public class User {
         this.registrationStatus = registrationStatus;
         this.phone = phone;
         this.country = country;
-        this.roles = ADMIN.equals(role) ? List.of(new Role(3,"ADMIN")) : List.of(new Role(1,"UNAUTHORIZED_USER"));
+        if (ADMIN.equals(role)) this.roles = List.of(new Role(3,"ADMIN"));
     }
 
     public User(CreateUserDto user) {
@@ -160,7 +160,6 @@ public class User {
         this.registrationStatus = UserRegStatus.PENDING;
         this.phone = user.getPhone();
         this.items = new ArrayList<>();
-        this.roles = List.of(new Role(1,"UNAUTHORIZED_USER"));
     }
 
     public Integer getId() {
@@ -271,6 +270,9 @@ public class User {
         this.country = country;
     }
 
+    public void setRoles(List<Role> roles){
+        this.roles = roles;
+    }
     public boolean isAdmin() {
 
         for (Role role : roles) if (role.getRole().equals("ADMIN")) return true;

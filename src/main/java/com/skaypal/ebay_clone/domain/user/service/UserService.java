@@ -5,23 +5,28 @@ import com.skaypal.ebay_clone.domain.country.model.Country;
 import com.skaypal.ebay_clone.domain.country.service.CountryService;
 import com.skaypal.ebay_clone.domain.role.model.Role;
 import com.skaypal.ebay_clone.domain.role.repository.RoleRepository;
+import com.skaypal.ebay_clone.domain.role.service.RoleService;
+import com.skaypal.ebay_clone.domain.user.UserRegStatus;
 import com.skaypal.ebay_clone.domain.user.dto.CreateUserDto;
 import com.skaypal.ebay_clone.domain.user.dto.UpdateUserDto;
 import com.skaypal.ebay_clone.domain.user.dto.ViewUserDto;
 import com.skaypal.ebay_clone.domain.user.exceptions.UserConflictException;
 import com.skaypal.ebay_clone.domain.user.exceptions.UserNotFoundException;
 import com.skaypal.ebay_clone.domain.user.model.User;
-import com.skaypal.ebay_clone.domain.user.repositories.JPAUserRepository;
 import com.skaypal.ebay_clone.domain.user.repositories.UserRepository;
 import com.skaypal.ebay_clone.domain.user.validator.UserValidator;
 import com.skaypal.ebay_clone.utils.validator.ValidationResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.skaypal.ebay_clone.domain.user.UserRegStatus.ACCEPTED;
 
 @Service
 public class UserService {
@@ -29,22 +34,27 @@ public class UserService {
     private UserRepository userRepository;
     private UserValidator userValidator;
     private CountryService countryService;
-    private RoleRepository roleRepository;
+    private RoleService roleService;
 
     private PasswordEncoder passwordEncoder;
 
+    Role UNAUTHORIZED;
+    Role AUTHORIZED;
 
     @Autowired
     public UserService(UserRepository userRepository,
                        UserValidator userValidator,
                        CountryService countryService,
-                       RoleRepository roleRepository,
+                       RoleService roleService,
                        PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.userValidator = userValidator;
         this.countryService = countryService;
-        this.roleRepository = roleRepository;
+        this.roleService = roleService;
         this.passwordEncoder = passwordEncoder;
+
+        UNAUTHORIZED = roleService.getRole("UNAUTHORIZED_USER").orElseThrow(() -> new RuntimeException("FATAL : UNAUTHORIZED_USER ROLE DOES NOT EXIST"));
+        AUTHORIZED = roleService.getRole("AUTHORIZED_USER").orElseThrow(() -> new RuntimeException("FATAL : AUTHORIZED_USER ROLE DOES NOT EXIST"));
 
     }
 
@@ -68,11 +78,14 @@ public class UserService {
 
         Country country = countryService.getCountry(createUserDto.getCountry());
 
+        List<Role> roles = List.of(UNAUTHORIZED);
+
         if (country == null) throw new CountryNotFoundException(createUserDto.getCountry());
 
         User user = new User(createUserDto);
         user.setCountry(country);
         user.setPassword(passwordEncoder.encode(createUserDto.getPassword()));
+        user.setRoles(roles);
 
         return new ViewUserDto(userRepository.save(user));
 
@@ -111,4 +124,23 @@ public class UserService {
     }
 
 
+    @Transactional
+    public boolean approveUser(Integer id) {
+        Optional<User> user = userRepository.findById(id);
+
+        if (user.isEmpty() || UserRegStatus.DECLINED.equals(user.get().getRegistrationStatus())) return false;
+
+        User u = user.get();
+
+        List<Role> roles = new ArrayList<>();
+        roles.add(AUTHORIZED);
+
+        u.setRoles(roles);
+        u.setRegistrationStatus(ACCEPTED);
+
+        userRepository.save(u);
+
+        return true;
+
+    }
 }

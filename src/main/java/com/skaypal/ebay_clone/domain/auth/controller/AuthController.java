@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/ebay_clone/api/auth/")
+@RequestMapping("/ebay_clone/api/auth")
 public class AuthController {
     AuthService authService;
 
@@ -40,7 +40,7 @@ public class AuthController {
 
         return ServiceResultStatus.OK.equals(hopefullyMap.getServiceResultStatus()) ?
                 ResponseEntity.ok(hopefullyMap.hopefully()) :
-                ResponseEntity.notFound().build();
+                ResponseEntity.badRequest().build();
         //Needs to provide a more explanatory message in case of authentication failure
 
 

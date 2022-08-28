@@ -42,10 +42,10 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
+                .antMatcher("/**")
                 .authorizeRequests()
-                .antMatchers("GET","/ebay_clone/api/user/").hasAuthority("ADMIN")
-                .antMatchers("POST","/ebay_clone/api/auth/").permitAll()
-                .antMatchers("POST","/ebay_clone/api/user/").permitAll()
+                .antMatchers("POST","/ebay_clone/api/auth").permitAll()
+                .antMatchers("POST","/ebay_clone/api/user").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .userDetailsService(loginForm)

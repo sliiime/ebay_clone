@@ -55,7 +55,7 @@ public class OnStartupConfiguration {
                     "syriza@sugarbabes.com",
                     "123456788",
                     1F,
-                    UserRegStatus.ACCEPTED,
+                    UserRegStatus.PENDING,
                     "12121312",
                     new Country(88),
                     List.of(new Role(1,"UNAUTHORIZED_USER"))

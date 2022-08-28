@@ -1,9 +1,12 @@
 package com.skaypal.ebay_clone.domain.user.dto;
 
+import com.skaypal.ebay_clone.domain.user.UserRegStatus;
 import com.skaypal.ebay_clone.domain.user.model.User;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.skaypal.ebay_clone.domain.user.UserRegStatus.*;
 
 public class ViewUserDto {
 
@@ -21,6 +24,7 @@ public class ViewUserDto {
     private String country;
     private List<Integer> itemIds;
 
+    private UserRegStatus registrationStatus;
 
     public ViewUserDto() {
     }
@@ -37,6 +41,7 @@ public class ViewUserDto {
         this.password = user.getPassword();
         this.itemIds = user.getItems().stream().map((i) -> i.getId()).collect(Collectors.toList());
         this.country = user.getCountry().getCountry();
+        this.registrationStatus = user.getRegistrationStatus();
     }
 
     public Integer getId() { return id;}
@@ -79,6 +84,10 @@ public class ViewUserDto {
 
     public String getCountry() {return country;}
 
+    public UserRegStatus getRegistrationStatus(){return registrationStatus;}
+
+
+
     public void setAddress(String address) {
         this.address = address;
     }
@@ -117,5 +126,9 @@ public class ViewUserDto {
 
     public void setItemIds(List<Integer> itemIds) { this.itemIds = itemIds;}
 
-    private void setCountry(String country) {this.country = country;}
+    public void setCountry(String country) {this.country = country;}
+
+    public void setRegistrationStatus(UserRegStatus registrationStatus) {
+        this.registrationStatus = registrationStatus;
+    }
 }

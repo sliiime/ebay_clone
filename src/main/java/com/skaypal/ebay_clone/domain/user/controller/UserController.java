@@ -9,6 +9,7 @@ import com.skaypal.ebay_clone.domain.user.service.UserService;
 import com.skaypal.ebay_clone.utils.Responses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,6 +33,7 @@ public class UserController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<ViewUserDto>> getUsers() {
         List<ViewUserDto> users = userService.getUsers();
         return ResponseEntity.ok(users);
@@ -59,6 +61,13 @@ public class UserController {
     public ResponseEntity<?> deleteUser(@PathVariable Integer id){
         userService.deleteUser(id);
         return ResponseEntity.ok().build();
+
+    }
+
+    @PutMapping(path = "/approve/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<?> approveUser(@PathVariable Integer id){
+        return userService.approveUser(id) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
 
     }
 }
