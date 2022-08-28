@@ -45,15 +45,10 @@ function Login() {
         setSubmitButtonPressed(true)
     };
 
-    useEffect( () => {
-        setAuth({});
-        localStorage.clear();
-    },[])
-
     useEffect(() => {
         if(!loginErrorsExist(submitButtonPressed,errors)) {
             axios
-                .post("http://localhost:8080/ebay_clone/api/auth", {
+                .post("http://localhost:8080/ebay_clone/api/auth/", {
                     username : credentials.username,
                     password : credentials.password
                 })
@@ -61,14 +56,18 @@ function Login() {
                     console.log(response)
                     console.log(response.data)
                     const username = credentials.username;
-                    const password = credentials.password
-                    const roles = [2001,5150]//response?.data?.role;
-                    const accessToken = response?.data//response?.data?.accessToken;
-                    const email = "pal@test.com"//response?.data?.email;
-                    setAuth({ username, password, roles, accessToken });
+                    const roleResponse = response?.data?.role//response?.data?.role;
+                    let roles = []
+                    console.log(roleResponse)
+                    if (roleResponse === "user") {
+                        roles = [2001]
+                    } else {
+                        roles = [5150]
+                    }
+                    const accessToken = response?.data?.token//response?.data?.accessToken;
+                    setAuth({ username, roles, accessToken });
                     localStorage.setItem("username", JSON.stringify(credentials.username));
-                    localStorage.setItem("email", JSON.stringify(email));
-                    localStorage.setItem("role", JSON.stringify(roles));
+                    localStorage.setItem("roles", JSON.stringify(roles));
                     localStorage.setItem("accessToken", JSON.stringify(accessToken));
                     setCredentials({
                         username: "",
@@ -76,7 +75,7 @@ function Login() {
                     })
                     setIsCorrectSubmission(1);
                     setDisableButton(true);
-                    const timer = setTimeout(() => navigate(from, {replace: true}), 3000);
+                    const timer = setTimeout(() => (roleResponse==="admin") ? navigate('../admin') : navigate(from, {replace: true}), 3000);
                     return () => clearTimeout(timer);
                 })
                 .catch((error) => {
@@ -86,6 +85,20 @@ function Login() {
                 });
         }
     }, [submitButtonPressed, errors]);
+
+    useEffect(() => {
+        if(localStorage.getItem("username")) {
+            const username = JSON.parse(localStorage.getItem("username"))
+            const roles = JSON.parse(localStorage.getItem("roles"))
+            const accessToken = JSON.parse(localStorage.getItem("accessToken"))
+            console.log(username)
+            console.log(roles)
+            console.log(accessToken)
+            setAuth({username, roles, accessToken})
+
+            navigate(from, {replace: true})
+        }
+    })
 
     return (
         <div className="login">

@@ -19,15 +19,35 @@ function App() {
       return (
           <div className="App">
               <Routes>
-                  <Route path="" element={<Home />} />
-                  <Route path="login" element={<Login />} />
-                  <Route path="signup" element={<SignUp />} />
-                  <Route path="unauthorized" element={<Unauthorized />} />
-                  <Route path="admin" element={<Admin />} />
-                  <Route path="*" element={<Missing />} />
+                  <Route path="/" element={<Layout />}>
+                      {/* public routes */}
+                      <Route path="login" element={<Login />} />
+                      <Route path="signup" element={<SignUp />} />
+                      <Route path="unauthorized" element={<Unauthorized />} />
+                      <Route path="" element={<Home />} />
+
+                      {/* we want to protect these routes */}
+                      <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
+                          <Route path="admin" element={<Admin />} />
+                      </Route>
+
+                      {/* catch all */}
+                      <Route path="*" element={<Missing />} />
+                  </Route>
               </Routes>
           </div>
       );
 }
 
 export default App;
+
+/*
+
+<Route path="" element={<Home />} />
+                  <Route path="login" element={<Login />} />
+                  <Route path="signup" element={<SignUp />} />
+                  <Route path="unauthorized" element={<Unauthorized />} />
+                  <Route path="admin" element={<Admin />} />
+                  <Route path="*" element={<Missing />} />
+
+ */

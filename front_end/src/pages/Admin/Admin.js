@@ -2,12 +2,22 @@ import React, {useEffect, useState} from 'react';
 import axios from "axios";
 import market from "../../images/market.png";
 import '../../css/admin.css'
+import useAuth from "../../context/useAuth";
+import {useNavigate} from "react-router-dom";
 
 const Admin = () => {
 
+    const { setAuth } = useAuth()
+
     const [users,setUsers] = useState([])
+
+    const handleLogoutClick = () => {
+        setAuth({})
+        localStorage.clear()
+    }
+
     const handleAuthClick = (user) => {
-        console.log(user)
+        
     }
 
     useEffect( () => {
@@ -15,7 +25,7 @@ const Admin = () => {
             .get("http://localhost:8080/ebay_clone/api/user/")
             .then((response) => {
                 setUsers(response.data)
-                console.log(response.data)
+                (response.data)
             })
             .catch((error) => {
                 console.log(error)
@@ -27,8 +37,8 @@ const Admin = () => {
             <nav className="navbar">
                 <img className="marketPlaceIcon" src={market} alt=""/>
                 <h1 className="admin-text">~ADMIN~</h1>
-                <button className="admin-applyChanges-button">
-                    Apply changes
+                <button className="admin-applyChanges-button" onClick={handleLogoutClick}>
+                    Logout
                 </button>
             </nav>
             {
