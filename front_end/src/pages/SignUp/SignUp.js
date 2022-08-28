@@ -4,6 +4,7 @@ import {useNavigate} from "react-router-dom";
 import regexValidation from "./regexValidation";
 import errorsExist from "./errorsExist";
 import axios from "axios";
+import '../../css/signup.css';
 
 function SignUp() {
 
@@ -16,14 +17,17 @@ function SignUp() {
         phoneNumber:"",
         address:"",
         password:"",
+        confirmPassword:"",
         country:""
     });
 
     let navigate = useNavigate();
 
     const [errors,setErrors] = useState({});
+    const [signUpError,setSignUpError] = useState("");
+    const [disableButton, setDisableButton] = useState(false);
     const [submitButtonPressed,setSubmitButtonPressed] = useState(false)
-    const [isCorrectSubmition,setIsCorrectSubmition] = useState(0)
+    const [isCorrectSubmission,setIsCorrectSubmission] = useState(0)
 
     const handleChange = (event) => {
         setCredentials({
@@ -39,9 +43,7 @@ function SignUp() {
     };
 
     useEffect(() => {
-        if(errorsExist(submitButtonPressed,errors)) {
-            return;
-        } else {
+        if(!errorsExist(submitButtonPressed,errors)) {
             axios
                 .post("http://localhost:8080/ebay_clone/api/user/", {
                     username : credentials.username,
@@ -55,9 +57,15 @@ function SignUp() {
                     country  : credentials.country
                 })
                 .then((response) => {
-                    console.log(response)
+                    setIsCorrectSubmission(1);
+                    setDisableButton(true);
+                    const timer = setTimeout(() => navigate('../login'), 3000);
+                    return () => clearTimeout(timer);
                 })
-                .catch((error) => console.log(error));
+                .catch((error) => {
+                    setSignUpError(error.response.data);
+                    setIsCorrectSubmission(2);
+                });
         }
     }, [submitButtonPressed, errors]);
 
@@ -101,19 +109,29 @@ function SignUp() {
                     <input className="signUpInputBox" placeholder="Password" type="password" name="password" value={credentials.password} onChange={handleChange}/>
                     {errors.password && <p className="input--error">{errors.password}</p>}
                 </div>
+                <div className="signUpInputDiv">
+                    <input className="signUpInputBox" placeholder="Confirm password" type="password" name="confirmPassword" value={credentials.confirmPassword} onChange={handleChange}/>
+                    {errors.confirmPassword && <p className="input--error">{errors.confirmPassword}</p>}
+                </div>
             </form>
             <div className="signup--register">
-                <button className="login-register--button" onClick={handleFormSubmit}>
+                <button className="login-register--button" onClick={handleFormSubmit} disabled={disableButton}>
                     Register!
                 </button>
-                {isCorrectSubmition===1 &&
-                    <p className="correct--signup">
-                        Great, you registered! Now you should wait for the admin approval.
-                    </p>}
-                {isCorrectSubmition===2 &&
-                    <p className="wrong--signup">
-                        Something went wrong! Try again.
-                    </p>}
+                <div>
+                    {
+                        isCorrectSubmission===1 &&
+                        <p className="correct--signup--login">
+                            Great, you registered! Now you should wait for the admin approval.
+                        </p>
+                    }
+                    {
+                        isCorrectSubmission===2 &&
+                        <p className="wrong--signup--login">
+                            {signUpError}
+                        </p>
+                    }
+                </div>
             </div>
         </div>
     )

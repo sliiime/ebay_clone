@@ -112,6 +112,11 @@
     box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
 }
 
+.login-register--button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
 .underButtonContent {
     width: 350px;
     height: 15px;
@@ -170,4 +175,47 @@
 .createAccButton:active {
     transform: scale(0.98);
     box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+}
+
+.input--error {
+    font-family: 'Mulish';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 10px;
+    line-height: 15px;
+
+    color: #FF0000;
+}
+
+.loginInputDiv {
+    display: block;
+    width: 350px;
+}
+
+.correct--signup--login{
+    font-family: 'Mulish';
+    font-style: normal;
+    font-weight: bold;
+    font-size: 15px;
+    line-height: 15px;
+
+    color: #11AF22;
+}
+
+.wrong--signup--login {
+    font-family: 'Mulish';
+    font-style: normal;
+    font-weight: bold;
+    font-size: 15px;
+    line-height: 15px;
+    width: 450px;
+    text-align: center;
+
+    color: #FF0000;
+}
+
+.login--afterSubmissionInfo {
+    padding-top: 30px;
+    width: 450px;
+    text-align: center;
 }
