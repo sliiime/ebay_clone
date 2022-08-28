@@ -8,6 +8,7 @@ import com.skaypal.ebay_clone.domain.user.exceptions.UserNotFoundException;
 import com.skaypal.ebay_clone.domain.user.model.User;
 import com.skaypal.ebay_clone.domain.user.repositories.UserRepository;
 import com.skaypal.ebay_clone.utils.jwt.JWTUtil;
+import com.skaypal.ebay_clone.utils.validator.ServiceResultStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,30 +18,31 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/ebay_clone/api/auth")
+@RequestMapping("/ebay_clone/api/auth/")
 public class AuthController {
     AuthService authService;
 
 
     @Autowired
-    public AuthController(AuthService authService){
+    public AuthController(AuthService authService) {
         this.authService = authService;
     }
 
     @PostMapping
     public ResponseEntity<?> loginHandler(@RequestBody LoginFormDto loginFormDto) {
 
-        AuthenticationResult<String> hopefullyToken = authService.authenticate(loginFormDto);
+        AuthenticationResult<HashMap<String, Object>> hopefullyMap = authService.authenticate(loginFormDto);
 
-        String token = hopefullyToken.hopefully();
-
-
+        return ServiceResultStatus.OK.equals(hopefullyMap.getServiceResultStatus()) ?
+                ResponseEntity.ok(hopefullyMap.hopefully()) :
+                ResponseEntity.notFound().build();
         //Needs to provide a more explanatory message in case of authentication failure
-        return token == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(token);
+
 
     }
 

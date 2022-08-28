@@ -3,9 +3,11 @@ package com.skaypal.ebay_clone.domain.user.model;
 import com.skaypal.ebay_clone.domain.country.model.Country;
 import com.skaypal.ebay_clone.domain.item.model.Item;
 import com.skaypal.ebay_clone.domain.role.model.Role;
+import com.skaypal.ebay_clone.domain.role.model.RoleEnum;
+import com.skaypal.ebay_clone.domain.role.repository.RoleRepositoryImpl;
 import com.skaypal.ebay_clone.domain.user.UserRegStatus;
 import com.skaypal.ebay_clone.domain.user.dto.CreateUserDto;
-import org.hibernate.boot.model.source.spi.FetchCharacteristics;
+import static com.skaypal.ebay_clone.domain.role.model.RoleEnum.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -15,6 +17,7 @@ import java.util.List;
 @Entity
 @Table()
 public class User {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -58,7 +61,7 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id")
     )
 
-    private List<Role> roles = List.of(new Role(1,"USER"));
+    protected List<Role> roles;
 
     public User() {}
 
@@ -116,6 +119,32 @@ public class User {
         this.registrationStatus = registrationStatus;
         this.phone = phone;
         this.country = country;
+    }
+    public User(String username,
+                String password,
+                String name,
+                String surname,
+                String address,
+                String email,
+                String afm,
+                Float rating,
+                UserRegStatus registrationStatus,
+                String phone,
+                Country country,
+                RoleEnum role) {
+
+        this.username = username;
+        this.password = password;
+        this.name = name;
+        this.surname = surname;
+        this.address = address;
+        this.email = email;
+        this.afm = afm;
+        this.rating = rating;
+        this.registrationStatus = registrationStatus;
+        this.phone = phone;
+        this.country = country;
+        this.roles = role == ADMIN ? List.of(new Role(2,"ADMIN"),new Role(1,"USER")) : List.of(new Role(1,"USER"));
     }
 
     public User(CreateUserDto user) {
@@ -240,8 +269,10 @@ public class User {
         this.country = country;
     }
 
-    public void setRoles(List<Role> roles){
-        this.roles = roles;
-    }
+    public boolean isAdmin() {
 
+        for (Role role : roles) if (role.getRole().equals("ADMIN")) return true;
+
+        return false;
+    }
 }

@@ -14,7 +14,7 @@ public class HaveMadeTransactionValidation extends ValidationStep<CreateMessageD
 
     @Override
     public ValidationResult validate(CreateMessageDto toValidate) {
-        return !itemValidator.usersHaveMadeTransaction(toValidate.getReceiverId(), toValidate.getSenderId()) ?
+        return itemValidator.usersHaveMadeTransaction(toValidate.getReceiverId(), toValidate.getSenderId()) ?
                 checkNext(toValidate):
                 ValidationResult.invalid("You have not made a transaction yet with this user");
     }

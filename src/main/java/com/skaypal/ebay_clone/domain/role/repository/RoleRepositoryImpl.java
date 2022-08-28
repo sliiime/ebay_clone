@@ -4,6 +4,7 @@ import com.skaypal.ebay_clone.domain.role.model.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,8 +13,11 @@ public class RoleRepositoryImpl implements RoleRepository{
 
     JPARoleRepository roleRepository;
 
+
+
     @Autowired
     public RoleRepositoryImpl(JPARoleRepository roleRepository){
+
         this.roleRepository = roleRepository;
     }
 

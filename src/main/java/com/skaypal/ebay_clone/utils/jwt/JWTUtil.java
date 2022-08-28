@@ -15,7 +15,7 @@ public class JWTUtil {
     private final String SECRET = "WABALABADUBDUB";
 
     public String generateToken(User user) {
-        return JWT.create()
+        String token = JWT.create()
                 .withSubject("User Details")
                 .withClaim("userId",user.getId())
                 .withClaim("username",user.getUsername())
@@ -23,6 +23,8 @@ public class JWTUtil {
                 .withExpiresAt(Date.from(Instant.from(Instant.now().plusSeconds( 60*60))))
                 .withIssuer("Skaypal corp")
                 .sign(Algorithm.HMAC256(SECRET));
+
+        return String.format("Bearer %s",token);
     }
 
     public String validateTokenAndRetrieveSubject(String token){

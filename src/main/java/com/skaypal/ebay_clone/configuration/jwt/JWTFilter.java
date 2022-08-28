@@ -1,7 +1,7 @@
 package com.skaypal.ebay_clone.configuration.jwt;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.skaypal.ebay_clone.domain.auth.model.LoginForm;
+import com.skaypal.ebay_clone.domain.auth.service.LoginService;
 import com.skaypal.ebay_clone.utils.jwt.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,12 +19,12 @@ import java.io.IOException;
 @Component
 public class JWTFilter extends OncePerRequestFilter {
 
-    private LoginForm loginForm;
+    private LoginService loginForm;
 
     private JWTUtil jwtUtil;
 
     @Autowired
-    public JWTFilter(LoginForm loginForm,
+    public JWTFilter(LoginService loginForm,
                      JWTUtil jwtUtil){
         this.jwtUtil = jwtUtil;
         this.loginForm = loginForm;

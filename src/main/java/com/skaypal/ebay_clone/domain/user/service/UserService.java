@@ -32,7 +32,6 @@ public class UserService {
     private RoleRepository roleRepository;
 
     private PasswordEncoder passwordEncoder;
-    private final Role USER_ROLE;
 
 
     @Autowired
@@ -47,7 +46,7 @@ public class UserService {
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
 
-        this.USER_ROLE =roleRepository.getRole("ROLE_USER").orElseThrow(() -> new RuntimeException("User role does not exist : FATAL"));
+         roleRepository.getRole("USER").orElseThrow(() -> new RuntimeException("User role does not exist : FATAL"));
     }
 
     public List<ViewUserDto> getUsers() {
@@ -74,7 +73,6 @@ public class UserService {
 
         User user = new User(createUserDto);
         user.setCountry(country);
-        user.setRoles(List.of(USER_ROLE));
         user.setPassword(passwordEncoder.encode(createUserDto.getPassword()));
 
         return new ViewUserDto(userRepository.save(user));

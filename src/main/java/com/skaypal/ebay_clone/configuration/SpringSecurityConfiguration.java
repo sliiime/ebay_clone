@@ -1,7 +1,7 @@
 package com.skaypal.ebay_clone.configuration;
 
 import com.skaypal.ebay_clone.configuration.jwt.JWTFilter;
-import com.skaypal.ebay_clone.domain.auth.model.LoginForm;
+import com.skaypal.ebay_clone.domain.auth.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,13 +29,13 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public SpringSecurityConfiguration(
-            LoginForm loginForm,
+            LoginService loginForm,
             JWTFilter jwtFilter
     ){
         this.loginForm = loginForm;
         this.jwtFilter = jwtFilter;
     }
-    LoginForm loginForm;
+    LoginService loginForm;
 
     JWTFilter jwtFilter;
 
@@ -43,8 +43,9 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/ebay_clone/api/auth").permitAll()
+                .antMatchers("/ebay_clone/api/auth/").permitAll()
                 .antMatchers("POST","/ebay_clone/api/user/").permitAll()
+                .antMatchers("GET","/ebay_clone/api/user/").hasAuthority("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .userDetailsService(loginForm)

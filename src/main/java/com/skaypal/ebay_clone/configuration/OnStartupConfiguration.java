@@ -1,11 +1,13 @@
 package com.skaypal.ebay_clone.configuration;
 
+import com.skaypal.ebay_clone.domain.admin.AdminFactory;
 import com.skaypal.ebay_clone.domain.bid.model.Bid;
 import com.skaypal.ebay_clone.domain.bid.repository.JPABidRepository;
 import com.skaypal.ebay_clone.domain.country.model.Country;
 import com.skaypal.ebay_clone.domain.item.ItemStatusEnum;
 import com.skaypal.ebay_clone.domain.item.model.Item;
 import com.skaypal.ebay_clone.domain.item.repositories.JPAItemRepository;
+import com.skaypal.ebay_clone.domain.role.model.RoleEnum;
 import com.skaypal.ebay_clone.domain.user.UserRegStatus;
 import com.skaypal.ebay_clone.domain.user.model.User;
 import com.skaypal.ebay_clone.domain.user.repositories.JPAUserRepository;
@@ -49,13 +51,27 @@ public class OnStartupConfiguration {
                     "Eugenios",
                     "Lilipoupoli 2",
                     "syriza@sugarbabes.com",
-                    "123456788", 1F,
+                    "123456788",
+                    1F,
                     UserRegStatus.ACCEPTED,
                     "12121312",
                     new Country(88))
             );
 
-            JPAUserRepository.saveAll(List.of(user1, user2));
+            User admin = ( AdminFactory.admin(
+                    "Katsikas",
+                    encoder.encode("backfrombarca6"),
+                    "Panais",
+                    "Palamidis",
+                    "Negroniou 7",
+                    "koulourades@yahoo.pub",
+                    "778994332",
+                    "6945455420",
+                    new Country(153)
+            )
+            );
+
+            JPAUserRepository.saveAll(List.of(user1, user2,admin));
         };
     }
 
