@@ -30,6 +30,10 @@ function App() {
                           <Route path="admin" element={<Admin />} />
                       </Route>
 
+                      <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
+                          <Route path="mybids" element={<Admin />} />
+                      </Route>
+
                       {/* catch all */}
                       <Route path="*" element={<Missing />} />
                   </Route>

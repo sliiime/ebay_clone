@@ -20,14 +20,14 @@ const Admin = () => {
     const handleAuthClick = (user) => {
         const endpoint = 'http://localhost:8080/ebay_clone/api/user/approve/' + String(user.id)
         axios
-            .put(endpoint,{
+            .put(endpoint,{}, {
                 headers: {
                     'Authorization': JSON.parse(localStorage.getItem('accessToken'))
                 }
             })
             .then((response) => {
                 console.log(response)
-                detectChanges = !detectChanges;
+                window.location.reload(false);
             })
             .catch((error) => {
                 console.log(error)
