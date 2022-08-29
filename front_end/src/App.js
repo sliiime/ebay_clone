@@ -1,8 +1,7 @@
-import React, {useEffect} from "react";
+import React from "react";
 import { Routes, Route } from "react-router-dom";
 import Login from "./pages/Login/Login";
 import SignUp from "./pages/SignUp/SignUp";
-import useAuth from "./context/useAuth";
 import Home from "./pages/MainMenu/Home";
 import Admin from "./pages/Admin/Admin";
 import RequireAuth from "./context/RequireAuth";

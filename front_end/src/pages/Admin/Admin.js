@@ -3,7 +3,6 @@ import axios from "axios";
 import market from "../../images/market.png";
 import '../../css/admin.css'
 import useAuth from "../../context/useAuth";
-import {useNavigate} from "react-router-dom";
 
 const Admin = () => {
 
@@ -11,33 +10,57 @@ const Admin = () => {
 
     const [users,setUsers] = useState([])
 
+    let detectChanges = true
+
     const handleLogoutClick = () => {
         setAuth({})
         localStorage.clear()
     }
 
     const handleAuthClick = (user) => {
-        
-    }
-
-    useEffect( () => {
+        const endpoint = 'http://localhost:8080/ebay_clone/api/user/approve/' + String(user.id)
         axios
-            .get("http://localhost:8080/ebay_clone/api/user/")
+            .put(endpoint,{
+                headers: {
+                    'Authorization': JSON.parse(localStorage.getItem('accessToken'))
+                }
+            })
             .then((response) => {
-                setUsers(response.data)
-                (response.data)
+                console.log(response)
+                detectChanges = !detectChanges;
             })
             .catch((error) => {
                 console.log(error)
             })
-    },[])
+    }
+
+    useEffect( () => {
+        axios
+            .get("http://localhost:8080/ebay_clone/api/user", {
+                headers: {
+                    'Authorization': JSON.parse(localStorage.getItem('accessToken')),
+                }
+            })
+            .then((response) => {
+                //registrationStatus
+                setUsers(response?.data);
+                users.sort(function(x, y) {
+                    return (x.registrationStatus === y.registrationStatus)? 0 : x? -1 : 1;
+                });
+                console.log(users)
+                console.log(response?.data)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+    },[detectChanges])
 
     return (
         <div>
             <nav className="navbar">
                 <img className="marketPlaceIcon" src={market} alt=""/>
                 <h1 className="admin-text">~ADMIN~</h1>
-                <button className="admin-applyChanges-button" onClick={handleLogoutClick}>
+                <button className="admin-logout-button" onClick={handleLogoutClick}>
                     Logout
                 </button>
             </nav>
@@ -45,11 +68,11 @@ const Admin = () => {
                 users.length ?
                     users.map(user =>
                         <div className="admin-userInfo" key={user.id}>
-                            <a className="admin-userInfo-text">
+                            <p className="admin-userInfo-text">
                                 {user.username}, {user.afm}, {user.country}
-                            </a>
+                            </p>
                             {
-                                (user.id === 1) ?
+                                (user.registrationStatus !== "ACCEPTED") ?
                                 <button className="admin-userInfo-button" onClick={() => handleAuthClick(user)}>
                                     AUTHORIZE
                                 </button> : null

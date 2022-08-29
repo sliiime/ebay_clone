@@ -7,7 +7,7 @@ body {
     font-weight: bolder;
 }
 
-.admin-applyChanges-button {
+.admin-logout-button {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -26,30 +26,30 @@ body {
     color: black;
 }
 
-.admin-applyChanges-button:active {
+.admin-logout-button:active {
     transform: scale(0.98);
     box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
 }
 
 .admin-userInfo {
     width: 70%;
-    height: 50px;
+    height: auto;
 
-    display: grid;
+    display: block;
+    text-align: center;
     align-items: center;
+    justify-content: center;
 
     background: white;
     border: 1px solid black;
     border-radius: 2px;
 
     margin-top: 10px;
-    padding-left: 5px;
 
     color: black;
 }
 
 .admin-userInfo-text {
-    text-align: left;
     font-family: 'Mulish';
     font-style: normal;
     font-weight: 400;
@@ -70,6 +70,8 @@ body {
     background: white;
     border: 1px solid black;
     border-radius: 4px;
+
+    margin-bottom: 10px;
 
     color: black;
 }

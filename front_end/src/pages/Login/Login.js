@@ -48,7 +48,7 @@ function Login() {
     useEffect(() => {
         if(!loginErrorsExist(submitButtonPressed,errors)) {
             axios
-                .post("http://localhost:8080/ebay_clone/api/auth/", {
+                .post("http://localhost:8080/ebay_clone/api/auth", {
                     username : credentials.username,
                     password : credentials.password
                 })
@@ -56,13 +56,17 @@ function Login() {
                     console.log(response)
                     console.log(response.data)
                     const username = credentials.username;
-                    const roleResponse = response?.data?.role//response?.data?.role;
+                    const roleResponse = response?.data?.status//response?.data?.role;
                     let roles = []
                     console.log(roleResponse)
-                    if (roleResponse === "user") {
+                    if (roleResponse === "admin") {
+                        roles = [5150]
+                    } else if (roleResponse === "approved") {
                         roles = [2001]
                     } else {
-                        roles = [5150]
+                        setLoginError("Your account has not been accepted yet!");
+                        setIsCorrectSubmission(2);
+                        return;
                     }
                     const accessToken = response?.data?.token//response?.data?.accessToken;
                     setAuth({ username, roles, accessToken });
@@ -80,7 +84,12 @@ function Login() {
                 })
                 .catch((error) => {
                     console.log(error)
-                    setLoginError("Either username or password is incorrect!");
+                    console.log(error.response.status)
+                    if (error.response.status === 401) {
+                        setLoginError("Either username or password is incorrect!");
+                    } else {
+                        setLoginError(error.response.data)
+                    }
                     setIsCorrectSubmission(2);
                 });
         }
