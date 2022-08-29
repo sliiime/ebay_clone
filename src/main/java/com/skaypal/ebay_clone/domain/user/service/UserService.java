@@ -80,6 +80,7 @@ public class UserService {
 
         List<Role> roles = List.of(UNAUTHORIZED);
 
+        //Validator logic could be used here
         if (country == null) throw new CountryNotFoundException(createUserDto.getCountry());
 
         User user = new User(createUserDto);

@@ -4,6 +4,8 @@ import com.skaypal.ebay_clone.domain.item.ItemStatusEnum;
 import com.skaypal.ebay_clone.domain.item.model.Item;
 
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ViewItemDto {
 
@@ -18,7 +20,8 @@ public class ViewItemDto {
     private Date startDate;
     private Date endDate;
     private String description;
-    private String category;
+
+    private List<String> categories;
 
     private ItemStatusEnum status;
     private Integer sellerId;
@@ -38,7 +41,7 @@ public class ViewItemDto {
         this.startDate = item.getStartDate();
         this.endDate = item.getEndDate();
         this.description = item.getDescription();
-        this.category = item.getCategory();
+        this.categories = item.getCategories().stream().map(c -> c.getCategory()).collect(Collectors.toList());
         this.status = item.getStatus();
         this.sellerId = item.getSeller().getId();
         this.boughtById = item.getBoughtBy() == null ? null : item.getBoughtBy().getId();
@@ -93,8 +96,8 @@ public class ViewItemDto {
         return description;
     }
 
-    public String getCategory() {
-        return category;
+    public List<String> getCategory() {
+        return categories;
     }
 
     public ItemStatusEnum getStatus() {
@@ -147,8 +150,8 @@ public class ViewItemDto {
         this.description = description;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public void setCategory(List<String> categories) {
+        this.categories = categories;
     }
 
     public void setStatus(ItemStatusEnum status) {

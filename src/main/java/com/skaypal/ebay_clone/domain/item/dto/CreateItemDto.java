@@ -9,6 +9,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 import java.util.Date;
+import java.util.List;
 
 
 @MinBidBuyPriceValidation
@@ -30,7 +31,7 @@ public class CreateItemDto {
 
     @NotNull
     @Length(max = 45)
-    private String category;
+    private List<String> categories;
 
     @NotNull
     private Date endDate;
@@ -46,13 +47,13 @@ public class CreateItemDto {
                          Float buyPrice,
                          Float minBid,
                          String description,
-                         String category,
+                         List<String> categories,
                          Date endDate,
                          Date startDate) {
         this.name = name;
         this.buyPrice = buyPrice;
         this.description = description;
-        this.category = category;
+        this.categories = categories;
         this.minBid = minBid;
         this.endDate = endDate;
         this.startDate = startDate;
@@ -62,14 +63,14 @@ public class CreateItemDto {
                          Float buyPrice,
                          Float minBid,
                          String description,
-                         String category,
+                         List<String> categories,
                          Date endDate,
                          Date startDate,
                          Integer ownerId) {
         this.name = name;
         this.buyPrice = buyPrice;
         this.description = description;
-        this.category = category;
+        this.categories = categories;
         this.minBid = minBid;
         this.endDate = endDate;
         this.startDate = startDate;
@@ -79,7 +80,7 @@ public class CreateItemDto {
     public String getName() {return name;}
     public Float getBuyPrice() {return buyPrice;}
     public String getDescription() {return description;}
-    public String getCategory() {return category;}
+    public List<String> getCategories() {return categories;}
 
     public Date getEndDate() { return endDate;}
 
@@ -91,7 +92,7 @@ public class CreateItemDto {
     public void setName(String name) {this.name = name;}
     public void setBuyPrice(Float buyPrice) {this.buyPrice = buyPrice; }
     public void setDescription(String description) {this.description = description; }
-    public void setCategory(String category) {this.category = category; }
+    public void setCategory(List<String> categories) {this.categories = categories; }
     public void setMinBid(Float minBid) {this.minBid = minBid;}
     public void setEndDate(Date endDate){this.endDate = endDate;}
     public void setStartDate(Date startDate) {this.startDate = startDate;}

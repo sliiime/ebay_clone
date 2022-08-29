@@ -3,6 +3,7 @@ package com.skaypal.ebay_clone.configuration;
 import com.skaypal.ebay_clone.domain.admin.AdminFactory;
 import com.skaypal.ebay_clone.domain.bid.model.Bid;
 import com.skaypal.ebay_clone.domain.bid.repository.JPABidRepository;
+import com.skaypal.ebay_clone.domain.category.model.Category;
 import com.skaypal.ebay_clone.domain.country.model.Country;
 import com.skaypal.ebay_clone.domain.item.ItemStatusEnum;
 import com.skaypal.ebay_clone.domain.item.model.Item;
@@ -81,19 +82,19 @@ public class OnStartupConfiguration {
     @Bean
     CommandLineRunner itemRepoInit(JPAItemRepository JPAItemRepository) {
         return args -> {
-            Item item1 = (new Item("item1",
+            Item item1 = (new Item("Warmogs's",
                     10f,
                     5f,
                     50d,
                     40d,
                     new Date(),
                     Date.from(Instant.now().plusSeconds(10000)),
-                    "perigrafh",
-                    "KATHGORIA",
+                    "peri",
+                    List.of(new Category(1)),
                     ItemStatusEnum.ONGOING,
                     new User(1)
             ));
-            Item item2 = (new Item("item2",
+            Item item2 = (new Item("Thornmail",
                     15f,
                     7f,
                     50d,
@@ -101,49 +102,49 @@ public class OnStartupConfiguration {
                     new Date(),
                     Date.from(Instant.now().plusSeconds(10000)),
                     "perigrafh",
-                    "KATHGORIA",
+                    List.of(new Category(2)),
                     ItemStatusEnum.ONGOING,
                     new User(1)
             ));
-            Item item3 = (new Item("item2",
+            Item item3 = (new Item("email",
                     20f,
                     8f,
                     50d,
                     40d,
                     new Date(),
                     Date.from(Instant.now().plusSeconds(10000)),
-                    "perigrafh",
-                    "KATHGORIA",
+                    "perigrafhsee",
+                    List.of(new Category(3)),
                     ItemStatusEnum.ONGOING,
                     new User(1)
             ));
-            Item item4 = (new Item("item3",
+            Item item4 = (new Item("moggolos",
                     25f,
                     10f,
                     50d,
                     40d,
                     new Date(),
                     Date.from(Instant.now().plusSeconds(150)),
-                    "perigrafh",
-                    "KATHGORIA",
+                    "grafh",
+                    List.of(new Category(4)),
                     ItemStatusEnum.BOUGHT_BUYOUT,
                     new User(1),
                     new User(2)
             ));
-            Item item5 = (new Item("item4",
+            Item item5 = (new Item("Amogus",
                     140f,
                     3f,
                     50d,
                     40d,
                     new Date(),
                     Date.from(Instant.now().plusSeconds(30)),
-                    "perigrafh",
-                    "KATHGORIA",
+                    "periklees",
+                    List.of(new Category(1)),
                     ItemStatusEnum.BOUGHT_TIMEOUT,
                     new User(1),
                     new User(2)
             ));
-            Item item6 = (new Item("item6",
+            Item item6 = (new Item("Thumbemail",
                     20f,
                     6f,
                     50d,
@@ -151,7 +152,7 @@ public class OnStartupConfiguration {
                     new Date(),
                     Date.from(Instant.now().plusSeconds(10)),
                     "perigrafh",
-                    "KATHGORIA",
+                    List.of(new Category(2)),
                     ItemStatusEnum.NOT_BOUGHT,
                     new User(1)
             ));
