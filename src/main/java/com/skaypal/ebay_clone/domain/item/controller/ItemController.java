@@ -1,15 +1,18 @@
 package com.skaypal.ebay_clone.domain.item.controller;
 
 import com.skaypal.ebay_clone.domain.item.dto.CreateItemDto;
+import com.skaypal.ebay_clone.domain.item.dto.FiltersDto;
 import com.skaypal.ebay_clone.domain.item.dto.UpdateItemDto;
 import com.skaypal.ebay_clone.domain.item.dto.ViewItemDto;
 import com.skaypal.ebay_clone.domain.item.model.Item;
+import com.skaypal.ebay_clone.domain.item.repositories.queries.Filter;
 import com.skaypal.ebay_clone.domain.item.service.ItemService;
 import com.skaypal.ebay_clone.utils.Responses;
 import com.skaypal.ebay_clone.utils.jwt.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "ebay_clone/api/item")
@@ -43,9 +47,13 @@ public class ItemController {
         return ResponseEntity.ok(items);
     }*/
 
-    @GetMapping
-    public ResponseEntity<Page<ViewItemDto>> getItemsPage(@RequestParam Integer p) {
-        return ResponseEntity.ok(itemService.getPage(p));
+
+
+    @PostMapping(path = "/page/")
+    public ResponseEntity<Page<ViewItemDto>> getItemsPage(@RequestParam Integer p,@RequestBody Optional<FiltersDto> filters){
+
+        FiltersDto filtersDto = filters.isPresent() ? filters.get() : null;
+        return ResponseEntity.ok(itemService.getPage(filtersDto,p));
     }
 
     @GetMapping(path = "/{id}")

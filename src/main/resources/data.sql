@@ -1,3 +1,4 @@
+/*-- Initialize country table */
 INSERT INTO country (name, iso) VALUES ('Afghanistan', 'AF');
 INSERT INTO country (name, iso) VALUES ('Albania', 'AL');
 INSERT INTO country (name, iso) VALUES ('Algeria', 'DZ');
@@ -227,6 +228,17 @@ INSERT INTO country (name, iso) VALUES ('Yemen', 'YE');
 INSERT INTO country (name, iso) VALUES ('Zambia', 'ZM');
 INSERT INTO country (name, iso) VALUES ('Zimbabwe', 'ZW');
 
+/* Initialize role table */
 INSERT INTO role (role) VALUES ('UNAUTHORIZED_USER');
 INSERT INTO role (role) VALUES ('AUTHORIZED_USER');
 INSERT INTO role (role) VALUES ('ADMIN');
+
+/* Initialize category table */
+INSERT INTO category (name) VALUES ('CATEGORY 1');
+INSERT INTO category (name) VALUES ('CATEGORY 2');
+INSERT INTO category (name) VALUES ('CATEGORY 3');
+INSERT INTO category (name) VALUES ('CATEGORY 4');
+INSERT INTO category (name) VALUES ('CATEGORY 5');
+INSERT INTO category (name) VALUES ('CATEGORY 6');
+INSERT INTO category (name) VALUES ('CATEGORY 7');
+INSERT INTO category (name) VALUES ('CATEGORY 8');

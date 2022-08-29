@@ -2,10 +2,13 @@ package com.skaypal.ebay_clone.domain.item.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.skaypal.ebay_clone.domain.bid.model.Bid;
+import com.skaypal.ebay_clone.domain.category.model.Category;
 import com.skaypal.ebay_clone.domain.item.ItemStatusEnum;
 import com.skaypal.ebay_clone.domain.item.dto.CreateItemDto;
 import com.skaypal.ebay_clone.domain.item.dto.UpdateItemDto;
 import com.skaypal.ebay_clone.domain.user.model.User;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -32,7 +35,15 @@ public class Item {
     @JsonFormat(pattern = "dd/MM/yyyy")
     private Date endDate;
     private String description;
-    private String category;
+
+
+    @ManyToMany
+    @JoinTable(name = "item_has_category",
+            joinColumns = @JoinColumn(name = "item_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name ="category_id",referencedColumnName = "id")
+    )
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<Category> categories;
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private ItemStatusEnum status;
@@ -59,7 +70,7 @@ public class Item {
                 Date startDate,
                 Date endDate,
                 String description,
-                String category,
+                List<Category> categories,
                 ItemStatusEnum status) {
 
         this.id = id;
@@ -71,7 +82,7 @@ public class Item {
         this.startDate = startDate;
         this.endDate = endDate;
         this.description = description;
-        this.category = category;
+        this.categories = categories;
         this.status = status;
     }
 
@@ -84,7 +95,7 @@ public class Item {
                 Date startDate,
                 Date endDate,
                 String description,
-                String category,
+                List<Category> categories,
                 ItemStatusEnum status,
                 User boughtBy) {
 
@@ -97,7 +108,7 @@ public class Item {
         this.startDate = startDate;
         this.endDate = endDate;
         this.description = description;
-        this.category = category;
+        this.categories = categories;
         this.status = status;
         this.boughtBy = boughtBy;
     }
@@ -110,7 +121,7 @@ public class Item {
                 Date startDate,
                 Date endDate,
                 String description,
-                String category,
+                List<Category> categories,
                 ItemStatusEnum status,
                 User seller) {
 
@@ -122,10 +133,11 @@ public class Item {
         this.startDate = startDate;
         this.endDate = endDate;
         this.description = description;
-        this.category = category;
+        this.categories = categories;
         this.status = status;
         this.seller = seller;
     }
+
     public Item(String name,
                 Float buyPrice,
                 Float minBid,
@@ -134,7 +146,7 @@ public class Item {
                 Date startDate,
                 Date endDate,
                 String description,
-                String category,
+                List<Category> categories,
                 ItemStatusEnum status,
                 User seller,
                 User boughtBy) {
@@ -147,18 +159,16 @@ public class Item {
         this.startDate = startDate;
         this.endDate = endDate;
         this.description = description;
-        this.category = category;
+        this.categories = categories;
         this.status = status;
         this.seller = seller;
         this.boughtBy = boughtBy;
     }
 
-    
 
     public Item(CreateItemDto createItemDto) {
         this.name = createItemDto.getName();
         this.buyPrice = createItemDto.getBuyPrice();
-        this.category = createItemDto.getCategory();
         this.description = createItemDto.getDescription();
         this.seller = new User(createItemDto.getOwnerId());
         this.startDate = createItemDto.getStartDate();
@@ -191,7 +201,9 @@ public class Item {
         return latitude;
     }
 
-    public User getSeller() { return seller;}
+    public User getSeller() {
+        return seller;
+    }
 
     public Double getLongitude() {
         return longitude;
@@ -209,15 +221,17 @@ public class Item {
         return description;
     }
 
-    public String getCategory() {
-        return category;
+    public List<Category> getCategories() {
+        return categories;
     }
 
     public ItemStatusEnum getStatus() {
         return status;
     }
 
-    public User getBoughtBy(){ return boughtBy;}
+    public User getBoughtBy() {
+        return boughtBy;
+    }
 
     public void setId(Integer id) {
         this.id = id;
@@ -255,23 +269,27 @@ public class Item {
         this.description = description;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public void setCategory(List<Category> categories) {
+        this.categories = categories;
     }
 
     public void setStatus(ItemStatusEnum status) {
         this.status = status;
     }
 
-    public void setBoughtBy(User boughtBy){this.boughtBy = boughtBy;}
+    public void setBoughtBy(User boughtBy) {
+        this.boughtBy = boughtBy;
+    }
 
     public void updateItemWithDto(UpdateItemDto updateItemDto) {
         if (updateItemDto.getName() != null)
             this.name = updateItemDto.getName();
         if (updateItemDto.getDescription() != null)
             this.description = updateItemDto.getDescription();
-        if (updateItemDto.getCategory() != null)
-            this.category = updateItemDto.getCategory();
+    }
+
+    public void addCategory(Category category){
+        this.categories.add(category);
     }
 
     public boolean hasExpired() {
