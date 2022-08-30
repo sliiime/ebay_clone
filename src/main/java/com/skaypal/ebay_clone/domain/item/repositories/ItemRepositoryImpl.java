@@ -7,6 +7,7 @@ import com.skaypal.ebay_clone.domain.item.repositories.queries.Filter;
 import com.skaypal.ebay_clone.domain.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
@@ -86,17 +87,28 @@ public class ItemRepositoryImpl implements ItemRepository {
     }
 
     @Override
+    public Page<Item> findItemsOfUser(Integer userId,Pageable pageable){
+        return jpaItemRepository.findItemsBySeller(new User(userId),pageable);
+    }
+
+    @Override
     public Page<Item> findAll(List<Filter> filters,Pageable pageable) {
         Specification<Item> specification = getSpecificationFromFilters(filters);
         return specification == null ? jpaItemRepository.findAll(pageable) : jpaItemRepository.findAll(specification,pageable);
     }
 
     private Specification<Item> createSpecification(Filter filter) {
+
         switch (filter.getQueryOperator()) {
             case EQUALS:
-                return (root, query, criteriaBuilder) ->
-                        criteriaBuilder.equal(root.get(filter.getField()),
-                                castToRequiredType(root.get(filter.getField()).getJavaType(), filter.getValue()));
+                return (root, query, criteriaBuilder) -> {
+                    var field = "seller".equals(filter.getField()) ?
+                            root.get(filter.getField()).get("id") :
+                            root.get(filter.getField());
+
+                    return criteriaBuilder.equal(field,
+                            castToRequiredType(field.getJavaType(), filter.getValue()));
+                };
             case NOT_EQUALS:
                 return (root, query, criteriaBuilder) ->
                         criteriaBuilder.notEqual(root.get(filter.getField()),
