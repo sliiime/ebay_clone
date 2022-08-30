@@ -19,6 +19,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.View;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -91,6 +92,19 @@ public class ItemService {
         return viewItemDtoPage;
     }
 
+    /*public Page<ViewItemDto> getUserItems(Integer userId, Integer p) {
+        Page<Item> itemPage = itemRepository.findItemsOfUser(userId,PageRequest.of(p,ITEM_PAGE_SIZE));
+        itemPage.forEach((i) ->{
+            if(i.hasExpired()){
+                i.setStatus(ItemStatusEnum.BOUGHT_TIMEOUT);
+                itemRepository.save(i);
+            }
+        });
+        Page<ViewItemDto> viewItemDtoPage = itemPage.map(item -> new ViewItemDto(item));
+        viewItemDtoPage.forEach(i ->setBidData(i));
+        return viewItemDtoPage;
+    }*/
+
     public boolean newBidSubmitted(Bid bid) {
         Float buyoutPrice = itemRepository.getBuyoutPrice(bid.getItem().getId());
 
@@ -115,6 +129,7 @@ public class ItemService {
         }
 
     }
+
 
 
 }

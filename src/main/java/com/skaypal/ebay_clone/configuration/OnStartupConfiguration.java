@@ -90,7 +90,7 @@ public class OnStartupConfiguration {
                     new Date(),
                     Date.from(Instant.now().plusSeconds(10000)),
                     "peri",
-                    List.of(new Category(1)),
+                    List.of(new Category(1),new Category(3),new Category(5),new Category(7)),
                     ItemStatusEnum.ONGOING,
                     new User(1)
             ));
@@ -102,7 +102,7 @@ public class OnStartupConfiguration {
                     new Date(),
                     Date.from(Instant.now().plusSeconds(10000)),
                     "perigrafh",
-                    List.of(new Category(2)),
+                    List.of(new Category(2),new Category(4),new Category(6),new Category(8)),
                     ItemStatusEnum.ONGOING,
                     new User(1)
             ));
@@ -114,7 +114,7 @@ public class OnStartupConfiguration {
                     new Date(),
                     Date.from(Instant.now().plusSeconds(10000)),
                     "perigrafhsee",
-                    List.of(new Category(3)),
+                    List.of(new Category(3),new Category(8),new Category(5),new Category(7)),
                     ItemStatusEnum.ONGOING,
                     new User(1)
             ));
@@ -139,7 +139,7 @@ public class OnStartupConfiguration {
                     new Date(),
                     Date.from(Instant.now().plusSeconds(30)),
                     "periklees",
-                    List.of(new Category(1)),
+                    List.of(new Category(1),new Category(4)),
                     ItemStatusEnum.BOUGHT_TIMEOUT,
                     new User(1),
                     new User(2)
@@ -156,8 +156,32 @@ public class OnStartupConfiguration {
                     ItemStatusEnum.NOT_BOUGHT,
                     new User(1)
             ));
+            Item item7 = (new Item("Thumbroller",
+                    20f,
+                    9f,
+                    50d,
+                    40d,
+                    new Date(),
+                    Date.from(Instant.now().plusSeconds(1000)),
+                    "grafh ths peri",
+                    List.of(new Category(2),new Category(3)),
+                    ItemStatusEnum.NOT_BOUGHT,
+                    new User(2)
+            ));
+            Item item8 = (new Item("broller de france",
+                    20f,
+                    3f,
+                    80d,
+                    95.4d,
+                    new Date(),
+                    Date.from(Instant.now().plusSeconds(500)),
+                    "en peasant de france",
+                    List.of(new Category(2),new Category(3),new Category(5)),
+                    ItemStatusEnum.NOT_BOUGHT,
+                    new User(2)
+            ));
 
-            JPAItemRepository.saveAll(List.of(item1,item2,item3,item4,item5,item6));
+            JPAItemRepository.saveAll(List.of(item1,item2,item3,item4,item5,item6,item7,item8));
         };
     }
 
@@ -168,7 +192,7 @@ public class OnStartupConfiguration {
                     new Date(),
                     5f,
                     new Item(2),
-                    new User(2))
+                    new User(3))
             );
             Bid bid2 = (new Bid(
                     new Date(),
@@ -176,8 +200,21 @@ public class OnStartupConfiguration {
                     new Item(2),
                     new User(2))
             );
+            Bid bid3 = (new Bid(
+                    new Date(),
+                    15f,
+                    new Item(3),
+                    new User(2)
+            ));
+            Bid bid4 = (new Bid(
+                    new Date(),
+                    17f,
+                    new Item(3),
+                    new User(3)
+            ));
 
-            JPABidRepository.saveAll(List.of(bid1,bid2));
+
+            JPABidRepository.saveAll(List.of(bid1,bid2,bid3,bid4));
         };
     }
 }

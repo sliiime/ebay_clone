@@ -6,18 +6,23 @@ import com.skaypal.ebay_clone.domain.item.dto.UpdateItemDto;
 import com.skaypal.ebay_clone.domain.item.dto.ViewItemDto;
 import com.skaypal.ebay_clone.domain.item.model.Item;
 import com.skaypal.ebay_clone.domain.item.repositories.queries.Filter;
+import com.skaypal.ebay_clone.domain.item.repositories.queries.QueryOperator;
 import com.skaypal.ebay_clone.domain.item.service.ItemService;
 import com.skaypal.ebay_clone.utils.Responses;
 import com.skaypal.ebay_clone.utils.jwt.JWTUtil;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.swing.text.View;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -53,12 +58,29 @@ public class ItemController {
     public ResponseEntity<Page<ViewItemDto>> getItemsPage(@RequestParam Integer p,@RequestBody Optional<FiltersDto> filters){
 
         FiltersDto filtersDto = filters.isPresent() ? filters.get() : null;
+
         return ResponseEntity.ok(itemService.getPage(filtersDto,p));
     }
 
     @GetMapping(path = "/{id}")
     public ResponseEntity<ViewItemDto> getItem(@PathVariable Integer id) {
         return ResponseEntity.ok(itemService.getItem(id));
+    }
+
+    @GetMapping(path = "/user/")
+    public ResponseEntity<Page<ViewItemDto>> getUserItems(@RequestParam Integer p, HttpServletRequest request){
+        String token = request.getHeader("Authorization");
+        if (token == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        Integer userId = jwtUtil.retrieveUserId(token);
+
+        FiltersDto filtersDto = new FiltersDto();
+        List<Filter> filters = new ArrayList<>();
+        filters.add(new Filter("seller", QueryOperator.EQUALS,userId.toString()));
+
+        filtersDto.setFilters(filters);
+
+        return ResponseEntity.ok(itemService.getPage(filtersDto,p));
+
     }
 
     @PostMapping

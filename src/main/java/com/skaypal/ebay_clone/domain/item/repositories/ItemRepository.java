@@ -28,6 +28,8 @@ public interface ItemRepository {
 
     public Page<Item> findAll(List<Filter> filters, Pageable pageable);
 
+    public Page<Item> findItemsOfUser(Integer userId,Pageable pageable);
+
     public Float getBuyoutPrice(Integer id);
 
     public void itemBought(Integer itemId,Integer boughtById);

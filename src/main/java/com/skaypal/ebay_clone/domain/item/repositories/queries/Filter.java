@@ -5,6 +5,11 @@ import java.util.List;
 public class Filter {
 
     public Filter(){}
+    public Filter(String field,QueryOperator operator,String value){
+        this.field = field;
+        this.operator = operator;
+        this.value = value;
+    }
 
     private String field;
     private QueryOperator operator;
