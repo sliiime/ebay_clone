@@ -2,6 +2,7 @@ package com.skaypal.ebay_clone.domain.item.repositories;
 
 import com.skaypal.ebay_clone.domain.bid.model.Bid;
 import com.skaypal.ebay_clone.domain.bid.repository.BidRepository;
+import com.skaypal.ebay_clone.domain.category.model.Category;
 import com.skaypal.ebay_clone.domain.item.model.Item;
 import com.skaypal.ebay_clone.domain.item.repositories.queries.Filter;
 import com.skaypal.ebay_clone.domain.user.model.User;
@@ -13,7 +14,12 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Subquery;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -126,9 +132,18 @@ public class ItemRepositoryImpl implements ItemRepository {
                         criteriaBuilder.like(root.get(filter.getField()),
                                 "%" + filter.getValue() + "%");
             case IN:
-                return (root, query, criteriaBuilder) ->
-                        criteriaBuilder.in(root.get(filter.getField()))
-                                .value(castToRequiredType(root.get(filter.getField()).getJavaType(), filter.getValues()));
+                return (root, query, criteriaBuilder) -> {
+                    Join<Item,Category> itemCategory = root.join("categories");
+                    var field = "category".equals(filter.getField()) ?
+                            itemCategory.get("category") :
+                            root.get(filter.getField());
+
+                    query.distinct(true);
+
+
+                    return  criteriaBuilder.in(field)
+                            .value(castToRequiredType(field.getJavaType(), filter.getValues()));
+                };
             default:
                 throw new RuntimeException("Operation not supported yet");
         }
