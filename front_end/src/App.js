@@ -9,6 +9,7 @@ import Unauthorized from "./pages/Unauthorized/Unauthorized";
 import Layout from "./components/Layout";
 import Missing from "./pages/Missing/Missing";
 import MyItems from "./pages/UsersItems/MyItems";
+import AddItem from "./pages/AddItem/AddItem";
 
 const ROLES = {
     'User': 2001,
@@ -35,7 +36,9 @@ function App() {
                           <Route path="myitems" element={<MyItems />} />
                       </Route>
 
-
+                      <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
+                          <Route path="myitems/addItem" element={<AddItem />} />
+                      </Route>
 
                       {/* catch all */}
                       <Route path="*" element={<Missing />} />
