@@ -40,6 +40,14 @@ public class BidService {
     public ViewBidDto createBid(CreateBidDto createBidDto) {
         ValidationResult validationResult = bidValidator.validateCreateBidDto(createBidDto);
         if (!validationResult.isValid()) throw new BidBadRequestException(validationResult.getErrorMessage());
+        Float buyoutPrice = itemService.getBuyoutPrice(createBidDto.getItemId());
+
+        Float bidPrice =  buyoutPrice < createBidDto.getPrice() ?
+                 buyoutPrice :
+                createBidDto.getPrice();
+
+        createBidDto.setPrice(bidPrice);
+
         Bid bid = new Bid(createBidDto);
         ViewBidDto view = new ViewBidDto(bidRepository.save(bid));
         itemService.newBidSubmitted(bid);

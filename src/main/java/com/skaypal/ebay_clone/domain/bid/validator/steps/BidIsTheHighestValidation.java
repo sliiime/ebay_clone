@@ -22,6 +22,6 @@ public class BidIsTheHighestValidation extends ValidationStep<CreateBidDto> {
 
         return bids.size() == 0 || bids.get(0).getPrice() < toValidate.getPrice()
                 ? checkNext(toValidate)
-                : ValidationResult.invalid("The submitted bid is lower that the current best bid");
+                : ValidationResult.invalid("Current bid is lower than the current best bid");
     }
 }

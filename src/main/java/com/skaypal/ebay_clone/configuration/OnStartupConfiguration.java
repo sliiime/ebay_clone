@@ -153,7 +153,7 @@ public class OnStartupConfiguration {
                     Date.from(Instant.now().plusSeconds(10)),
                     "perigrafh",
                     List.of(new Category(2)),
-                    ItemStatusEnum.NOT_BOUGHT,
+                    ItemStatusEnum.ONGOING,
                     new User(1)
             ));
             Item item7 = (new Item("Thumbroller",
@@ -165,7 +165,7 @@ public class OnStartupConfiguration {
                     Date.from(Instant.now().plusSeconds(1000)),
                     "grafh ths peri",
                     List.of(new Category(2),new Category(3)),
-                    ItemStatusEnum.NOT_BOUGHT,
+                    ItemStatusEnum.ONGOING,
                     new User(2)
             ));
             Item item8 = (new Item("broller de france",
@@ -177,7 +177,7 @@ public class OnStartupConfiguration {
                     Date.from(Instant.now().plusSeconds(500)),
                     "en peasant de france",
                     List.of(new Category(2),new Category(3),new Category(5)),
-                    ItemStatusEnum.NOT_BOUGHT,
+                    ItemStatusEnum.ONGOING,
                     new User(2)
             ));
 
