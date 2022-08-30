@@ -13,10 +13,12 @@ import com.skaypal.ebay_clone.domain.item.exceptions.ItemNotFoundException;
 import com.skaypal.ebay_clone.domain.item.model.Item;
 import com.skaypal.ebay_clone.domain.item.repositories.ItemRepository;
 import com.skaypal.ebay_clone.domain.item.repositories.queries.Filter;
+import com.skaypal.ebay_clone.domain.item.validator.ItemValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.View;
@@ -26,17 +28,24 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@PreAuthorize("hasAnyAuthority('ADMIN','AUTHORIZED_USER')")
 public class ItemService {
 
     private ItemRepository itemRepository;
+
+    private ItemValidator itemValidator;
 
     private CategoryService categoryService;
 
     private final Integer ITEM_PAGE_SIZE = 4;
 
     @Autowired
-    public ItemService(ItemRepository itemRepository) {
+    public ItemService(ItemRepository itemRepository,
+                       ItemValidator itemValidator,
+                       CategoryService categoryService) {
         this.itemRepository = itemRepository;
+        this.itemValidator = itemValidator;
+        this.categoryService = categoryService;
     }
 
     public List<ViewItemDto> getItems() {
@@ -81,12 +90,7 @@ public class ItemService {
             List<Filter> filters = filtersDto.getFilters().stream().collect(Collectors.toCollection(ArrayList::new));
             itemPage = itemRepository.findAll(filters, PageRequest.of(p, ITEM_PAGE_SIZE));
         }
-        itemPage.forEach((i) -> {
-            if (i.hasExpired()) {
-                i.setStatus(ItemStatusEnum.BOUGHT_TIMEOUT);
-                itemRepository.save(i);
-            }
-        });
+        itemPage.forEach((i) -> itemValidator.auctionIsEligibleForBids(i.getId()));
         Page<ViewItemDto> viewItemDtoPage = itemPage.map(item -> new ViewItemDto(item));
         viewItemDtoPage.forEach(i -> setBidData(i));
         return viewItemDtoPage;
@@ -131,5 +135,7 @@ public class ItemService {
     }
 
 
-
+    public Float getBuyoutPrice(Integer itemId) {
+        return itemRepository.getBuyoutPrice(itemId);
+    }
 }

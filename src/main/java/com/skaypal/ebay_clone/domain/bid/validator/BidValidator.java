@@ -35,6 +35,7 @@ public class BidValidator {
         return new SelfBidValidation(itemValidator).
                 linkWith(new OngoingAuctionValidation(itemValidator)).
                 linkWith(new BidIsTheHighestValidation(bidRepository)).
+                linkWith(new BidIsHigherThanMinBid(itemValidator)).
                 validate(createBidDto);
     }
 }

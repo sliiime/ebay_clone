@@ -30,7 +30,6 @@ public class CreateItemDto {
     private String description;
 
     @NotNull
-    @Length(max = 45)
     private List<String> categories;
 
     @NotNull
