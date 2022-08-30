@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import axios from "axios";
 import market from "../../images/market.png";
-import '../../css/admin.css'
+import './admin.css'
 import useAuth from "../../context/useAuth";
 
 const Admin = () => {
@@ -44,9 +44,6 @@ const Admin = () => {
             .then((response) => {
                 //registrationStatus
                 setUsers(response?.data);
-                users.sort(function(x, y) {
-                    return (x.registrationStatus === y.registrationStatus)? 0 : x? -1 : 1;
-                });
                 console.log(users)
                 console.log(response?.data)
             })

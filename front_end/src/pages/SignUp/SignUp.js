@@ -4,7 +4,7 @@ import {useNavigate} from "react-router-dom";
 import regexValidation from "./regexValidation";
 import errorsExist from "./errorsExist";
 import axios from "axios";
-import '../../css/signup.css';
+import './signup.css';
 
 function SignUp() {
 

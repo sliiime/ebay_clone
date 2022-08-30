@@ -1,6 +1,6 @@
 import React, {useContext} from 'react';
 import market from '../../images/market.png'
-import '../../css/home.css'
+import './home.css'
 import {Link} from "react-router-dom";
 import AuthContext from "../../context/AuthProvider";
 
@@ -18,7 +18,7 @@ const NavBar = () => {
             <nav className="navbar" >
                 <img className="marketPlaceIcon" src={market} alt=""/>
                 <div className="left-side-items">
-                    <Link className="navbar--homeLink" to="./home">Home</Link>
+                    <Link className="navbar--homeLink" to="/">Home</Link>
                     <Link className="navbar--searchLink" to="./search">Search</Link>
                 </div>
                 {   localStorage.getItem("accessToken")

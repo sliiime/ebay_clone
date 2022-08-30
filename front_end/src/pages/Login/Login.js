@@ -5,7 +5,7 @@ import regexValidation from "./regexValidation";
 import loginErrorsExist from "./errorsExist";
 import axios from "axios";
 import useAuth from "../../context/useAuth";
-import '../../css/login.css';
+import './login.css';
 
 function Login() {
 

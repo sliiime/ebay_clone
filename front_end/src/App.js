@@ -8,6 +8,7 @@ import RequireAuth from "./context/RequireAuth";
 import Unauthorized from "./pages/Unauthorized/Unauthorized";
 import Layout from "./components/Layout";
 import Missing from "./pages/Missing/Missing";
+import MyItems from "./pages/UsersItems/MyItems";
 
 const ROLES = {
     'User': 2001,
@@ -31,8 +32,10 @@ function App() {
                       </Route>
 
                       <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
-                          <Route path="mybids" element={<Admin />} />
+                          <Route path="myitems" element={<MyItems />} />
                       </Route>
+
+
 
                       {/* catch all */}
                       <Route path="*" element={<Missing />} />
