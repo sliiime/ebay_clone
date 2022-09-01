@@ -1,13 +1,6 @@
 import React, {useState} from 'react';
 import NavBar from "../MainMenu/Navbar";
 import './addItem.css'
-import Select, {
-    components,
-    MultiValueGenericProps,
-    MultiValueProps,
-    OnChangeValue,
-    Props,
-} from 'react-select';
 
 const AddItem = () => {
 
@@ -30,14 +23,12 @@ const AddItem = () => {
     };
 
     const handleCategory = (event) => {
-        let value = Array.from(
-            event.target.selectedOptions,
-            (option) => option.value
-        );
-        console.log(value)
+        const temp = item.categories
+        item.categories.includes(event.target.value) ? console.log("contains!") : temp.push(event.target.value)
+        console.log(temp)
         setItem({
             ...item,
-            [event.target.name]: value
+            [event.target.name]: temp
         })
     }
 
@@ -49,7 +40,7 @@ const AddItem = () => {
         <div>
             <NavBar/>
             <p className="add-item-welcome-text">Hello! Here you can add a new item! Please fill the blank spaces.</p>
-            <div className="items-panel">
+            <div className="add-item-panel">
                 <label>Name</label>
                     <input maxLength={45} placeholder="Name" type="text" name="name" value={item.name} onChange={handleChange}></input>
                 <label>Description</label>
@@ -63,7 +54,12 @@ const AddItem = () => {
                 <label>End Date</label>
                     <input type="date" name="endDate" value={item.endDate} onChange={handleChange}></input>
                 <label>Category</label>
-                    <Select isMulti/>
+                    <select multiple={true} name="categories" value={item.categories} onChange={handleCategory}>
+                        <option value="Gaming">Gaming</option>
+                        <option value="Sports">Sports</option>
+                        <option value="Fashion">Fashion</option>
+                        <option value="Other">Other</option>
+                    </select>
             </div>
             <button onClick={handleTest}>test</button>
         </div>

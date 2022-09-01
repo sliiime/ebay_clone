@@ -79,8 +79,7 @@ function Login() {
                     })
                     setIsCorrectSubmission(1);
                     setDisableButton(true);
-                    const timer = setTimeout(() => (roleResponse==="admin") ? navigate('../admin') : navigate(from, {replace: true}), 3000);
-                    return () => clearTimeout(timer);
+                    roleResponse==="admin" ? navigate('../admin') : navigate(from, {replace: true})
                 })
                 .catch((error) => {
                     console.log(error)
