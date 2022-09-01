@@ -11,6 +11,9 @@ import com.skaypal.ebay_clone.utils.Responses;
 import com.skaypal.ebay_clone.utils.jwt.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,6 +27,7 @@ public class MessageController {
     private MessageService messageService;
     private JWTUtil jwtUtil;
 
+    private SimpMessagingTemplate simp;
     private final String location = "ebay_clone/api/message";
 
     @Autowired
@@ -55,6 +59,14 @@ public class MessageController {
         ViewMessageDto message = messageService.createMessage(createMessageDto);
 
         return Responses.created(String.format("%s/%s", location, message.getId().toString()));
+    }
+
+
+    @MessageMapping("/chat")
+    public void processMessage(@Payload CreateMessageDto messageDto){
+            messageDto.setSenderId(jwtUtil.retrieveUserId(messageDto.getAuthToken()));
+            ViewMessageDto viewMessageDto = messageService.createMessage(messageDto);
+            simp.convertAndSendToUser(messageDto.getReceiverId().toString(),"/private",viewMessageDto);
     }
 
     @PutMapping(path = "/{id}")
