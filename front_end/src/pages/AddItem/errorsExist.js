@@ -1,16 +1,13 @@
 const errorsExist = (submitButtonPressed, errors) => {
     let errorExist = true
     if( submitButtonPressed
-        && errors.email === ""
-        && errors.username === ""
-        && errors.firstName === ""
-        && errors.lastName === ""
-        && errors.afm === ""
-        && errors.phoneNumber === ""
-        && errors.address === ""
-        && errors.country === ""
-        && errors.password === ""
-        && errors.confirmPassword === "") {errorExist = false}
+        && errors.name === ""
+        && errors.buyPrice === ""
+        && errors.description === ""
+        && errors.categories === ""
+        && errors.minBid === ""
+        && errors.endDate === ""
+        && errors.startDate === "") {errorExist = false}
     return errorExist
 }
 

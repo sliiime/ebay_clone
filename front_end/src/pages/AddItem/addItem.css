@@ -70,3 +70,52 @@
 
     color: black;
 }
+
+.add-item-submit-btn:active {
+    transform: scale(0.98);
+    box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+}
+
+.add-item-submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.add-item-input-error {
+    font-family: 'Mulish';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 10px;
+    line-height: 15px;
+
+    margin-top: -5px;
+    margin-bottom: 0px;
+
+    color: #FF0000;
+}
+
+
+
+.add-item-correct-registration {
+    font-family: 'Mulish';
+    font-style: normal;
+    font-weight: bold;
+    font-size: 15px;
+    line-height: 15px;
+    width: 100%;
+    text-align: center;
+
+    color: #11AF22;
+}
+
+.add-item-wrong-registration {
+    font-family: 'Mulish';
+    font-style: normal;
+    font-weight: bold;
+    font-size: 15px;
+    line-height: 15px;
+    width: 100%;
+    text-align: center;
+
+    color: #FF0000;
+}

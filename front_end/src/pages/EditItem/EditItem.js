@@ -1,12 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import NavBar from "../MainMenu/Navbar";
-import './addItem.css'
-import validation from "./validation";
-import errorsExist from "./errorsExist";
-import axios from "axios";
 import {useNavigate} from "react-router-dom";
+import validation from "../AddItem/validation";
+import errorsExist from "../AddItem/errorsExist";
+import axios from "axios";
 
-const AddItem = () => {
+const EditItem = () => {
 
     const [item,setItem] = useState({
         name: "",
@@ -61,10 +60,35 @@ const AddItem = () => {
     }
 
     useEffect( () => {
+        const itemID = localStorage.getItem('itemID')
+        axios
+            .get("http://localhost:8080/ebay_clone/api/item/"+String(itemID),{
+                headers: {
+                    'Authorization': JSON.parse(localStorage.getItem('accessToken'))
+                }
+            })
+            .then((response) => {
+                console.log(response?.data)
+                setItem({
+                    name: response?.data?.name,
+                    buyPrice: response?.data?.buyPrice,
+                    description: response?.data?.description,
+                    categories: [],
+                    minBid: response?.data?.minBid,
+                    endDate: "",
+                    startDate: ""
+                })
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+    },[])
+
+    useEffect( () => {
         if(!errorsExist(submitButtonPressed,errors)) {
-            console.log(item)
+            const itemID = localStorage.getItem('itemID')
             axios
-                .post("http://localhost:8080/ebay_clone/api/item",{
+                .put("http://localhost:8080/ebay_clone/api/item/" + String(itemID),{
                     name: item.name,
                     buyPrice: item.buyPrice,
                     description: item.description,
@@ -78,7 +102,7 @@ const AddItem = () => {
                     }
                 })
                 .then((response) => {
-                    console.log("all gucci")
+                    localStorage.removeItem('itemID')
                     setIsCorrectSubmission(1);
                     setDisableButton(true);
                     const timer = setTimeout(() => navigate('../'), 2000);
@@ -148,7 +172,7 @@ const AddItem = () => {
                 {
                     isCorrectSubmission===1 &&
                     <p className="add-item-correct-registration">
-                        Great, your item is placed in the marketplace.
+                        Great, you successfully edited your item.
                     </p>
                 }
                 {
@@ -162,4 +186,4 @@ const AddItem = () => {
     );
 };
 
-export default AddItem;
+export default EditItem;

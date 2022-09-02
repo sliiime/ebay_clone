@@ -59,7 +59,7 @@ function SignUp() {
                 .then((response) => {
                     setIsCorrectSubmission(1);
                     setDisableButton(true);
-                    const timer = setTimeout(() => navigate('../login'), 3000);
+                    const timer = setTimeout(() => navigate('../login'), 2000);
                     return () => clearTimeout(timer);
                 })
                 .catch((error) => {

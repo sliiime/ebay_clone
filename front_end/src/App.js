@@ -10,6 +10,7 @@ import Layout from "./components/Layout";
 import Missing from "./pages/Missing/Missing";
 import MyItems from "./pages/UsersItems/MyItems";
 import AddItem from "./pages/AddItem/AddItem";
+import EditItem from "./pages/EditItem/EditItem";
 
 const ROLES = {
     'User': 2001,
@@ -40,6 +41,10 @@ function App() {
                           <Route path="myitems/addItem" element={<AddItem />} />
                       </Route>
 
+                      <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
+                          <Route path="myitems/editItem" element={<EditItem />} />
+                      </Route>
+
                       {/* catch all */}
                       <Route path="*" element={<Missing />} />
                   </Route>
@@ -49,14 +54,3 @@ function App() {
 }
 
 export default App;
-
-/*
-
-<Route path="" element={<Home />} />
-                  <Route path="login" element={<Login />} />
-                  <Route path="signup" element={<SignUp />} />
-                  <Route path="unauthorized" element={<Unauthorized />} />
-                  <Route path="admin" element={<Admin />} />
-                  <Route path="*" element={<Missing />} />
-
- */

@@ -1,45 +1,56 @@
 const validation = (item) => {
 
-    let errors={}
+    let errors = {}
+    const today = new Date()
 
-    if(!credentials.email){
-        errors.email="Email is required."
-    } else if(!/\S+@\S+\.\S+/.test(credentials.email)) {
-        errors.email="Email is invalid."
-    } else { errors.email = "" }
-    if(!credentials.username){
-        errors.username="Username is required."
-    } else { errors.username = "" }
-    if(!credentials.firstName){
-        errors.firstName="First name is required."
-    } else { errors.firstName = "" }
-    if(!credentials.lastName){
-        errors.lastName="Last name is required."
-    } else { errors.lastName = "" }
-    if(!credentials.afm){
-        errors.afm="ΑΦΜ is required."
-    } else { errors.afm = "" }
-    if(!credentials.phoneNumber){
-        errors.phoneNumber="Phone number is required."
-    } else { errors.phoneNumber = "" }
-    if(!credentials.address){
-        errors.address="Address is required."
-    } else { errors.address = "" }
-    if(!credentials.password) {
-        errors.password="Password is required."
-    } else if (credentials.password.length < 8) {
-        errors.password="Password must be more than 8 characters."
-    } else { errors.password = "" }
-    if(!credentials.country){
-        errors.country="Country is required."
-    } else { errors.country = "" }
-    if(!credentials.confirmPassword) {
-        errors.confirmPassword = "Confirm password is required"
-    } else { errors.confirmPassword = "" }
-    if(!errors.password && !errors.confirmPassword && (credentials.password !== credentials.confirmPassword)) {
-        errors.password = "Passwords do not match!"
-        errors.confirmPassword = "Passwords do not match!"
+    if (!item.name) {
+        errors.name = "Name is required."
+    } else {
+        errors.name = ""
     }
+
+    if (!item.description) {
+        errors.description = "Description is required."
+    } else {
+        errors.description = ""
+    }
+
+    if (!item.minBid) {
+        errors.minBid = "Minimum bid is required."
+    } else if (item.minBid <= 0) {
+        errors.minBid = "Enter a valid Minimum bid."
+    } else if (item.minBid >= item.buyPrice) {
+        errors.minBid = "Minimum bid must be less than Buyout price."
+    } else { errors.minBid = "" }
+
+    if(!item.buyPrice){
+        errors.buyPrice="Buyout price is required."
+    } else if (item.buyPrice <= 0){
+        errors.buyPrice="Enter a valid Buyout price."
+    } else if (item.buyPrice <= item.minBid){
+        errors.buyPrice="Buyout price must be greater than Minimum bid."
+    } else { errors.buyPrice = "" }
+
+    if(!item.startDate){
+        errors.startDate="Starting date is required."
+    } else if (Date.parse(item.startDate) < Date.parse(today)) {
+        errors.startDate="Enter a valid Starting date."
+    } else if (Date.parse(item.startDate) > Date.parse(item.endDate)) {
+        errors.startDate="Starting date must be before End date."
+    } else { errors.startDate = "" }
+
+    if(!item.endDate){
+        errors.endDate="End date is required."
+    } else if (Date.parse(item.endDate) < Date.parse(today)) {
+        errors.endDate="Enter a valid End date."
+    } else if (Date.parse(item.endDate) <= Date.parse(item.startDate)) {
+        errors.endDate="End date must be before Starting date."
+    } else { errors.endDate = "" }
+
+    if(item.categories.length === 0){
+        errors.categories="Item should belong to at least one category."
+    } else { errors.categories = "" }
+
 
     return errors;
 }

@@ -60,9 +60,9 @@ const MyItems = () => {
                 }
             </div>
             <div className="change-page-container">
-                <button className="change-page-btn" disabled={currentPage === numOfPages} onClick={handlePrevClick}>←</button>
+                <button className="change-page-btn" disabled={currentPage === 1} onClick={handlePrevClick}>←</button>
                 <p className="current-page">{currentPage}</p>
-                <button className="change-page-btn" disabled={currentPage === 1} onClick={handleNextClick}>→</button>
+                <button className="change-page-btn" disabled={currentPage === numOfPages} onClick={handleNextClick}>→</button>
             </div>
         </div>
     );
