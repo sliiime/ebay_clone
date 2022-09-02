@@ -11,6 +11,7 @@ import Missing from "./pages/Missing/Missing";
 import MyItems from "./pages/UsersItems/MyItems";
 import AddItem from "./pages/AddItem/AddItem";
 import EditItem from "./pages/EditItem/EditItem";
+import Search from "./pages/Search/Search";
 
 const ROLES = {
     'User': 2001,
@@ -27,6 +28,7 @@ function App() {
                       <Route path="signup" element={<SignUp />} />
                       <Route path="unauthorized" element={<Unauthorized />} />
                       <Route path="" element={<Home />} />
+                      <Route path="search" element={<Search />} />
 
                       {/* we want to protect these routes */}
                       <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>

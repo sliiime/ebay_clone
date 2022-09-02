@@ -19,7 +19,7 @@ const NavBar = () => {
                 <img className="marketPlaceIcon" src={market} alt=""/>
                 <div className="left-side-items">
                     <Link className="navbar--homeLink" to="/">Home</Link>
-                    <Link className="navbar--searchLink" to="./search">Search</Link>
+                    <Link className="navbar--searchLink" to="/search">Search</Link>
                 </div>
                 {   localStorage.getItem("accessToken")
                     ?
