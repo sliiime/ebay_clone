@@ -8,7 +8,7 @@
 }
 
 .add-item-panel {
-    width: 80%;
+    width: 60%;
     display: grid;
     align-items: center;
 
@@ -16,8 +16,57 @@
     border: 4px solid lightblue;
     border-radius: 2px;
 
-    margin-top: 50px;
+    margin-top: 40px;
     padding-left: 20px;
     padding-top: 10px;
     padding-bottom: 10px;
+}
+
+.item-attributes {
+    display: grid;
+    margin-top: 7px;
+    margin-bottom: 7px;
+}
+
+.select-category-box {
+    height: 140px;
+    border-radius: 3px;
+    border: 2px solid black;
+}
+
+.add-item-input-box {
+    border: 2px solid black;
+    border-radius: 4px;
+    height: 20px;
+}
+
+.item-item-label {
+    margin-bottom: 3px;
+    font-family: "DejaVu Sans";
+    font-weight: normal;
+}
+
+.add-item-option {
+    font-family: "DejaVu Sans";
+    font-weight: normal;
+    text-align: center;
+}
+
+.add-item-div-btn {
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin-top: 25px;
+}
+
+.add-item-submit-btn {
+    width: 300px;
+    height: 40px;
+
+    background: lightblue;
+    border: 1px solid black;
+    border-radius: 4px;
+
+    color: black;
 }
