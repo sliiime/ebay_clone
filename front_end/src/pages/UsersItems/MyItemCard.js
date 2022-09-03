@@ -2,7 +2,7 @@ import React from 'react';
 import missingImage from './missingImage.png'
 import {useNavigate} from "react-router-dom";
 
-function ItemCard ({item}) {
+function MyItemCard ({item}) {
 
     const endDate = new Date(item.endDate)
 
@@ -41,4 +41,4 @@ function ItemCard ({item}) {
     );
 };
 
-export default ItemCard;
+export default MyItemCard;

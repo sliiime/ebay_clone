@@ -118,7 +118,7 @@ const EditItem = () => {
     return (
         <div>
             <NavBar/>
-            <p className="add-item-welcome-text">Hello! Here you can add a new item! Please fill the blank spaces.</p>
+            <p className="add-item-welcome-text">Feel free to edit your item.</p>
             <div className="add-item-panel">
                 <div className="item-attributes">
                     <label className="item-item-label">Name</label>
@@ -155,6 +155,7 @@ const EditItem = () => {
                     {errors.categories && <p className="add-item-input-error">{errors.categories}</p>}
                     <select multiple={true} name="categories" value={item.categories} onChange={handleCategory} className="select-category-box">
                         <option className="add-item-option" value="">~Empty selection~</option>
+                        <option className="add-item-option" value="Technology">Technology</option>
                         <option className="add-item-option" value="Home & Kitchen">Home & Kitchen</option>
                         <option className="add-item-option" value="Beauty & Personal Care">Beauty & Personal Care</option>
                         <option className="add-item-option" value="Toys & Games">Toys & Games</option>

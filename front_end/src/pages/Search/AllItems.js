@@ -1,19 +1,19 @@
 import React, {useEffect, useState} from 'react';
-import NavBar from "../MainMenu/Navbar";
 import axios from "axios";
-import './myitems.css'
-import MyItemCard from "./MyItemCard";
-import {Link} from "react-router-dom";
+import MyItemCard from "../UsersItems/MyItemCard";
+import SearchItemCard from "./SearchItemCard";
 
-const MyItems = () => {
+const AllItems = () => {
 
     const [numOfPages, setNumOfPages] = useState()
     const [currentPage,setCurrentPage] = useState(1)
     const [itemsShown, setItemsShown] = useState([])
 
-    useEffect( () => {
+    useEffect(() => {
         axios
-            .get('http://localhost:8080/ebay_clone/api/item/user/?p=' + (currentPage-1),{
+            .post("http://localhost:8080/ebay_clone/api/item/page/?p="+(currentPage-1),{
+                filters: []
+            },{
                 headers: {
                     'Authorization': JSON.parse(localStorage.getItem('accessToken'))
                 }
@@ -28,7 +28,7 @@ const MyItems = () => {
             .catch((error) => {
                 console.log(error)
             })
-    }, [currentPage]);
+    },[currentPage])
 
     const handleNextClick = () => {
         setCurrentPage(currentPage+1)
@@ -40,16 +40,12 @@ const MyItems = () => {
 
     return (
         <div>
-            <NavBar/>
-            <div className="add-item">
-                <Link className="add-item-button" to="addItem">Add an item!</Link>
-            </div>
             <div className="items-panel">
                 {
                     itemsShown.length ?
                         itemsShown.map( item =>
                             <div key={item.id}>
-                                <MyItemCard item={item}/>
+                                <SearchItemCard item={item}/>
                             </div>
                         ) : null
                 }
@@ -63,4 +59,4 @@ const MyItems = () => {
     );
 };
 
-export default MyItems;
+export default AllItems;
