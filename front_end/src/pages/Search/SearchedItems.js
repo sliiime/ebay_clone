@@ -1,24 +1,24 @@
 import React, {useEffect, useState} from 'react';
 import axios from "axios";
 import SearchItemCard from "./SearchItemCard";
+import filterSearch from "./filterSearch";
 
 const SearchedItems = ({search}) => {
     const [numOfPages, setNumOfPages] = useState()
     const [currentPage,setCurrentPage] = useState(1)
     const [itemsShown, setItemsShown] = useState([])
+    const [filters,setFilters] = useState([])
+
+    useEffect(() => {
+        setFilters(filterSearch(search))
+        setNumOfPages(0)
+        setCurrentPage(1)
+    },[search])
 
     useEffect(() => {
         axios
-            .post("http://localhost:8080/ebay_clone/api/item/page/?p="+(currentPage-1),{
-                filters: [{
-                    field: "category",
-                    operation: "IN",
-                    values: ["Category 1"]
-                }]
-            },{
-                headers: {
-                    'Authorization': JSON.parse(localStorage.getItem('accessToken'))
-                }
+            .post("http://localhost:8080/ebay_clone/api/item/search/?p=" + (currentPage - 1), {
+                filters: {filters}
             })
             .then((response) => {
                 console.log(response?.data)
@@ -30,7 +30,7 @@ const SearchedItems = ({search}) => {
             .catch((error) => {
                 console.log(error)
             })
-    },[currentPage])
+    },[currentPage,filters])
 
     const handleNextClick = () => {
         setCurrentPage(currentPage+1)

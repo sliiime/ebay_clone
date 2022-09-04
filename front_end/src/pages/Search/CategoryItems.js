@@ -3,22 +3,26 @@ import axios from "axios";
 import SearchItemCard from "./SearchItemCard";
 
 const CategoryItems = ({category}) => {
-    const [numOfPages, setNumOfPages] = useState()
+    const [numOfPages, setNumOfPages] = useState(0)
     const [currentPage,setCurrentPage] = useState(1)
     const [itemsShown, setItemsShown] = useState([])
+    const [currentCategory,setCurrentCategory] = useState([])
 
     useEffect(() => {
+        setCurrentCategory([category])
+        setNumOfPages(0)
+        setCurrentPage(1)
+    },[category])
+
+    useEffect(() => {
+        console.log("will request for " + currentCategory[0])
         axios
-            .post("http://localhost:8080/ebay_clone/api/item/page/?p="+(currentPage-1),{
+            .post("http://localhost:8080/ebay_clone/api/item/search/?p=" + (currentPage - 1), {
                 filters: [{
                     field: "category",
-                    operation: "IN",
+                    operator: "IN",
                     values: ["Category 1"]
                 }]
-            },{
-                headers: {
-                    'Authorization': JSON.parse(localStorage.getItem('accessToken'))
-                }
             })
             .then((response) => {
                 console.log(response?.data)
@@ -30,7 +34,7 @@ const CategoryItems = ({category}) => {
             .catch((error) => {
                 console.log(error)
             })
-    },[currentPage])
+    },[currentPage,currentCategory])
 
     const handleNextClick = () => {
         setCurrentPage(currentPage+1)

@@ -25,6 +25,12 @@ const Search = () => {
         setExtendedSearch(!extendedSearch)
     }
 
+    const handleSearchButton = () => {
+        setAllItems(false)
+        setCategoryItems(false)
+        setSearchedItems(true)
+    }
+
     const handleSearchChange = (event) => {
         setSearch({
             ...search,
@@ -70,7 +76,7 @@ const Search = () => {
                 <div className="search-bar">
                     <button className="search-bar-more-options-btn" onClick={handleExtendButton}>☰</button>
                     <input className="search-bar-input" placeholder="Search" type="text" name="text" value={search.text} onChange={handleSearchChange}/>
-                    <button className="search-bar-input-button">🔍︎</button>
+                    <button className="search-bar-input-button" onClick={handleSearchButton}>🔍︎</button>
                 </div>
                 {   extendedSearch ?
                     <div className="search-all-options">
@@ -111,12 +117,13 @@ const Search = () => {
                     <Link className="search-link" to="" onClick={() => handleCategoryLink("Clothing, Shoes & Jewelry")}>Clothing, Shoes & Jewelry</Link>
                     <Link className="search-link" to="" onClick={() => handleCategoryLink("Sports & Outdoors")}>Sports & Outdoors</Link>
                     <Link className="search-link" to="" onClick={() => handleCategoryLink("Books")}>Books</Link>
+                    <Link className="search-link" to="" onClick={() => handleCategoryLink("Other")}>Other</Link>
                 </div>
             </div>
             <div className="search-show-items">
                 { allItems && <AllItems/> }
                 { categoryItems && <CategoryItems category={currentCategory}/> }
-                { searchedItems && <SearchedItems/> }
+                { searchedItems && <SearchedItems search={search}/> }
             </div>
         </div>
     );
