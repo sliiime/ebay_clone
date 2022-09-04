@@ -54,7 +54,7 @@ public class ItemController {
 
 
 
-    @PostMapping(path = "/page/")
+    @PostMapping(path = "/search/")
     public ResponseEntity<Page<ViewItemDto>> getItemsPage(@RequestParam Integer p,@RequestBody Optional<FiltersDto> filters){
 
         FiltersDto filtersDto = filters.isPresent() ? filters.get() : null;

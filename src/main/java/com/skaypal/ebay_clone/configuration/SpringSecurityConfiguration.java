@@ -46,6 +46,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("POST","/ebay_clone/api/auth").permitAll()
                 .antMatchers("POST","/ebay_clone/api/user").permitAll()
+                .mvcMatchers("POST","/ebay_clone/api/item/search/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .userDetailsService(loginForm)
