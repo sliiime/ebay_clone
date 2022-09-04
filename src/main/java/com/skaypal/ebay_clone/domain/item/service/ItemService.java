@@ -28,7 +28,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@PreAuthorize("hasAnyAuthority('ADMIN','AUTHORIZED_USER')")
 public class ItemService {
 
     private ItemRepository itemRepository;
