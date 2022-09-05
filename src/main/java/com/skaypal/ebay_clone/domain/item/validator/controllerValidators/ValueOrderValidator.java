@@ -17,7 +17,7 @@ public class ValueOrderValidator implements ConstraintValidator<EndDateValidatio
     @Override
     public boolean isValid(CreateItemDto createItemDto, ConstraintValidatorContext ctx){
         Date smallDate = createItemDto.getStartDate();
-        Date bigDate   = createItemDto.getEndDate();
+        Date bigDate = createItemDto.getEndDate();
 
         smallDate = smallDate == null ? new Date() : smallDate;
 

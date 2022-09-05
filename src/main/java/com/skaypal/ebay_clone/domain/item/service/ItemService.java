@@ -14,14 +14,22 @@ import com.skaypal.ebay_clone.domain.item.model.Item;
 import com.skaypal.ebay_clone.domain.item.repositories.ItemRepository;
 import com.skaypal.ebay_clone.domain.item.repositories.queries.Filter;
 import com.skaypal.ebay_clone.domain.item.validator.ItemValidator;
+import com.skaypal.ebay_clone.property.ImageStorageProperty;
+import com.sun.xml.txw2.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.swing.text.View;
+import java.awt.*;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -30,21 +38,26 @@ import java.util.stream.Collectors;
 @Service
 public class ItemService {
 
-    private ItemRepository itemRepository;
+    private final ItemRepository itemRepository;
 
-    private ItemValidator itemValidator;
+    private final ItemValidator itemValidator;
 
-    private CategoryService categoryService;
+    private final CategoryService categoryService;
 
+    private final Path imageStoragePath;
     private final Integer ITEM_PAGE_SIZE = 4;
 
     @Autowired
     public ItemService(ItemRepository itemRepository,
                        ItemValidator itemValidator,
-                       CategoryService categoryService) {
+                       CategoryService categoryService,
+                       ImageStorageProperty imageStorageProperty) throws IOException {
         this.itemRepository = itemRepository;
         this.itemValidator = itemValidator;
         this.categoryService = categoryService;
+        this.imageStoragePath = Paths.get(imageStorageProperty.getUploadDirectory()).toAbsolutePath().normalize();
+
+        Files.createDirectories(imageStoragePath);
     }
 
     public List<ViewItemDto> getItems() {
@@ -60,15 +73,52 @@ public class ItemService {
         return viewItemDto;
     }
 
-    public ViewItemDto createItem(CreateItemDto createItemDto) {
-        Item item = new Item(createItemDto);
-        for (String str : createItemDto.getCategories()){
+    private void setItemCategories(Item item,List<String> categoryNames) {
+
+        for (String str : categoryNames){
             Optional<Category> category = categoryService.getCategory(str);
             if (category.isEmpty()) throw new CategoryNotFoundException(str);
             item.addCategory(category.get());
         }
-        return new ViewItemDto(itemRepository.save(item));
+
     }
+
+    private void saveItemImages(Path directoryPath,List<MultipartFile> images) throws IOException {
+        for (MultipartFile image : images) saveItemImage(directoryPath,image);
+    }
+
+    private void saveItemImage(Path directoryPath,MultipartFile image) throws IOException {
+                Files.copy(image.getInputStream(),directoryPath);
+    }
+
+    private Item saveItem(CreateItemDto createItemDto){
+        Item item = new Item(createItemDto);
+
+        List<String> categoryNames = createItemDto.getCategories();
+
+        setItemCategories(item,categoryNames);
+
+        itemRepository.save(item);
+
+        return item;
+
+    }
+
+    public ViewItemDto createItem(CreateItemDto createItemDto) throws IOException {
+
+        Item item = saveItem(createItemDto);
+
+        List<MultipartFile> images = createItemDto.getImages();
+
+        String directoryPathStr = String.format("item_%s",item.getId().toString());
+
+        Path directoryPath = imageStoragePath.resolve(directoryPathStr);
+
+        saveItemImages(directoryPath,images);
+
+        return new ViewItemDto(item);
+    }
+
 
     public void updateItem(UpdateItemDto updateItemDto) {
         Item item = itemRepository.findById(updateItemDto.getId()).orElseThrow(() -> new ItemNotFoundException("id", updateItemDto.getId().toString()));
