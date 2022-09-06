@@ -76,7 +76,7 @@ public class ItemService {
 
     public ViewItemDto getItem(Integer id)  {
 
-        Item item = itemRepository.findById(id).orElseThrow(() -> new ItemNotFoundException("id", id.toString())));
+        Item item = itemRepository.findById(id).orElseThrow(() -> new ItemNotFoundException("id", id.toString()));
 
         ViewItemDto viewItemDto = new ViewItemDto(item);
         List<MultipartFile> images = getItemImages(id,item.getImages());
