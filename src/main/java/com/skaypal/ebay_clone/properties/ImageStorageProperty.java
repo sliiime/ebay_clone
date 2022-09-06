@@ -1,4 +1,4 @@
-package com.skaypal.ebay_clone.property;
+package com.skaypal.ebay_clone.properties;
 
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
