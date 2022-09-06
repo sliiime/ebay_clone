@@ -47,6 +47,7 @@ public class User {
     @Column(name = "phone", unique = true)
     private String phone;
 
+
     @OneToMany(mappedBy = "seller", fetch = FetchType.LAZY)
     private List<Item> items;
 

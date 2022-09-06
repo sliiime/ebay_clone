@@ -234,11 +234,11 @@ INSERT INTO role (role) VALUES ('AUTHORIZED_USER');
 INSERT INTO role (role) VALUES ('ADMIN');
 
 /* Initialize category table */
-INSERT INTO category (name) VALUES ('CATEGORY 1');
-INSERT INTO category (name) VALUES ('CATEGORY 2');
-INSERT INTO category (name) VALUES ('CATEGORY 3');
-INSERT INTO category (name) VALUES ('CATEGORY 4');
-INSERT INTO category (name) VALUES ('CATEGORY 5');
-INSERT INTO category (name) VALUES ('CATEGORY 6');
-INSERT INTO category (name) VALUES ('CATEGORY 7');
-INSERT INTO category (name) VALUES ('CATEGORY 8');
+INSERT INTO category (name) VALUES ('Technology');
+INSERT INTO category (name) VALUES ('Home & Kitchen');
+INSERT INTO category (name) VALUES ('Beauty & Personal Care');
+INSERT INTO category (name) VALUES ('Toys & Games');
+INSERT INTO category (name) VALUES ('Clothing, Shoes & Jewelry');
+INSERT INTO category (name) VALUES ('Sports & Outdoors');
+INSERT INTO category (name) VALUES ('Books');
+INSERT INTO category (name) VALUES ('Other');
