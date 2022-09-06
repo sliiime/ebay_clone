@@ -27,7 +27,7 @@ const filterSearch = (search) => {
     }*/
     if (search.minPrice) {
         let filter = {
-            field: "buy_price",
+            field: "buyPrice",
             operator: "GREATER_THAN",
             value: search.minPrice
         }
@@ -35,7 +35,7 @@ const filterSearch = (search) => {
     }
     if (search.maxPrice) {
         let filter = {
-            field: "buy_price",
+            field: "buyPrice",
             operator: "LESS_THAN",
             value: search.maxPrice
         }

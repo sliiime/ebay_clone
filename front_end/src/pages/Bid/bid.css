@@ -1,0 +1,36 @@
+.bid-item-panel {
+    width: 50%;
+    display: grid;
+    align-items: center;
+    text-align: center;
+
+    background: whitesmoke;
+    border: 4px solid lightblue;
+    border-radius: 2px;
+
+    margin-top: 30px;
+}
+
+.bid-item-container {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.bid-item-label{
+    font-size: 17px;
+    font-weight: bolder;
+}
+
+.bid-item-text {
+    font-family: Chandas;
+    font-weight: lighter;
+    font-size: 15px;
+    margin-top: -1px;
+}
+
+.bid-divider {
+    font-weight: bolder;
+    margin-top: -20px;
+    margin-bottom: -5px;
+    letter-spacing: -1px;
+}

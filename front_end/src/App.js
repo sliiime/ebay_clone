@@ -12,6 +12,7 @@ import MyItems from "./pages/UsersItems/MyItems";
 import AddItem from "./pages/AddItem/AddItem";
 import EditItem from "./pages/EditItem/EditItem";
 import Search from "./pages/Search/Search";
+import Bid from "./pages/Bid/Bid";
 
 const ROLES = {
     'User': 2001,
@@ -45,6 +46,10 @@ function App() {
 
                       <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
                           <Route path="myitems/editItem" element={<EditItem />} />
+                      </Route>
+
+                      <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
+                          <Route path="search/bid/:id" element={<Bid />} />
                       </Route>
 
                       {/* catch all */}

@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import axios from "axios";
-import MyItemCard from "../UsersItems/MyItemCard";
 import SearchItemCard from "./SearchItemCard";
 
 const AllItems = () => {

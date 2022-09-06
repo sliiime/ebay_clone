@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import './search.css'
-import {useNavigate} from "react-router-dom";
+import {NavLink, useNavigate} from "react-router-dom";
 import missingImage from "../UsersItems/missingImage.png";
 
 const SearchItemCard = ({item}) => {
@@ -35,9 +35,11 @@ const SearchItemCard = ({item}) => {
             <div className="card-editButton">
                 {
                     item.status === "NOT_BOUGHT" ?
-                        <button onClick={handleEditButton}>
-                            Check
-                        </button>
+                        <NavLink style={{ textDecoration: 'none'}} to={'/search/bid/'+String(item.id)}>
+                            <button onClick={handleEditButton}>
+                                Check
+                            </button>
+                        </NavLink>
                         : null
                 }
             </div>
