@@ -29,12 +29,12 @@ const SearchItemCard = ({item}) => {
                     <p className="card-item-info">Minimum bid: {item.minBid} €</p>
                     <p className="card-item-info">Buyout price: {item.buyPrice} €</p>
                     <p className="card-item-info">End date: {endDate.getDate()}-{endDate.getMonth()+1}-{endDate.getFullYear()}</p>
-                    <p className="card-item-info">Status: {item.status==="NOT_BOUGHT" ? "On going" : "Bought"}</p>
+                    <p className="card-item-info">Status: {item.status==="ONGOING" ? "On going" : "Finished"}</p>
                 </div>
             </div>
             <div className="card-editButton">
                 {
-                    item.status === "NOT_BOUGHT" ?
+                    item.status === "ONGOING" ?
                         <NavLink style={{ textDecoration: 'none'}} to={'/search/bid/'+String(item.id)}>
                             <button onClick={handleEditButton}>
                                 Check

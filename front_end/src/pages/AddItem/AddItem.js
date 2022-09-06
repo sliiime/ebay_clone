@@ -18,6 +18,8 @@ const AddItem = () => {
         startDate: ""
     })
 
+    let formData = new FormData()
+
     let navigate = useNavigate()
 
     const [errors,setErrors] = useState({});
@@ -60,10 +62,28 @@ const AddItem = () => {
         setSubmitButtonPressed(true)
     }
 
-    useEffect( () => {
+    useEffect(  () => {
         if(!errorsExist(submitButtonPressed,errors)) {
             console.log(item)
-            axios
+            formData.append("name",item.name)
+            formData.append("buyPrice",item.buyPrice)
+            formData.append("description", item.description)
+            formData.append("category", item.categories)
+            formData.append("minBid",item.minBid)
+            formData.append("startDate",item.startDate)
+            formData.append("endDate",item.endDate)
+            formData.append("images",images)
+            try {
+                axios ({
+                    method: "post",
+                    url: "http://localhost:8080/ebay_clone/api/item",
+                    data: formData,
+                    headers: {'Authorization': JSON.parse(localStorage.getItem('accessToken'))}
+                })
+            } catch (error){
+                console.log(error)
+            }
+            /*axios
                 .post("http://localhost:8080/ebay_clone/api/item",{
                     name: item.name,
                     buyPrice: item.buyPrice,
@@ -87,9 +107,28 @@ const AddItem = () => {
                 .catch((error) => {
                     console.log(error)
                     setIsCorrectSubmission(2);
-                });
+                });*/
         }
     }, [submitButtonPressed,errors]);
+
+    /*const [selectedImage, setSelectedImage] = useState(null);
+    const [images,setImages] = useState([])
+    const handleImages = (event) => {
+        setImages(images.push(event.target.files[0]))
+    }*/
+    const [images, setImages] = useState([]);
+    const handleImages = (event) => {
+        for (const file of event.target.files) {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => {
+                setImages((imgs) => [...imgs, reader.result]);
+            };
+            reader.onerror = () => {
+                console.log(reader.error);
+            };
+        }
+    };
 
     return (
         <div>
@@ -140,6 +179,18 @@ const AddItem = () => {
                         <option className="add-item-option" value="Books">Books</option>
                         <option className="add-item-option" value="Other">Other</option>
                     </select>
+                </div>
+                <div className="item-attributes">
+                    <label className="item-item-label">Add photos</label>
+                    <input onChange={handleImages} type="file" name="file" multiple />
+                    {
+                        images.map((image) => (
+                            <img className="add-item-image" src={image} />
+                        ))
+                    }
+                    {
+                        images.length>0 ? <button onClick={()=>setImages([])}>Remove</button> : null
+                    }
                 </div>
             </div>
             <div className="add-item-div-btn">
