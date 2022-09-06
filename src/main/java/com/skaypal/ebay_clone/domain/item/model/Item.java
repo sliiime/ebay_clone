@@ -53,7 +53,7 @@ public class Item {
     @JoinColumn(name = "seller")
     private User seller;
 
-    @OneToMany
+    @OneToMany(mappedBy = "item")
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<ItemImage> images;
 
