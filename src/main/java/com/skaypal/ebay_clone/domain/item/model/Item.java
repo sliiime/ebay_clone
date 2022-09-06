@@ -53,6 +53,10 @@ public class Item {
     @JoinColumn(name = "seller")
     private User seller;
 
+    @OneToMany
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<ItemImage> images;
+
     @OneToMany(fetch = FetchType.LAZY)
     private List<Bid> bids;
     @ManyToOne(fetch = FetchType.LAZY)
@@ -230,6 +234,8 @@ public class Item {
         return status;
     }
 
+    public List<ItemImage> getImages(){return this.images;}
+
     public User getBoughtBy() {
         return boughtBy;
     }
@@ -281,6 +287,8 @@ public class Item {
     public void setBoughtBy(User boughtBy) {
         this.boughtBy = boughtBy;
     }
+
+    public void setImages(List<ItemImage> images) {this.images = images;}
 
     public void updateItemWithDto(UpdateItemDto updateItemDto) {
         if (updateItemDto.getName() != null)

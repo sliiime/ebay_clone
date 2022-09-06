@@ -121,18 +121,18 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `ebay_clone`.`item_has_category` ;
 
 CREATE TABLE IF NOT EXISTS `ebay_clone`.`item_has_category` (
-  `Item_id` INT NOT NULL,
-  `Category_id` INT NOT NULL,
-  PRIMARY KEY (`Item_id`, `Category_id`),
-  INDEX `fk_Item_has_Category_Category1_idx` (`Category_id` ASC) VISIBLE,
-  INDEX `fk_Item_has_Category_Item1_idx` (`Item_id` ASC) VISIBLE,
+  `item_id` INT NOT NULL,
+  `category_id` INT NOT NULL,
+  PRIMARY KEY (`item_id`, `category_id`),
+  INDEX `fk_Item_has_Category_Category1_idx` (`category_id` ASC) VISIBLE,
+  INDEX `fk_Item_has_Category_Item1_idx` (`item_id` ASC) VISIBLE,
   CONSTRAINT `fk_Item_has_Category_Item1`
-    FOREIGN KEY (`Item_id`)
+    FOREIGN KEY (`item_id`)
     REFERENCES `ebay_clone`.`item` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Item_has_Category_Category1`
-    FOREIGN KEY (`Category_id`)
+    FOREIGN KEY (`category_id`)
     REFERENCES `ebay_clone`.`category` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -263,6 +263,26 @@ CREATE TABLE IF NOT EXISTS `ebay_clone`.`user_has_role` (
   CONSTRAINT `fk_user_has_role_role1`
     FOREIGN KEY (`role_id`)
     REFERENCES `ebay_clone`.`role` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `ebay_clone`.`item_image`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `ebay_clone`.`item_image` ;
+
+CREATE TABLE IF NOT EXISTS `ebay_clone`.`item_image` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `relative_path` VARCHAR(45) NULL,
+  `content_type` VARCHAR(45) NULL,
+  `item_id` INT NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_item_image_item1_idx` (`item_id` ASC) VISIBLE,
+  CONSTRAINT `fk_item_image_item1`
+    FOREIGN KEY (`item_id`)
+    REFERENCES `ebay_clone`.`item` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;

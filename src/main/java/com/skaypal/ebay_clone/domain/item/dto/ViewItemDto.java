@@ -2,6 +2,7 @@ package com.skaypal.ebay_clone.domain.item.dto;
 
 import com.skaypal.ebay_clone.domain.item.ItemStatusEnum;
 import com.skaypal.ebay_clone.domain.item.model.Item;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 import java.util.List;
@@ -29,6 +30,8 @@ public class ViewItemDto {
     private Integer highestBidderId;
 
     private Integer boughtById;
+
+    private List<MultipartFile> images;
 
 
     public ViewItemDto(Item item) {
@@ -106,6 +109,8 @@ public class ViewItemDto {
 
     public Integer getBoughtById(){return boughtById;}
 
+    public List<MultipartFile> getImages(){return this.images;}
+
     public void setId(Integer id) {
         this.id = id;
     }
@@ -162,4 +167,8 @@ public class ViewItemDto {
     public void setSellerId(Integer sellerId){this.sellerId = sellerId;}
 
     public void setBoughtById(Integer boughtById){this.boughtById = boughtById;}
+
+    public void setImages(List<MultipartFile> images){
+        this.images = images;
+    }
 }

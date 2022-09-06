@@ -3,15 +3,12 @@ package com.skaypal.ebay_clone.domain.item.validator;
 import static com.skaypal.ebay_clone.domain.item.ItemStatusEnum.*;
 import com.skaypal.ebay_clone.domain.item.exceptions.ItemNotFoundException;
 import com.skaypal.ebay_clone.domain.item.model.Item;
-import com.skaypal.ebay_clone.domain.item.repositories.ItemRepository;
-import com.skaypal.ebay_clone.domain.item.repositories.JPAItemRepository;
+import com.skaypal.ebay_clone.domain.item.repositories.item.ItemRepository;
 import com.skaypal.ebay_clone.domain.user.exceptions.UserNotFoundException;
 import com.skaypal.ebay_clone.domain.user.model.User;
-import com.skaypal.ebay_clone.utils.validator.ValidationResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.Optional;
 
 @Service
