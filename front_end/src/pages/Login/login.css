@@ -151,7 +151,7 @@
 }
 
 .createAccButton {
-    width: 125px;
+    width: 350px;
     height: 30px;
 
     font-family: 'Mulish';
@@ -163,6 +163,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
+
+    margin-top: -10px;
 
     background: white;
     border: 1px solid #0066FF;

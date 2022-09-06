@@ -133,7 +133,7 @@ function Login() {
             </div>
             {/* FORGET PASSWORD & CREATE ACCOUNT BUTTONS */}
             <div className="underButtonContent">
-                <button className="forgetPasswordButton">Forget password</button>
+                {/*<button className="forgetPasswordButton">Forget password</button>*/}
                 <button className="createAccButton" onClick={routeChange}>Create an account</button>
             </div>
             <div className="login--afterSubmissionInfo">
