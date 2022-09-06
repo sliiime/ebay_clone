@@ -3,6 +3,8 @@ package com.skaypal.ebay_clone.domain.item.dto;
 import com.skaypal.ebay_clone.domain.item.validator.controllerValidators.EndDateValidation;
 import com.skaypal.ebay_clone.domain.item.validator.controllerValidators.MinBidBuyPriceValidation;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.lang.Nullable;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.validation.constraints.Min;
@@ -35,7 +37,13 @@ public class CreateItemDto {
     @NotNull
     private Date endDate;
 
+
+    @Nullable
     private Date startDate;
+
+
+    @Nullable
+    private List<MultipartFile> images;
 
     @Null
     Integer ownerId;
@@ -88,6 +96,7 @@ public class CreateItemDto {
     public Integer getOwnerId(){return ownerId;}
 
     public Date getStartDate(){return startDate;}
+    public List<MultipartFile> getImages() {return images;}
     public void setName(String name) {this.name = name;}
     public void setBuyPrice(Float buyPrice) {this.buyPrice = buyPrice; }
     public void setDescription(String description) {this.description = description; }
@@ -96,4 +105,5 @@ public class CreateItemDto {
     public void setEndDate(Date endDate){this.endDate = endDate;}
     public void setStartDate(Date startDate) {this.startDate = startDate;}
     public void setOwnerId(Integer ownerId){this.ownerId = ownerId;}
+    public void setImages(List<MultipartFile> images){this.images = images;}
 }

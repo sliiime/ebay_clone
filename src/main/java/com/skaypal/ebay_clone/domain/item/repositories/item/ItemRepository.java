@@ -1,4 +1,4 @@
-package com.skaypal.ebay_clone.domain.item.repositories;
+package com.skaypal.ebay_clone.domain.item.repositories.item;
 
 import com.skaypal.ebay_clone.domain.bid.model.Bid;
 import com.skaypal.ebay_clone.domain.item.model.Item;

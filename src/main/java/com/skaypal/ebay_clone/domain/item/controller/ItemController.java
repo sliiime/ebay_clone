@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.swing.text.View;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -83,8 +84,8 @@ public class ItemController {
 
     }
 
-    @PostMapping
-    public ResponseEntity<?> createItem(@Valid @RequestBody CreateItemDto createItemDto, HttpServletRequest request) {
+    @PostMapping(consumes = "multipart/form-data")
+    public ResponseEntity<?> createItem(@Valid @ModelAttribute CreateItemDto createItemDto, HttpServletRequest request) throws IOException {
 
         String token = request.getHeader("Authorization"); //Check whether this header exists;
         Integer userId = jwtUtil.retrieveUserId(token);       //Throws invalid token exception
