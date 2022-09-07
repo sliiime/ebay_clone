@@ -21,7 +21,7 @@ const CategoryItems = ({category}) => {
                 filters: [{
                     field: "category",
                     operator: "IN",
-                    values: ["Category 1"]
+                    values: currentCategory
                 }]
             })
             .then((response) => {

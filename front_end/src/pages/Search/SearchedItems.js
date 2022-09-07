@@ -7,10 +7,11 @@ const SearchedItems = ({search}) => {
     const [numOfPages, setNumOfPages] = useState()
     const [currentPage,setCurrentPage] = useState(1)
     const [itemsShown, setItemsShown] = useState([])
-    const [filters,setFilters] = useState([])
+    const [searchFilters,setSearchFilters] = useState([])
 
     useEffect(() => {
-        setFilters(filterSearch(search))
+        setSearchFilters(filterSearch(search))
+        console.log(searchFilters)
         setNumOfPages(0)
         setCurrentPage(1)
     },[search])
@@ -18,7 +19,7 @@ const SearchedItems = ({search}) => {
     useEffect(() => {
         axios
             .post("http://localhost:8080/ebay_clone/api/item/search/?p=" + (currentPage - 1), {
-                filters: {filters}
+                filters: searchFilters
             })
             .then((response) => {
                 console.log(response?.data)
@@ -30,7 +31,7 @@ const SearchedItems = ({search}) => {
             .catch((error) => {
                 console.log(error)
             })
-    },[currentPage,filters])
+    },[currentPage,searchFilters])
 
     const handleNextClick = () => {
         setCurrentPage(currentPage+1)
