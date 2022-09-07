@@ -19,7 +19,7 @@ const validation = (item) => {
         errors.minBid = "Minimum bid is required."
     } else if (item.minBid <= 0) {
         errors.minBid = "Enter a valid Minimum bid."
-    } else if (item.minBid >= item.buyPrice) {
+    } else if (parseFloat(item.minBid) >= parseFloat(item.buyPrice)) {
         errors.minBid = "Minimum bid must be less than Buyout price."
     } else { errors.minBid = "" }
 
@@ -27,7 +27,7 @@ const validation = (item) => {
         errors.buyPrice="Buyout price is required."
     } else if (item.buyPrice <= 0){
         errors.buyPrice="Enter a valid Buyout price."
-    } else if (item.buyPrice <= item.minBid){
+    } else if (parseFloat(item.buyPrice) <= parseFloat(item.minBid)){
         errors.buyPrice="Buyout price must be greater than Minimum bid."
     } else { errors.buyPrice = "" }
 

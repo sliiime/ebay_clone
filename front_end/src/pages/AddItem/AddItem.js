@@ -5,6 +5,7 @@ import validation from "./validation";
 import errorsExist from "./errorsExist";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
+import FormData from 'form-data'
 
 const AddItem = () => {
 
@@ -17,8 +18,6 @@ const AddItem = () => {
         endDate: "",
         startDate: ""
     })
-
-    let formData = new FormData()
 
     let navigate = useNavigate()
 
@@ -64,16 +63,45 @@ const AddItem = () => {
 
     useEffect(  () => {
         if(!errorsExist(submitButtonPressed,errors)) {
+            let formData = new FormData()
             console.log(item)
+            const endDateValue = item.endDate.replaceAll("-","/")
+            const startDateValue = item.startDate.replaceAll("-","/")
             formData.append("name",item.name)
             formData.append("buyPrice",item.buyPrice)
             formData.append("description", item.description)
             formData.append("category", item.categories)
             formData.append("minBid",item.minBid)
-            formData.append("startDate",item.startDate)
-            formData.append("endDate",item.endDate)
-            formData.append("images",images)
-            try {
+            formData.append("startDate",startDateValue)
+            formData.append("endDate",endDateValue)
+
+            for (var value of formData.values()) {
+                console.log(value);
+            }
+
+            console.log(formData)
+            axios
+                .post('http://localhost:8080/ebay_clone/api/item',{
+                    formData
+                }, {
+                    headers:  {
+                        'Authorization': JSON.parse(localStorage.getItem('accessToken')),
+                        'Accept' : '*/*',
+                        'Content-Type': "multipart/form-data"
+                    }
+                })
+                .then((response) => {
+                    console.log("all gucci")
+                    setIsCorrectSubmission(1);
+                    setDisableButton(true);
+                    const timer = setTimeout(() => navigate('../'), 2000);
+                    return () => clearTimeout(timer);
+                })
+                .catch((error) => {
+                    console.log(error)
+                    setIsCorrectSubmission(2);
+                });
+            /*try {
                 axios ({
                     method: "post",
                     url: "http://localhost:8080/ebay_clone/api/item",
@@ -82,7 +110,7 @@ const AddItem = () => {
                 })
             } catch (error){
                 console.log(error)
-            }
+            }*/
             /*axios
                 .post("http://localhost:8080/ebay_clone/api/item",{
                     name: item.name,
@@ -185,7 +213,7 @@ const AddItem = () => {
                     <input onChange={handleImages} type="file" name="file" multiple />
                     {
                         images.map((image) => (
-                            <img className="add-item-image" src={image} />
+                            <img className="add-item-image" src={image} key={images.length} />
                         ))
                     }
                     {

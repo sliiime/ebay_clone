@@ -16,20 +16,21 @@ const NavBar = () => {
     return (
         <div>
             <nav className="navbar" >
-                <img className="marketPlaceIcon" src={market} alt=""/>
-                <div className="left-side-items">
-                    <Link className="navbar--homeLink" to="/">Home</Link>
-                    <Link className="navbar--searchLink" to="/search">Search</Link>
+                <div className="navbar-left-side-items">
+                    <img className="marketPlaceIcon" src={market} alt=""/>
+                    <Link className="navbar-left-link" to="/">Home</Link>
+                    <Link className="navbar-left-link" to="/search">Search</Link>
+                    <Link className="navbar-left-link" to="/myitems">My Items</Link>
                 </div>
                 {   localStorage.getItem("accessToken")
                     ?
-                    <div className="right-side-items">
-                            <Link className="navbar--logoutLink" to="/" onClick={handleLogout}>Logout</Link>
+                    <div className="navbar-right-side-items">
+                            <Link className="navbar-right-link" to="/" onClick={handleLogout}>Logout</Link>
                     </div>
                     :
-                    <div className="right-side-items">
-                        <Link className="navbar--loginLink" to="../login">Login</Link>
-                        <Link className="navbar--signupLink" to="../signup">Sign Up</Link>
+                    <div className="navbar-right-side-items">
+                        <Link className="navbar-right-link" to="/login">Login</Link>
+                        <Link className="navbar-right-link" to="/signup">Sign Up</Link>
                     </div>
                 }
             </nav>
