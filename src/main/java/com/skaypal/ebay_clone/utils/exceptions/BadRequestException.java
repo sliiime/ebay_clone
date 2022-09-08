@@ -4,9 +4,9 @@ public class BadRequestException extends RuntimeException {
 
     protected String message;
 
-    protected BadRequestException(){}
+    public BadRequestException(){}
 
-    protected BadRequestException(String message){
+    public BadRequestException(String message){
         this.message = message;
     }
 

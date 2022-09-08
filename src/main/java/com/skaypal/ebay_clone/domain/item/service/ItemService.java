@@ -16,6 +16,7 @@ import com.skaypal.ebay_clone.domain.item.repositories.item_image.ItemImageRepos
 import com.skaypal.ebay_clone.domain.item.repositories.queries.Filter;
 import com.skaypal.ebay_clone.domain.item.validator.ItemValidator;
 import com.skaypal.ebay_clone.properties.ImageStorageProperty;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -60,7 +61,7 @@ public class ItemService {
         this.itemImageRepository = itemImageRepository;
         this.imageStoragePath = Paths.get(imageStorageProperty.getUploadDirectory()).toAbsolutePath().normalize();
 
-        Files.deleteIfExists(imageStoragePath);
+        FileUtils.deleteDirectory(new File(imageStorageProperty.getUploadDirectory()));
         Files.createDirectories(imageStoragePath);
     }
 
