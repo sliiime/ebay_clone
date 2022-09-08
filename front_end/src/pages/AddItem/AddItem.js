@@ -5,8 +5,6 @@ import validation from "./validation";
 import errorsExist from "./errorsExist";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
-import FormData from 'form-data'
-
 const AddItem = () => {
 
     const [item,setItem] = useState({
@@ -26,6 +24,8 @@ const AddItem = () => {
     const [disableButton, setDisableButton] = useState(false);
     const [submitButtonPressed,setSubmitButtonPressed] = useState(false)
     const [isCorrectSubmission,setIsCorrectSubmission] = useState(0)
+    const [images, setImages] = useState([]);
+    const [previewImages, setPreviewImages] = useState([])
 
     const handleChange = (event) => {
         setItem({
@@ -64,7 +64,6 @@ const AddItem = () => {
     useEffect(  () => {
         if(!errorsExist(submitButtonPressed,errors)) {
             let formData = new FormData()
-            console.log(item)
             const endDateValue = item.endDate.replaceAll("-","/")
             const startDateValue = item.startDate.replaceAll("-","/")
             formData.append("name",item.name)
@@ -74,79 +73,27 @@ const AddItem = () => {
             formData.append("minBid",item.minBid)
             formData.append("startDate",startDateValue)
             formData.append("endDate",endDateValue)
-
-            for (var value of formData.values()) {
-                console.log(value);
-            }
-
-            console.log(formData)
-            axios
-                .post('http://localhost:8080/ebay_clone/api/item',{
-                    formData
-                }, {
-                    headers:  {
-                        'Authorization': JSON.parse(localStorage.getItem('accessToken')),
-                        'Accept' : '*/*',
-                        'Content-Type': "multipart/form-data"
-                    }
-                })
-                .then((response) => {
-                    console.log("all gucci")
-                    setIsCorrectSubmission(1);
-                    setDisableButton(true);
-                    const timer = setTimeout(() => navigate('../'), 2000);
-                    return () => clearTimeout(timer);
-                })
-                .catch((error) => {
-                    console.log(error)
-                    setIsCorrectSubmission(2);
-                });
-            /*try {
+            formData.append("images",images)
+            console.log(images)
+            try {
                 axios ({
                     method: "post",
                     url: "http://localhost:8080/ebay_clone/api/item",
                     data: formData,
-                    headers: {'Authorization': JSON.parse(localStorage.getItem('accessToken'))}
+                    headers: {
+                        'Authorization': JSON.parse(localStorage.getItem('accessToken')),
+                        'Accept' : '*/*',
+                        'Content-Type': "multipart/form-data"
+                    },
                 })
             } catch (error){
                 console.log(error)
-            }*/
-            /*axios
-                .post("http://localhost:8080/ebay_clone/api/item",{
-                    name: item.name,
-                    buyPrice: item.buyPrice,
-                    description: item.description,
-                    categories: item.categories,
-                    minBid: item.minBid,
-                    startDate: item.startDate,
-                    endDate: item.endDate
-                }, {
-                    headers: {
-                        'Authorization': JSON.parse(localStorage.getItem('accessToken'))
-                    }
-                })
-                .then((response) => {
-                    console.log("all gucci")
-                    setIsCorrectSubmission(1);
-                    setDisableButton(true);
-                    const timer = setTimeout(() => navigate('../'), 2000);
-                    return () => clearTimeout(timer);
-                })
-                .catch((error) => {
-                    console.log(error)
-                    setIsCorrectSubmission(2);
-                });*/
+            }
         }
     }, [submitButtonPressed,errors]);
 
-    /*const [selectedImage, setSelectedImage] = useState(null);
-    const [images,setImages] = useState([])
     const handleImages = (event) => {
-        setImages(images.push(event.target.files[0]))
-    }*/
-    const [images, setImages] = useState([]);
-    const handleImages = (event) => {
-        for (const file of event.target.files) {
+        /*for (const file of event.target.files) {
             const reader = new FileReader();
             reader.readAsDataURL(file);
             reader.onload = () => {
@@ -155,7 +102,19 @@ const AddItem = () => {
             reader.onerror = () => {
                 console.log(reader.error);
             };
-        }
+        }*/
+        let image_as_files = event.target.files[0];
+        let temp = images
+        temp.push(image_as_files)
+        setImages(temp)
+        let image_as_base64 = URL.createObjectURL(event.target.files[0])
+        let tempPreview = previewImages
+        tempPreview.push(image_as_base64)
+        setPreviewImages(tempPreview)
+        console.log(image_as_files)
+        console.log(image_as_base64)
+        //console.log(event.target.files, "&&&&")
+        //console.log(event.target.files[0], "&&&&")
     };
 
     return (
@@ -210,10 +169,10 @@ const AddItem = () => {
                 </div>
                 <div className="item-attributes">
                     <label className="item-item-label">Add photos</label>
-                    <input onChange={handleImages} type="file" name="file" multiple />
+                    <input formEncType="multipart/form-data" onChange={(e)=>handleImages(e)}/*onChange={handleImages}*/ type="file" name="file" /*multiple*/ />
                     {
-                        images.map((image) => (
-                            <img className="add-item-image" src={image} key={images.length} />
+                        previewImages.map((previewImage) => (
+                            <img className="add-item-image" src={previewImage} key={previewImage} />
                         ))
                     }
                     {
