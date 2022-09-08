@@ -73,7 +73,7 @@ const AddItem = () => {
             formData.append("minBid",item.minBid)
             formData.append("startDate",startDateValue)
             formData.append("endDate",endDateValue)
-            formData.append("images",images)
+            images.forEach((image)=>formData.append("images[]",image)) //palamidas = random !!!!gg
             console.log(images)
             try {
                 axios ({
