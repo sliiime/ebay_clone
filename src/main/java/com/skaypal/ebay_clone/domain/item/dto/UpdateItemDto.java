@@ -26,4 +26,5 @@ public class UpdateItemDto {
     public void setName(String name) {this.name = name;}
     public void setDescription(String description) {this.description = description;}
     public void setCategory(String category) {this.category = category;}
+    
 }

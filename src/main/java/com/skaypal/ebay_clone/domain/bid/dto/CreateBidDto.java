@@ -15,7 +15,8 @@ public class CreateBidDto {
     @NotNull
     Float price;
 
-    @Null Date submissionDate;
+    @Null
+    Date submissionDate;
 
 
     public CreateBidDto(){}

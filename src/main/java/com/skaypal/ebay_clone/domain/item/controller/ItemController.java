@@ -68,7 +68,7 @@ public class ItemController {
     @GetMapping(path = "/user/")
     public ResponseEntity<Page<ViewItemDto>> getUserItems(@RequestParam Integer p, HttpServletRequest request){
         String token = request.getHeader("Authorization");
-        if (token == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
         Integer userId = jwtUtil.retrieveUserId(token);
 
         FiltersDto filtersDto = new FiltersDto();
@@ -95,9 +95,12 @@ public class ItemController {
         String token = request.getHeader("Authorization"); //Check whether this header exists;
         Integer userId = jwtUtil.retrieveUserId(token);       //Throws invalid token exception
         createItemDto.setOwnerId(userId);
+
         Date startDate = createItemDto.getStartDate() == null ? new Date() : createItemDto.getStartDate();
         createItemDto.setStartDate(startDate);
+
         ViewItemDto item = itemService.createItem(createItemDto);
+
         return Responses.created(location + "/" + item.getId());
     }
 

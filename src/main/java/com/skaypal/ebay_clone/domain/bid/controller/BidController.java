@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import javax.xml.bind.JAXBContext;
 import java.util.Date;
 
@@ -36,7 +37,7 @@ public class BidController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createBid(@RequestBody CreateBidDto createBidDto, HttpServletRequest request){
+    public ResponseEntity<?> createBid(@Valid @RequestBody CreateBidDto createBidDto, HttpServletRequest request){
         String token = request.getHeader("Authorization");
         
         createBidDto.setBidderId(jwtUtil.retrieveUserId(token));

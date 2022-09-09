@@ -6,12 +6,12 @@ public class ItemImageDto {
 
     public ItemImageDto(){}
 
-    public ItemImageDto(String name,byte[] content,String contentType){
+    public ItemImageDto(String name,String content,String contentType){
         this.name = name;
         this.content = content;
         this.contentType = contentType;
     }
-    private byte[] content;
+    private String content;
     private String contentType;
 
     private String name;
@@ -20,7 +20,7 @@ public class ItemImageDto {
         return this.contentType;
     }
 
-    public byte[] getContent(){
+    public String getContent(){
         return this.content;
     }
 
