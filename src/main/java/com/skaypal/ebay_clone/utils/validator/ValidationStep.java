@@ -10,6 +10,7 @@ public abstract class ValidationStep<T> {
 
     public ValidationStep(){}
 
+
     public abstract ValidationResult validate(T toValidate);
 
     public ValidationStep<T> linkWith(ValidationStep<T> next) {

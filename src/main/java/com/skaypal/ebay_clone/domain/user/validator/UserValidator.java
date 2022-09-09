@@ -16,8 +16,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserValidator {
 
-    UserRepository userRepository;
-    CountryValidator countryValidator;
+    private UserRepository userRepository;
+    private CountryValidator countryValidator;
     @Autowired
     public UserValidator(UserRepository userRepository, CountryValidator countryValidator) {
         this.userRepository = userRepository;

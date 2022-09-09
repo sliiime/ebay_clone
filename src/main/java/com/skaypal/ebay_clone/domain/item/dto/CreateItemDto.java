@@ -16,7 +16,7 @@ import java.util.List;
 
 @MinBidBuyPriceValidation
 @EndDateValidation
-public class CreateItemDto {
+public class CreateItemDto implements ValidatableItemDto {
 
     @NotNull
     @Length(max = 45)

@@ -41,7 +41,7 @@ public class Item {
     @ManyToMany
     @JoinTable(name = "item_has_category",
             joinColumns = @JoinColumn(name = "item_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name ="category_id",referencedColumnName = "id")
+            inverseJoinColumns = @JoinColumn(name = "category_id", referencedColumnName = "id")
     )
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Category> categories;
@@ -234,7 +234,9 @@ public class Item {
         return status;
     }
 
-    public List<ItemImage> getImages(){return this.images;}
+    public List<ItemImage> getImages() {
+        return this.images;
+    }
 
     public User getBoughtBy() {
         return boughtBy;
@@ -288,16 +290,43 @@ public class Item {
         this.boughtBy = boughtBy;
     }
 
-    public void setImages(List<ItemImage> images) {this.images = images;}
-
-    public void updateItemWithDto(UpdateItemDto updateItemDto) {
-        if (updateItemDto.getName() != null)
-            this.name = updateItemDto.getName();
-        if (updateItemDto.getDescription() != null)
-            this.description = updateItemDto.getDescription();
+    public void setImages(List<ItemImage> images) {
+        this.images = images;
     }
 
-    public void addCategory(Category category){
+    public void updateItemWithDto(UpdateItemDto updateItemDto) {
+        for (ItemFields field : updateItemDto.getToUpdate()) {
+            switch (field) {
+                case NAME:
+                    name = updateItemDto.getName();
+                    break;
+                case BUY_PRICE:
+                    buyPrice = updateItemDto.getBuyPrice();
+                    break;
+                case DESCRIPTION:
+                    description = updateItemDto.getDescription();
+                    break;
+                case MIN_BID:
+                    minBid = updateItemDto.getMinBid();
+                    break;
+                case START_DATE:
+                    startDate = updateItemDto.getStartDate();
+                    break;
+                case END_DATE:
+                    endDate = updateItemDto.getEndDate();
+                    break;
+                case LATITUDE:
+                    latitude = updateItemDto.getLatitude();
+                    break;
+                case LONGITUDE:
+                    longitude = updateItemDto.getLongitude();
+                    break;
+            }
+        }
+
+    }
+
+    public void addCategory(Category category) {
         if (categories == null) this.categories = new ArrayList<>();
         this.categories.add(category);
     }
