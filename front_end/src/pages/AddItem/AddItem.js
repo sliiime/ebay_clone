@@ -14,7 +14,9 @@ const AddItem = () => {
         categories: [],
         minBid: "",
         endDate: "",
-        startDate: ""
+        startDate: "",
+        longitude: "",
+        latitude: ""
     })
 
     let navigate = useNavigate()
@@ -73,6 +75,8 @@ const AddItem = () => {
             formData.append("minBid",item.minBid)
             formData.append("startDate",startDateValue)
             formData.append("endDate",endDateValue)
+            formData.append("longitude",item.longitude)
+            formData.append("latitude",item.latitude)
             images.forEach((image)=>formData.append("images[]",image))
             try {
                 const response = axios ({
@@ -165,6 +169,15 @@ const AddItem = () => {
                         <option className="add-item-option" value="Other">Other</option>
                     </select>
                 </div>
+                <div className="item-attributes">
+                    <label className="item-item-label">Longitude</label>
+                    <input className="add-item-input-box" placeholder="Longitude" type="number" name="longitude" value={item.longitude} onChange={handleChange}></input>
+                </div>
+                <div className="item-attributes">
+                    <label className="item-item-label">Latitude</label>
+                    <input className="add-item-input-box" placeholder="Latitude" type="number" name="latitude" value={item.latitude} onChange={handleChange}></input>
+                </div>
+                <a href='https://support.google.com/maps/answer/18539?hl=en&co=GENIE.Platform%3DDesktop' target='_blank' rel="noopener noreferrer">Click here to see how to find your longitude and latitude!</a>
                 <div className="item-attributes">
                     <label className="item-item-label">Add photos</label>
                     <input formEncType="multipart/form-data" onChange={(e)=>handleImages(e)}/*onChange={handleImages}*/ type="file" name="file" /*multiple*/ />
