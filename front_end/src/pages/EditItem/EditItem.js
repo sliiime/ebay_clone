@@ -14,7 +14,9 @@ const EditItem = () => {
         categories: [],
         minBid: "",
         endDate: "",
-        startDate: ""
+        startDate: "",
+        longitude: "",
+        latitude: ""
     })
 
     let navigate = useNavigate()
@@ -76,7 +78,9 @@ const EditItem = () => {
                     categories: [],
                     minBid: response?.data?.minBid,
                     endDate: "",
-                    startDate: ""
+                    startDate: "",
+                    longitude: response?.data?.longitude ? response?.data?.longitude : "",
+                    latitude: response?.data?.latitude ? response?.data?.latitude : ""
                 })
             })
             .catch((error) => {
@@ -94,8 +98,10 @@ const EditItem = () => {
                     description: item.description,
                     categories: item.categories,
                     minBid: item.minBid,
-                    startDate: item.startDate,
-                    endDate: item.endDate
+                    startDate: item.startDate.replaceAll("-","/"),
+                    endDate: item.endDate.replaceAll("-","/"),
+                    longitude: item.longitude,
+                    latitude: item.latitude
                 }, {
                     headers: {
                         'Authorization': JSON.parse(localStorage.getItem('accessToken'))
@@ -165,6 +171,15 @@ const EditItem = () => {
                         <option className="add-item-option" value="Other">Other</option>
                     </select>
                 </div>
+                <div className="item-attributes">
+                    <label className="item-item-label">Longitude</label>
+                    <input className="add-item-input-box" placeholder="Longitude" type="number" name="longitude" value={item.longitude} onChange={handleChange}></input>
+                </div>
+                <div className="item-attributes">
+                    <label className="item-item-label">Latitude</label>
+                    <input className="add-item-input-box" placeholder="Latitude" type="number" name="latitude" value={item.latitude} onChange={handleChange}></input>
+                </div>
+                <a href='https://support.google.com/maps/answer/18539?hl=en&co=GENIE.Platform%3DDesktop' target='_blank' rel="noopener noreferrer">Click here to see how to find your longitude and latitude!</a>
             </div>
             <div className="add-item-div-btn">
                 <button className="add-item-submit-btn" onClick={handleSubmit} disabled={disableButton}>Place item</button>

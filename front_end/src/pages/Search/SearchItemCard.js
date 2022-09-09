@@ -6,6 +6,7 @@ import missingImage from "../UsersItems/missingImage.png";
 const SearchItemCard = ({item}) => {
 
     const endDate = new Date(item.endDate)
+    const startDate = new Date(item.startDate)
 
     let navigate = useNavigate()
 
@@ -28,6 +29,7 @@ const SearchItemCard = ({item}) => {
                     <p className="card-item-info">Current bid: {item.bestBid ? String(item.bestBid) : "~"} €</p>
                     <p className="card-item-info">Minimum bid: {item.minBid} €</p>
                     <p className="card-item-info">Buyout price: {item.buyPrice} €</p>
+                    <p className="card-item-info">Start date: {startDate.getDate()}-{startDate.getMonth()+1}-{startDate.getFullYear()}</p>
                     <p className="card-item-info">End date: {endDate.getDate()}-{endDate.getMonth()+1}-{endDate.getFullYear()}</p>
                     <p className="card-item-info">Status: {item.status==="ONGOING" ? "On going" : (item.status==='PREVIEW' ? "Preview" : "Finished")}</p>
                 </div>
