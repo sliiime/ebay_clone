@@ -4,10 +4,7 @@ import com.skaypal.ebay_clone.domain.bid.model.Bid;
 import com.skaypal.ebay_clone.domain.category.exceptions.CategoryNotFoundException;
 import com.skaypal.ebay_clone.domain.category.model.Category;
 import com.skaypal.ebay_clone.domain.category.service.CategoryService;
-import com.skaypal.ebay_clone.domain.item.dto.CreateItemDto;
-import com.skaypal.ebay_clone.domain.item.dto.FiltersDto;
-import com.skaypal.ebay_clone.domain.item.dto.UpdateItemDto;
-import com.skaypal.ebay_clone.domain.item.dto.ViewItemDto;
+import com.skaypal.ebay_clone.domain.item.dto.*;
 import com.skaypal.ebay_clone.domain.item.exceptions.ItemNotFoundException;
 import com.skaypal.ebay_clone.domain.item.model.Item;
 import com.skaypal.ebay_clone.domain.item.model.ItemImage;
@@ -16,6 +13,7 @@ import com.skaypal.ebay_clone.domain.item.repositories.item_image.ItemImageRepos
 import com.skaypal.ebay_clone.domain.item.repositories.queries.Filter;
 import com.skaypal.ebay_clone.domain.item.validator.ItemValidator;
 import com.skaypal.ebay_clone.properties.ImageStorageProperty;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,7 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -75,56 +72,16 @@ public class ItemService {
 
     }
 
-    public ViewItemDto getItem(Integer id)  {
+    public ViewItemDto getItem(Integer id) {
 
         Item item = itemRepository.findById(id).orElseThrow(() -> new ItemNotFoundException("id", id.toString()));
-
+        itemValidator.auctionIsEligibleForBids(id);
         ViewItemDto viewItemDto = new ViewItemDto(item);
-        List<MultipartFile> images = getItemImages(id,item.getImages());
-        setBidData(viewItemDto);
-        viewItemDto.setImages(images);
+        initializeDependedFields(viewItemDto);
 
         return viewItemDto;
     }
 
-    private List<MultipartFile> getItemImages(Integer id, List<ItemImage> images)  {
-
-        Path itemImageDirectoryPath = resolveItemImageDirectoryPath(id);
-
-        return new ArrayList<>();
-    }
-
-
-    private void setItemCategories(Item item, List<String> categoryNames) {
-
-        for (String str : categoryNames) {
-            Optional<Category> category = categoryService.getCategory(str);
-            if (category.isEmpty()) throw new CategoryNotFoundException(str);
-            item.addCategory(category.get());
-        }
-
-    }
-
-    private void saveItemImages(Integer itemId, Path directoryPath, List<MultipartFile> images) throws IOException {
-        if (images == null) return;
-
-        if (!Files.isDirectory(directoryPath)) Files.createDirectories(directoryPath);
-
-        for (MultipartFile image : images) saveItemImage(itemId,directoryPath, image);
-    }
-
-    private void saveItemImage(Integer itemId,Path directoryPath, MultipartFile image) throws IOException {
-        ItemImage itemImage = new ItemImage();
-        itemImage.setRelativePath(image.getOriginalFilename());
-        itemImage.setContentType(image.getContentType());
-        itemImage.setItem(new Item(itemId));
-
-        itemImageRepository.save(itemImage);
-
-        Path imageStoragePath = directoryPath.resolve(itemImage.getRelativePath());
-
-        Files.copy(image.getInputStream(), imageStoragePath);
-    }
 
     private Item saveItem(CreateItemDto createItemDto) {
         Item item = new Item(createItemDto);
@@ -175,7 +132,7 @@ public class ItemService {
         }
         itemPage.forEach((i) -> itemValidator.auctionIsEligibleForBids(i.getId()));
         Page<ViewItemDto> viewItemDtoPage = itemPage.map(item -> new ViewItemDto(item));
-        viewItemDtoPage.forEach(i -> setBidData(i));
+        viewItemDtoPage.forEach(i -> initializeDependedFields(i));
         return viewItemDtoPage;
     }
 
@@ -220,5 +177,72 @@ public class ItemService {
 
     public Float getBuyoutPrice(Integer itemId) {
         return itemRepository.getBuyoutPrice(itemId);
+    }
+
+    private List<ItemImageDto> getItemImages(Integer id) {
+        try {
+            Path itemImageDirectoryPath = resolveItemImageDirectoryPath(id);
+            if (Files.isDirectory(itemImageDirectoryPath) == false) return new ArrayList<>();
+
+            List<ItemImage> images = itemImageRepository.findByItem(id);
+
+            List<ItemImageDto> imageDtos = new ArrayList<>();
+
+            for (ItemImage imageData : images) {
+                String imageName = imageData.getName();
+                Path imagePath = itemImageDirectoryPath.resolve(imageName);
+                byte[] content = Base64.encodeBase64(Files.readAllBytes(imagePath));
+                String contentType = imageData.getContentType();
+
+                imageDtos.add(new ItemImageDto(imageName, content, contentType));
+
+            }
+
+            return imageDtos;
+        }catch (IOException e){
+            throw new RuntimeException(e);
+        }
+    }
+
+
+
+
+    private void setItemCategories(Item item, List<String> categoryNames) {
+
+        for (String str : categoryNames) {
+            Optional<Category> category = categoryService.getCategory(str);
+            if (category.isEmpty()) throw new CategoryNotFoundException(str);
+            item.addCategory(category.get());
+        }
+
+    }
+
+    private void saveItemImages(Integer itemId, Path directoryPath, List<MultipartFile> images) throws IOException {
+        if (images == null) return;
+
+        if (!Files.isDirectory(directoryPath)) Files.createDirectories(directoryPath);
+
+        for (MultipartFile image : images) saveItemImage(itemId,directoryPath, image);
+    }
+
+    private void saveItemImage(Integer itemId,Path directoryPath, MultipartFile image) throws IOException {
+        ItemImage itemImage = new ItemImage();
+        itemImage.setName(image.getOriginalFilename());
+        itemImage.setContentType(image.getContentType());
+        itemImage.setItem(new Item(itemId));
+
+        itemImageRepository.save(itemImage);
+
+        Path imageStoragePath = directoryPath.resolve(itemImage.getName());
+
+        Files.copy(image.getInputStream(), imageStoragePath);
+    }
+
+    private void initializeDependedFields(ViewItemDto viewItemDto){
+
+        List<ItemImageDto> images = getItemImages(viewItemDto.getId());
+        setBidData(viewItemDto);
+        viewItemDto.setImages(images);
+
     }
 }

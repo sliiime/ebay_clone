@@ -31,7 +31,7 @@ public class ViewItemDto {
 
     private Integer boughtById;
 
-    private List<MultipartFile> images;
+    private List<ItemImageDto> images;
 
 
     public ViewItemDto(Item item) {
@@ -109,7 +109,7 @@ public class ViewItemDto {
 
     public Integer getBoughtById(){return boughtById;}
 
-    public List<MultipartFile> getImages(){return this.images;}
+    public List<ItemImageDto> getImages(){return this.images;}
 
     public void setId(Integer id) {
         this.id = id;
@@ -168,7 +168,7 @@ public class ViewItemDto {
 
     public void setBoughtById(Integer boughtById){this.boughtById = boughtById;}
 
-    public void setImages(List<MultipartFile> images){
+    public void setImages(List<ItemImageDto> images){
         this.images = images;
     }
 }

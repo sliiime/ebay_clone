@@ -275,7 +275,7 @@ DROP TABLE IF EXISTS `ebay_clone`.`item_image` ;
 
 CREATE TABLE IF NOT EXISTS `ebay_clone`.`item_image` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `relative_path` VARCHAR(45) NULL,
+  `name` VARCHAR(45) NULL,
   `content_type` VARCHAR(45) NULL,
   `item_id` INT NOT NULL,
   PRIMARY KEY (`id`),

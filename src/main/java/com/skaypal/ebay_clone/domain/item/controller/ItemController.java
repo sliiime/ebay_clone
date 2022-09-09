@@ -1,9 +1,6 @@
 package com.skaypal.ebay_clone.domain.item.controller;
 
-import com.skaypal.ebay_clone.domain.item.dto.CreateItemDto;
-import com.skaypal.ebay_clone.domain.item.dto.FiltersDto;
-import com.skaypal.ebay_clone.domain.item.dto.UpdateItemDto;
-import com.skaypal.ebay_clone.domain.item.dto.ViewItemDto;
+import com.skaypal.ebay_clone.domain.item.dto.*;
 import com.skaypal.ebay_clone.domain.item.model.Item;
 import com.skaypal.ebay_clone.domain.item.repositories.queries.Filter;
 import com.skaypal.ebay_clone.domain.item.repositories.queries.QueryOperator;
@@ -83,6 +80,14 @@ public class ItemController {
         return ResponseEntity.ok(itemService.getPage(filtersDto,p));
 
     }
+
+    /*@GetMapping(path ="/images/{id}")
+    public ResponseEntity<List<ItemImageDto>> getItemImages(@PathVariable Integer id){
+
+            return ResponseEntity.ok(itemService.getItemImages(id)) ;
+
+
+    }*/
 
     @PostMapping(consumes = "multipart/form-data")
     public ResponseEntity<?> createItem(@Valid @ModelAttribute CreateItemDto createItemDto, HttpServletRequest request) throws IOException {
