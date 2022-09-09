@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Base64Utils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -61,10 +62,10 @@ public class ItemService {
         FileUtils.deleteDirectory(new File(imageStorageProperty.getUploadDirectory()));
         Files.createDirectories(imageStoragePath);
     }
-
+/*
     public List<ViewItemDto> getItems() {
         return itemRepository.findAll().stream().map((i) -> new ViewItemDto(i)).collect(Collectors.toList());
-    }
+    }*/
 
     private Path resolveItemImageDirectoryPath(Integer id){
         String relativePathStr = String.format("item_%s", id.toString());
@@ -75,7 +76,9 @@ public class ItemService {
     public ViewItemDto getItem(Integer id) {
 
         Item item = itemRepository.findById(id).orElseThrow(() -> new ItemNotFoundException("id", id.toString()));
+
         itemValidator.auctionIsEligibleForBids(id);
+
         ViewItemDto viewItemDto = new ViewItemDto(item);
         initializeDependedFields(viewItemDto);
 
@@ -136,19 +139,6 @@ public class ItemService {
         return viewItemDtoPage;
     }
 
-    /*public Page<ViewItemDto> getUserItems(Integer userId, Integer p) {
-        Page<Item> itemPage = itemRepository.findItemsOfUser(userId,PageRequest.of(p,ITEM_PAGE_SIZE));
-        itemPage.forEach((i) ->{
-            if(i.hasExpired()){
-                i.setStatus(ItemStatusEnum.BOUGHT_TIMEOUT);
-                itemRepository.save(i);
-            }
-        });
-        Page<ViewItemDto> viewItemDtoPage = itemPage.map(item -> new ViewItemDto(item));
-        viewItemDtoPage.forEach(i ->setBidData(i));
-        return viewItemDtoPage;
-    }*/
-
     public boolean newBidSubmitted(Bid bid) {
         Float buyoutPrice = itemRepository.getBuyoutPrice(bid.getItem().getId());
 
@@ -191,7 +181,7 @@ public class ItemService {
             for (ItemImage imageData : images) {
                 String imageName = imageData.getName();
                 Path imagePath = itemImageDirectoryPath.resolve(imageName);
-                byte[] content = Base64.encodeBase64(Files.readAllBytes(imagePath));
+                String content = Base64.encodeBase64String(org.apache.commons.io.FileUtils.readFileToByteArray(imagePath.toFile()));
                 String contentType = imageData.getContentType();
 
                 imageDtos.add(new ItemImageDto(imageName, content, contentType));
