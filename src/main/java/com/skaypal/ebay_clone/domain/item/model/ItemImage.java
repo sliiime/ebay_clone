@@ -11,9 +11,9 @@ public class ItemImage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String relativePath;
+    private String name;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "item_id")
     private Item item;
 
@@ -29,11 +29,11 @@ public class ItemImage {
     public String getContentType() {return this.contentType;}
 
     public Item getItem(){return this.item;}
-    public String getRelativePath(){return relativePath;}
+    public String getName(){return name;}
 
     public void setId(Integer id){this.id = id;}
 
     public void setContentType(String contentType){this.contentType = contentType;}
-    public void setRelativePath(String relativePath){this.relativePath = relativePath;}
+    public void setName(String relativePath){this.name = relativePath;}
     public void setItem(Item item){this.item = item;}
 }
