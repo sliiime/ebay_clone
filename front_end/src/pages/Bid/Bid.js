@@ -3,9 +3,8 @@ import NavBar from "../MainMenu/Navbar";
 import {useParams} from "react-router-dom";
 import axios from "axios";
 import './bid.css'
-import {MapContainer, TileLayer} from "react-leaflet";
-import 'leaflet'
-import {MarkerDrag} from "leaflet/src/layer/marker/Marker.Drag";
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { Icon } from "leaflet";
 
 const Bid = () => {
 
@@ -94,53 +93,62 @@ const Bid = () => {
     return (
         <div>
             <NavBar/>
-            <div className='bid-item-panel'>
-                <div className='bid-item-container'>
-                    <label className="bid-item-label">Name</label>
-                    <p className="bid-item-text" >{item.name}</p>
-                </div>
+            <div className='bid-item-body'>
                 <div>
-                    <label className="bid-item-label">Description</label>
-                    <p className="bid-item-text" >{item.description}</p>
+                    <div className='bid-item-panel'>
+                        <div className='bid-item-container'>
+                            <label className="bid-item-label">Name</label>
+                            <p className="bid-item-text" >{item.name}</p>
+                        </div>
+                        <div>
+                            <label className="bid-item-label">Description</label>
+                            <p className="bid-item-text" >{item.description}</p>
+                        </div>
+                        <div>
+                            <label className="bid-item-label">Start date</label>
+                            <p className="bid-item-text" >{item.startDate}</p>
+                        </div>
+                        <div>
+                            <label className="bid-item-label">End date</label>
+                            <p className="bid-item-text" >{item.endDate}</p>
+                        </div>
+                        <div>
+                            <label className="bid-item-label">Categories</label>
+                            <p className="bid-item-text" >{item.category}</p>
+                        </div>
+                        <div>
+                            <label className="bid-item-label">Minimum Bid</label>
+                            <p className="bid-item-text" >{item.minBid} €</p>
+                        </div>
+                        <div>
+                            <label className="bid-item-label">Buyout Price</label>
+                            <p className="bid-item-text" >{item.buy_price} €</p>
+                        </div>
+                        <div>
+                            <label className="bid-item-label">Current Price</label>
+                            <p className="bid-item-text" >{item.current_price>0 ? item.current_price : "~ €"}</p>
+                        </div>
+                    </div>
+                    <div className='bid-input-btn'>
+                        <input className='bid-input' placeholder='Insert bid' type='number' value={usersBid} onChange={handleUsersBid}/>
+                        <button className='bid-btn' disabled={placeBidButtonDisabled} onClick={handlePlaceBidButton}>place bid</button>
+                        {confirmBidButtonShowing && <button className='bid-btn-confirm' onClick={handleConfirmButton}>Confirm</button>}
+                    </div>
                 </div>
-                <div>
-                    <label className="bid-item-label">Start date</label>
-                    <p className="bid-item-text" >{item.startDate}</p>
-                </div>
-                <div>
-                    <label className="bid-item-label">End date</label>
-                    <p className="bid-item-text" >{item.endDate}</p>
-                </div>
-                <div>
-                    <label className="bid-item-label">Categories</label>
-                    <p className="bid-item-text" >{item.category}</p>
-                </div>
-                <div>
-                    <label className="bid-item-label">Minimum Bid</label>
-                    <p className="bid-item-text" >{item.minBid} €</p>
-                </div>
-                <div>
-                    <label className="bid-item-label">Buyout Price</label>
-                    <p className="bid-item-text" >{item.buy_price} €</p>
-                </div>
-                <div>
-                    <label className="bid-item-label">Current Price</label>
-                    <p className="bid-item-text" >{item.current_price>0 ? item.current_price : "~ €"}</p>
-                </div>
-                <MapContainer
-                    center={[37.983810, 23.727539]}
-                    zoom={13}
-                    scrollWheelZoom={true}>
-                    <TileLayer
-                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                <div className='bid-item-map'>
+                    <link
+                        rel="stylesheet"
+                        href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+                        integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+                        crossOrigin=""
                     />
-                </MapContainer>
-            </div>
-            <div className='bid-input-btn'>
-                <input className='bid-input' placeholder='Insert bid' type='number' value={usersBid} onChange={handleUsersBid}/>
-                <button className='bid-btn' disabled={placeBidButtonDisabled} onClick={handlePlaceBidButton}>place bid</button>
-                {confirmBidButtonShowing && <button className='bid-btn-confirm' onClick={handleConfirmButton}>Confirm</button>}
+                    <MapContainer center={[37.983810, 23.727539]} zoom={15} scrollWheelZoom={false}>
+                        <TileLayer
+                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                        />
+                    </MapContainer>
+                </div>
             </div>
         </div>
     );
