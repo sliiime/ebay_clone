@@ -96,3 +96,7 @@
     width: 600px;
     height: 500px;
 }
+
+.bid-input-error {
+    color: #FF0000;
+}

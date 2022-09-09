@@ -7,6 +7,7 @@ import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import marker from './marker.svg';
+import categoryItems from "../Search/CategoryItems";
 
 
 
@@ -25,6 +26,7 @@ const Bid = () => {
     const [placeBidButtonDisabled,setPlaceBidButtonDisabled] = useState(false)
     const [confirmBidButtonShowing,setConfirmBidButtonShowing] = useState(false)
     const [error,setError] = useState("")
+    const [itemCategories, setItemCategories] = useState("")
 
     const [item,setItem] = useState({
         name: "",
@@ -61,6 +63,8 @@ const Bid = () => {
                     current_price: response?.data?.bestBid,
                     minBid: response?.data?.minBid
                 })
+                //console.log(response?.data?.category)
+                setItemCategories(response?.data?.category.join(', '))
             })
     },[id])
 
@@ -79,6 +83,7 @@ const Bid = () => {
         } else if (usersBid<=item.current_price) {
             setError("Your bid must be greater than the current price.")
         } else {
+            setError("")
             setPlaceBidButtonDisabled(true)
             setConfirmBidButtonShowing(true)
         }
@@ -134,7 +139,7 @@ const Bid = () => {
                         </div>
                         <div>
                             <label className="bid-item-label">Categories</label>
-                            <p className="bid-item-text" >{item.category}</p>
+                            <p className="bid-item-text" >{itemCategories}</p>
                         </div>
                         <div>
                             <label className="bid-item-label">Minimum Bid</label>
@@ -152,7 +157,9 @@ const Bid = () => {
                     <div className='bid-input-btn'>
                         <input className='bid-input' placeholder='Insert bid' type='number' value={usersBid} onChange={handleUsersBid}/>
                         <button className='bid-btn' disabled={placeBidButtonDisabled} onClick={handlePlaceBidButton}>place bid</button>
+                        {error!=="" && <p className="bid-input-error">{error}</p>}
                         {confirmBidButtonShowing && <button className='bid-btn-confirm' onClick={handleConfirmButton}>Confirm</button>}
+
                     </div>
                 </div>
                 {
