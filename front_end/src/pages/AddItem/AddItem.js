@@ -61,7 +61,7 @@ const AddItem = () => {
         setSubmitButtonPressed(true)
     }
 
-    useEffect(  () => {
+    useEffect( () => {
         if(!errorsExist(submitButtonPressed,errors)) {
             let formData = new FormData()
             const endDateValue = item.endDate.replaceAll("-","/")
@@ -73,10 +73,9 @@ const AddItem = () => {
             formData.append("minBid",item.minBid)
             formData.append("startDate",startDateValue)
             formData.append("endDate",endDateValue)
-            images.forEach((image)=>formData.append("images[]",image)) //palamidas = random !!!!gg
-            console.log(images)
+            images.forEach((image)=>formData.append("images[]",image))
             try {
-                axios ({
+                const response = axios ({
                     method: "post",
                     url: "http://localhost:8080/ebay_clone/api/item",
                     data: formData,
@@ -89,33 +88,32 @@ const AddItem = () => {
             } catch (error){
                 console.log(error)
             }
+            setDisableButton(true)
+            setTimeout(()=>{navigate('..')},2000)
         }
     }, [submitButtonPressed,errors]);
 
     const handleImages = (event) => {
-        /*for (const file of event.target.files) {
+        for (const file of event.target.files) {
             const reader = new FileReader();
             reader.readAsDataURL(file);
             reader.onload = () => {
-                setImages((imgs) => [...imgs, reader.result]);
+                setPreviewImages((imgs) => [...imgs, reader.result]);
             };
             reader.onerror = () => {
                 console.log(reader.error);
             };
-        }*/
+        }
         let image_as_files = event.target.files[0];
         let temp = images
         temp.push(image_as_files)
         setImages(temp)
-        let image_as_base64 = URL.createObjectURL(event.target.files[0])
-        let tempPreview = previewImages
-        tempPreview.push(image_as_base64)
-        setPreviewImages(tempPreview)
-        console.log(image_as_files)
-        console.log(image_as_base64)
-        //console.log(event.target.files, "&&&&")
-        //console.log(event.target.files[0], "&&&&")
     };
+
+    const removeImages = () => {
+        setImages([])
+        setPreviewImages([])
+    }
 
     return (
         <div>
@@ -176,7 +174,7 @@ const AddItem = () => {
                         ))
                     }
                     {
-                        images.length>0 ? <button onClick={()=>setImages([])}>Remove</button> : null
+                        images.length>0 ? <button onClick={removeImages}>Remove</button> : null
                     }
                 </div>
             </div>
