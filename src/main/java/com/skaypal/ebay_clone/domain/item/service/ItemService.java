@@ -119,6 +119,10 @@ public class ItemService {
 
     public void updateItem(UpdateItemDto updateItemDto) {
         Item item = itemRepository.findById(updateItemDto.getId()).orElseThrow(() -> new ItemNotFoundException("id", updateItemDto.getId().toString()));
+
+        List<String> categoriesStr = updateItemDto.getCategories();
+        setItemCategories(item,categoriesStr);
+
         item.updateItemWithDto(updateItemDto);
 
         itemRepository.save(item);
