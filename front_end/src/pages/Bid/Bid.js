@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useSyncExternalStore} from 'react';
 import NavBar from "../MainMenu/Navbar";
 import {useParams} from "react-router-dom";
 import axios from "axios";
@@ -7,9 +7,6 @@ import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import marker from './marker.svg';
-import categoryItems from "../Search/CategoryItems";
-
-
 
 const Bid = () => {
 
@@ -27,6 +24,9 @@ const Bid = () => {
     const [confirmBidButtonShowing,setConfirmBidButtonShowing] = useState(false)
     const [error,setError] = useState("")
     const [itemCategories, setItemCategories] = useState("")
+
+    const [images,setImages] = useState([])
+    const [currentImage,setCurrentImage] = useState(0)
 
     const [item,setItem] = useState({
         name: "",
@@ -61,10 +61,12 @@ const Bid = () => {
                     category: response?.data?.category,
                     buy_price: response?.data?.buyPrice,
                     current_price: response?.data?.bestBid,
-                    minBid: response?.data?.minBid
+                    minBid: response?.data?.minBid,
+                    status: response?.data?.status
                 })
                 //console.log(response?.data?.category)
                 setItemCategories(response?.data?.category.join(', '))
+                setImages(response?.data?.images)
             })
     },[id])
 
@@ -82,7 +84,9 @@ const Bid = () => {
             setError("Your bid must be greater or equal than the minimum bid.")
         } else if (usersBid<=item.current_price) {
             setError("Your bid must be greater than the current price.")
-        } else {
+        } else if (item.status==='BOUGHT_BUYOUT'){
+            setError("This item is already bought.")
+        }else {
             setError("")
             setPlaceBidButtonDisabled(true)
             setConfirmBidButtonShowing(true)
@@ -112,6 +116,14 @@ const Bid = () => {
             })
     }
 
+    const handleNextClick = () => {
+        const temp = currentImage
+        currentImage===images.length-1 ? setCurrentImage(0) : setCurrentImage(temp+1)
+    }
+
+    const handlePrevClick = () => {
+        const temp = currentImage
+        currentImage===0 ? setCurrentImage(images.length-1) : setCurrentImage(temp-1)    }
     //[37.983810, 23.727539]
     const [position,setPosition] = useState([])
 
@@ -171,7 +183,7 @@ const Bid = () => {
                             integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
                             crossOrigin=""
                         />
-                        <MapContainer center={position} zoom={14} scrollWheelZoom={true}>
+                        <MapContainer center={position} zoom={13} scrollWheelZoom={true}>
                             <TileLayer
                                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                                 attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -179,6 +191,17 @@ const Bid = () => {
                             <Marker key={`marker-${id}`} position={position} icon={myIcon}/>
                         </MapContainer>
                     </div> : null
+                }
+                {
+                    (images.length!==0) ?
+                    <div className='bid-img-component'>
+                        <img className='show-img-test' src={"data:"+String(images[currentImage].contentType)+";base64,"+String(images[currentImage].content)}/>
+                        <div className="bid-change-image-btn">
+                            <button className="change-page-btn" onClick={handlePrevClick}>←</button>
+                            <button className="change-page-btn" onClick={handleNextClick}>→</button>
+                        </div>
+                    </div>
+                        : null
                 }
             </div>
         </div>

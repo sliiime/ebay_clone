@@ -20,6 +20,7 @@
 
 .card-image-container img{
     overflow: hidden;
+    width: 300px;
     height: 200px;
 }
 
@@ -145,4 +146,9 @@
     border-radius: 4px;
 
     color: black;
+}
+
+.show-img-test {
+    width: 10%;
+    height: 10%;
 }

@@ -1,0 +1,46 @@
+.chat-preview-body {
+    width: 100%;
+    text-align: center;
+    align-items: center;
+}
+
+.chat-preview-panel {
+    width: 50%;
+    display: grid;
+    align-items: center;
+
+    background: whitesmoke;
+    border: 4px solid lightblue;
+    border-radius: 2px;
+
+    margin-top: 20px;
+}
+
+.chat-preview-refresh-btn {
+    background: none;
+    border: none;
+    border-radius: 50px;
+    margin-top: 20px;
+    padding: 5px 5px 5px 5px;
+}
+
+.chat-preview-refresh-btn:active {
+    transform: scale(0.98);
+    box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+}
+
+.chat-preview-user-btn {
+    width: 200px;
+    align-items: center;
+
+    background: whitesmoke;
+    border: 1px solid black;
+    border-radius: 2px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.chat-preview-user-btn:active {
+    transform: scale(0.98);
+    box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+}

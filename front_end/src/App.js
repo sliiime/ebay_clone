@@ -13,6 +13,8 @@ import AddItem from "./pages/AddItem/AddItem";
 import EditItem from "./pages/EditItem/EditItem";
 import Search from "./pages/Search/Search";
 import Bid from "./pages/Bid/Bid";
+import ChatPreview from "./pages/Chat/ChatPreview";
+import Chat from "./pages/Chat/Chat";
 
 const ROLES = {
     'User': 2001,
@@ -45,11 +47,19 @@ function App() {
                       </Route>
 
                       <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
-                          <Route path="myitems/editItem" element={<EditItem />} />
+                          <Route path="myitems/editItem/:id" element={<EditItem />} />
                       </Route>
 
                       <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
                           <Route path="search/bid/:id" element={<Bid />} />
+                      </Route>
+
+                      <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
+                          <Route path="chat" element={<ChatPreview />} />
+                      </Route>
+
+                      <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
+                          <Route path="chat/:name" element={<Chat />} />
                       </Route>
 
                       {/* catch all */}

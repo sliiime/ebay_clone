@@ -180,7 +180,7 @@ const AddItem = () => {
                 <a href='https://support.google.com/maps/answer/18539?hl=en&co=GENIE.Platform%3DDesktop' target='_blank' rel="noopener noreferrer">Click here to see how to find your longitude and latitude!</a>
                 <div className="item-attributes">
                     <label className="item-item-label">Add photos</label>
-                    <input formEncType="multipart/form-data" onChange={(e)=>handleImages(e)}/*onChange={handleImages}*/ type="file" name="file" /*multiple*/ />
+                    <input formEncType="multipart/form-data" onChange={(e)=>handleImages(e)} type="file" name="file" />
                     {
                         previewImages.map((previewImage) => (
                             <img className="add-item-image" src={previewImage} key={previewImage} />

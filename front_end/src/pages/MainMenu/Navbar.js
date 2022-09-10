@@ -21,6 +21,7 @@ const NavBar = () => {
                     <Link className="navbar-left-link" to="/">Home</Link>
                     <Link className="navbar-left-link" to="/myitems">My Items</Link>
                     <Link className="navbar-left-link" to="/search">Search</Link>
+                    <Link className="navbar-left-link" to="/chat">Messages</Link>
                 </div>
                 {   localStorage.getItem("accessToken")
                     ?

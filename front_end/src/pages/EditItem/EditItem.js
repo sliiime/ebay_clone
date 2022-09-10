@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import NavBar from "../MainMenu/Navbar";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import validation from "../AddItem/validation";
 import errorsExist from "../AddItem/errorsExist";
 import axios from "axios";
@@ -19,6 +19,8 @@ const EditItem = () => {
         latitude: ""
     })
 
+    const { id } = useParams()
+
     let navigate = useNavigate()
 
     const [errors,setErrors] = useState({});
@@ -26,6 +28,8 @@ const EditItem = () => {
     const [disableButton, setDisableButton] = useState(false);
     const [submitButtonPressed,setSubmitButtonPressed] = useState(false)
     const [isCorrectSubmission,setIsCorrectSubmission] = useState(0)
+
+    const [images,setImages] = useState([])
 
     const handleChange = (event) => {
         setItem({
@@ -62,9 +66,8 @@ const EditItem = () => {
     }
 
     useEffect( () => {
-        const itemID = localStorage.getItem('itemID')
         axios
-            .get("http://localhost:8080/ebay_clone/api/item/"+String(itemID),{
+            .get("http://localhost:8080/ebay_clone/api/item/"+String(id),{
                 headers: {
                     'Authorization': JSON.parse(localStorage.getItem('accessToken'))
                 }
@@ -82,6 +85,7 @@ const EditItem = () => {
                     longitude: response?.data?.longitude ? response?.data?.longitude : "",
                     latitude: response?.data?.latitude ? response?.data?.latitude : ""
                 })
+                setImages(response?.data?.images)
             })
             .catch((error) => {
                 console.log(error)

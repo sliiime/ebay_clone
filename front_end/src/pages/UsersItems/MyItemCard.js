@@ -1,22 +1,20 @@
 import React from 'react';
 import missingImage from './missingImage.png'
-import {useNavigate} from "react-router-dom";
+import {NavLink} from "react-router-dom";
 
 function MyItemCard ({item}) {
 
     const endDate = new Date(item.endDate)
 
-    let navigate = useNavigate()
-
-    const handleEditButton = () => {
-        localStorage.setItem("itemID", JSON.stringify(item.id));
-        navigate('./editItem')
-    }
-
     return (
         <div className="card-container">
             <div className="card-image-container">
-                <img src={missingImage} alt=""/>
+                { item.images.length===0
+                    ?
+                    <img src={missingImage} alt=""/>
+                    :
+                    <img className='show-img-test' src={"data:"+String(item.images[0].contentType)+";base64,"+String(item.images[0].content)}/>
+                }
             </div>
             <div className="card-content">
                 <div className="card-title">
@@ -31,9 +29,11 @@ function MyItemCard ({item}) {
             <div className="card-editButton">
                 {
                     item.numOfBids===0 ?
-                    <button onClick={handleEditButton}>
-                        Edit
-                    </button>
+                        <NavLink style={{ textDecoration: 'none'}} to={'/myitems/editItem/'+String(item.id)}>
+                            <button>
+                                Check
+                            </button>
+                        </NavLink>
                     : null
                 }
             </div>
