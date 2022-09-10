@@ -14,8 +14,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class BidValidator {
 
-    BidRepository bidRepository;
-    ItemValidator itemValidator;
+    private final BidRepository bidRepository;
+    private final ItemValidator itemValidator;
 
     @Autowired
     public BidValidator(BidRepository bidRepository,
