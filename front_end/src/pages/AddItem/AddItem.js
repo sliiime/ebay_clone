@@ -1,13 +1,24 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import NavBar from "../MainMenu/Navbar";
 import './addItem.css'
 import validation from "./validation";
 import errorsExist from "./errorsExist";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
+import {MapContainer, Marker, TileLayer} from "react-leaflet";
+import L from "leaflet";
+import marker from "../Bid/marker.svg";
+
 const AddItem = () => {
 
-    const [item,setItem] = useState({
+    const myIcon = new L.Icon({
+        iconUrl: marker,
+        iconRetinaUrl: marker,
+        popupAnchor: [-0, -0],
+        iconSize: [20, 20],
+    });
+
+    const [item, setItem] = useState({
         name: "",
         buyPrice: "",
         description: "",
@@ -21,13 +32,17 @@ const AddItem = () => {
 
     let navigate = useNavigate()
 
-    const [errors,setErrors] = useState({});
+    const [errors, setErrors] = useState({});
     const addItemError = "Something went wrong. Try again."
     const [disableButton, setDisableButton] = useState(false);
-    const [submitButtonPressed,setSubmitButtonPressed] = useState(false)
-    const [isCorrectSubmission,setIsCorrectSubmission] = useState(0)
+    const [submitButtonPressed, setSubmitButtonPressed] = useState(false)
+    const [isCorrectSubmission, setIsCorrectSubmission] = useState(0)
     const [images, setImages] = useState([]);
     const [previewImages, setPreviewImages] = useState([])
+
+    const [position, setPosition] = useState([37.983810, 23.727539])
+    const [finalPos, setFinalPos] = useState([])
+    const markerRef = useRef();
 
     const handleChange = (event) => {
         setItem({
@@ -63,39 +78,43 @@ const AddItem = () => {
         setSubmitButtonPressed(true)
     }
 
-    useEffect( () => {
-        if(!errorsExist(submitButtonPressed,errors)) {
+    useEffect(() => {
+        console.log("on submit " + markerPos.lat + " " + markerPos.lng)
+        return
+        if (!errorsExist(submitButtonPressed, errors)) {
             let formData = new FormData()
-            const endDateValue = item.endDate.replaceAll("-","/")
-            const startDateValue = item.startDate.replaceAll("-","/")
-            formData.append("name",item.name)
-            formData.append("buyPrice",item.buyPrice)
+            const endDateValue = item.endDate.replaceAll("-", "/")
+            const startDateValue = item.startDate.replaceAll("-", "/")
+            formData.append("name", item.name)
+            formData.append("buyPrice", item.buyPrice)
             formData.append("description", item.description)
             formData.append("category", item.categories)
-            formData.append("minBid",item.minBid)
-            formData.append("startDate",startDateValue)
-            formData.append("endDate",endDateValue)
-            formData.append("longitude",item.longitude)
-            formData.append("latitude",item.latitude)
-            images.forEach((image)=>formData.append("images[]",image))
+            formData.append("minBid", item.minBid)
+            formData.append("startDate", startDateValue)
+            formData.append("endDate", endDateValue)
+            formData.append("longitude", item.longitude)
+            formData.append("latitude", item.latitude)
+            images.forEach((image) => formData.append("images[]", image))
             try {
-                const response = axios ({
+                const response = axios({
                     method: "post",
                     url: "http://localhost:8080/ebay_clone/api/item",
                     data: formData,
                     headers: {
                         'Authorization': JSON.parse(localStorage.getItem('accessToken')),
-                        'Accept' : '*/*',
+                        'Accept': '*/*',
                         'Content-Type': "multipart/form-data"
                     },
                 })
-            } catch (error){
+            } catch (error) {
                 console.log(error)
             }
             setDisableButton(true)
-            setTimeout(()=>{navigate('..')},2000)
+            setTimeout(() => {
+                navigate('..')
+            }, 2000)
         }
-    }, [submitButtonPressed,errors]);
+    }, [submitButtonPressed, errors]);
 
     const handleImages = (event) => {
         for (const file of event.target.files) {
@@ -119,94 +138,131 @@ const AddItem = () => {
         setPreviewImages([])
     }
 
+    const [markerPos, setMarkerPos] = useState({
+        lat: 37.983810,
+        lng: 23.727539,
+    })
+
+    const onMapClick = (event) => {
+        const marker = markerRef.current
+        console.log("marker" + marker._latlng)
+        setMarkerPos({
+            lat: marker._latlng.lat,
+            lng: marker._latlng.lng
+        })
+    }
+
     return (
         <div>
             <NavBar/>
             <p className="add-item-welcome-text">Hello! Here you can add a new item! Please fill the blank spaces.</p>
-            <div className="add-item-panel">
-                <div className="item-attributes">
-                    <label className="item-item-label">Name</label>
-                    {errors.name && <p className="add-item-input-error">{errors.name}</p>}
-                    <input className="add-item-input-box" maxLength={45} placeholder="Name" type="text" name="name" value={item.name} onChange={handleChange}></input>
+            <div className='add-item-full-body'>
+                <div className="add-item-panel">
+                    <div className="item-attributes">
+                        <label className="item-item-label">Name</label>
+                        {errors.name && <p className="add-item-input-error">{errors.name}</p>}
+                        <input className="add-item-input-box" maxLength={45} placeholder="Name" type="text" name="name"
+                               value={item.name} onChange={handleChange}></input>
+                    </div>
+                    <div className="item-attributes">
+                        <label className="item-item-label">Description</label>
+                        {errors.description && <p className="add-item-input-error">{errors.description}</p>}
+                        <input className="add-item-input-box" maxLength={200} placeholder="Description" type="text"
+                               name="description" value={item.description} onChange={handleChange}></input>
+                    </div>
+                    <div className="item-attributes">
+                        <label className="item-item-label">Buyout Price</label>
+                        {errors.buyPrice && <p className="add-item-input-error">{errors.buyPrice}</p>}
+                        <input className="add-item-input-box" placeholder="Buyout Price" type="number" name="buyPrice"
+                               value={item.buyPrice} onChange={handleChange}></input>
+                    </div>
+                    <div className="item-attributes">
+                        <label className="item-item-label">Minimum Bid</label>
+                        {errors.minBid && <p className="add-item-input-error">{errors.minBid}</p>}
+                        <input className="add-item-input-box" placeholder="Minimum Bid" type="number" name="minBid"
+                               value={item.minBid} onChange={handleChange}></input>
+                    </div>
+                    <div className="item-attributes">
+                        <label className="item-item-label">Start Date</label>
+                        {errors.startDate && <p className="add-item-input-error">{errors.startDate}</p>}
+                        <input className="add-item-input-box" type="date" name="startDate" value={item.startDate}
+                               onChange={handleChange}></input>
+                    </div>
+                    <div className="item-attributes">
+                        <label className="item-item-label">End Date</label>
+                        {errors.endDate && <p className="add-item-input-error">{errors.endDate}</p>}
+                        <input className="add-item-input-box" type="date" name="endDate" value={item.endDate}
+                               onChange={handleChange}></input>
+                    </div>
+                    <div className="item-attributes">
+                        <label className="item-item-label">Category</label>
+                        {errors.categories && <p className="add-item-input-error">{errors.categories}</p>}
+                        <select multiple={true} name="categories" value={item.categories} onChange={handleCategory}
+                                className="select-category-box">
+                            <option className="add-item-option" value="">~Empty selection~</option>
+                            <option className="add-item-option" value="Technology">Technology</option>
+                            <option className="add-item-option" value="Home & Kitchen">Home & Kitchen</option>
+                            <option className="add-item-option" value="Beauty & Personal Care">Beauty & Personal Care
+                            </option>
+                            <option className="add-item-option" value="Toys & Games">Toys & Games</option>
+                            <option className="add-item-option" value="Clothing, Shoes & Jewelry">Clothing, Shoes &
+                                Jewelry
+                            </option>
+                            <option className="add-item-option" value="Sports & Outdoors">Sports & Outdoors</option>
+                            <option className="add-item-option" value="Books">Books</option>
+                            <option className="add-item-option" value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div className="item-attributes">
+                        <label className="item-item-label">Longitude</label>
+                        <p className="add-item-longlat-box" placeholder="Longitude">{markerPos.lng}</p>
+                    </div>
+                    <div className="item-attributes">
+                        <label className="item-item-label">Latitude</label>
+                        <p className="add-item-longlat-box" placeholder="Latitude">{markerPos.lat}</p>
+                    </div>
+                    {/*<a href='https://support.google.com/maps/answer/18539?hl=en&co=GENIE.Platform%3DDesktop'
+                       target='_blank' rel="noopener noreferrer">Click here to see how to find your longitude and
+                        latitude!</a>*/}
+                    <div className="item-attributes">
+                        <label className="item-item-label">Add photos</label>
+                        <input formEncType="multipart/form-data" onChange={(e) => handleImages(e)} type="file"
+                               name="file"/>
+                        {
+                            previewImages.map((previewImage) => (
+                                <img className="add-item-image" src={previewImage} key={previewImage}/>
+                            ))
+                        }
+                        {
+                            images.length > 0 ? <button onClick={removeImages}>Remove</button> : null
+                        }
+                    </div>
+                    <div className="add-item-div-btn">
+                        <button className="add-item-submit-btn" onClick={handleSubmit} disabled={disableButton}>Place item
+                        </button>
+                    </div>
                 </div>
-                <div className="item-attributes">
-                    <label className="item-item-label">Description</label>
-                    {errors.description && <p className="add-item-input-error">{errors.description}</p>}
-                    <input className="add-item-input-box" maxLength={200} placeholder="Description" type="text" name="description" value={item.description} onChange={handleChange}></input>
+
+                <div className='add-item-map'>
+                    <link
+                        rel="stylesheet"
+                        href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+                        integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+                        crossOrigin=""
+                    />
+                    <MapContainer center={position} zoom={13} scrollWheelZoom={true}>
+                        <TileLayer
+                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                        />
+                        <Marker
+                            position={[markerPos.lat, markerPos.lng]}
+                            draggable={true}
+                            eventHandlers={{dragend: onMapClick}}
+                            ref={markerRef}
+                            icon={myIcon}/>
+                    </MapContainer>
                 </div>
-                <div className="item-attributes">
-                    <label className="item-item-label">Buyout Price</label>
-                    {errors.buyPrice && <p className="add-item-input-error">{errors.buyPrice}</p>}
-                    <input className="add-item-input-box" placeholder="Buyout Price" type="number" name="buyPrice" value={item.buyPrice} onChange={handleChange}></input>
-                </div>
-                <div className="item-attributes">
-                    <label className="item-item-label">Minimum Bid</label>
-                    {errors.minBid && <p className="add-item-input-error">{errors.minBid}</p>}
-                    <input className="add-item-input-box" placeholder="Minimum Bid" type="number" name="minBid" value={item.minBid} onChange={handleChange}></input>
-                </div>
-                <div className="item-attributes">
-                    <label className="item-item-label">Start Date</label>
-                    {errors.startDate && <p className="add-item-input-error">{errors.startDate}</p>}
-                    <input className="add-item-input-box" type="date" name="startDate" value={item.startDate} onChange={handleChange}></input>
-                </div>
-                <div className="item-attributes">
-                    <label className="item-item-label">End Date</label>
-                    {errors.endDate && <p className="add-item-input-error">{errors.endDate}</p>}
-                    <input className="add-item-input-box" type="date" name="endDate" value={item.endDate} onChange={handleChange}></input>
-                </div>
-                <div className="item-attributes">
-                    <label className="item-item-label">Category</label>
-                    {errors.categories && <p className="add-item-input-error">{errors.categories}</p>}
-                    <select multiple={true} name="categories" value={item.categories} onChange={handleCategory} className="select-category-box">
-                        <option className="add-item-option" value="">~Empty selection~</option>
-                        <option className="add-item-option" value="Technology">Technology</option>
-                        <option className="add-item-option" value="Home & Kitchen">Home & Kitchen</option>
-                        <option className="add-item-option" value="Beauty & Personal Care">Beauty & Personal Care</option>
-                        <option className="add-item-option" value="Toys & Games">Toys & Games</option>
-                        <option className="add-item-option" value="Clothing, Shoes & Jewelry">Clothing, Shoes & Jewelry</option>
-                        <option className="add-item-option" value="Sports & Outdoors">Sports & Outdoors</option>
-                        <option className="add-item-option" value="Books">Books</option>
-                        <option className="add-item-option" value="Other">Other</option>
-                    </select>
-                </div>
-                <div className="item-attributes">
-                    <label className="item-item-label">Longitude</label>
-                    <input className="add-item-input-box" placeholder="Longitude" type="number" name="longitude" value={item.longitude} onChange={handleChange}></input>
-                </div>
-                <div className="item-attributes">
-                    <label className="item-item-label">Latitude</label>
-                    <input className="add-item-input-box" placeholder="Latitude" type="number" name="latitude" value={item.latitude} onChange={handleChange}></input>
-                </div>
-                <a href='https://support.google.com/maps/answer/18539?hl=en&co=GENIE.Platform%3DDesktop' target='_blank' rel="noopener noreferrer">Click here to see how to find your longitude and latitude!</a>
-                <div className="item-attributes">
-                    <label className="item-item-label">Add photos</label>
-                    <input formEncType="multipart/form-data" onChange={(e)=>handleImages(e)} type="file" name="file" />
-                    {
-                        previewImages.map((previewImage) => (
-                            <img className="add-item-image" src={previewImage} key={previewImage} />
-                        ))
-                    }
-                    {
-                        images.length>0 ? <button onClick={removeImages}>Remove</button> : null
-                    }
-                </div>
-            </div>
-            <div className="add-item-div-btn">
-                <button className="add-item-submit-btn" onClick={handleSubmit} disabled={disableButton}>Place item</button>
-            </div>
-            <div className="add-item-submit-message">
-                {
-                    isCorrectSubmission===1 &&
-                    <p className="add-item-correct-registration">
-                        Great, your item is placed in the marketplace.
-                    </p>
-                }
-                {
-                    isCorrectSubmission===2 &&
-                    <p className="add-item-wrong-registration">
-                        {addItemError}
-                    </p>
-                }
             </div>
         </div>
     );

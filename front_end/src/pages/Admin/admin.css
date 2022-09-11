@@ -2,6 +2,14 @@ body {
     margin: 0px;
 }
 
+.admin-navbar {
+    width: 100%;
+    display: flex;
+    background: lightblue;
+    align-items: center;
+    height: 100px;
+}
+
 .admin-text{
     background-color: lightblue;
     font-weight: bolder;
@@ -79,4 +87,8 @@ body {
 .admin-userInfo-button:active {
     transform: scale(0.98);
     box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+}
+
+.admin-marketPlaceIcon {
+    background: lightblue;
 }

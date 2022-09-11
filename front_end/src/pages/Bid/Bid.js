@@ -28,6 +28,10 @@ const Bid = () => {
     const [images,setImages] = useState([])
     const [currentImage,setCurrentImage] = useState(0)
 
+    const [startDate,setStartDate] = useState(null)
+    const [endDate,setEndDate] = useState(null)
+
+
     const [item,setItem] = useState({
         name: "",
         description: "",
@@ -66,9 +70,10 @@ const Bid = () => {
                 //console.log(response?.data?.category)
                 setItemCategories(response?.data?.category.join(', '))
                 setImages(response?.data?.images)
-                if ((response?.data?.longitude!==null)&&(response?.data?.latitude!==null)) {
+                /*if ((response?.data?.longitude!==null)&&(response?.data?.latitude!==null)) {
                     setPosition([response?.data?.longitude,response?.data?.latitude])
-                }
+                }*/
+                setPosition([37.983810, 23.727539])
             })
     },[id])
 
@@ -132,79 +137,81 @@ const Bid = () => {
     return (
         <div>
             <NavBar/>
-            <div className='bid-item-body'>
-                <div>
-                    <div className='bid-item-panel'>
-                        <div className='bid-item-container'>
-                            <label className="bid-item-label">Name</label>
-                            <p className="bid-item-text" >{item.name}</p>
+            <div className='bid-body'>
+                <div className='bid-item-body'>
+                    <div>
+                        <div className='bid-item-panel'>
+                            <div className='bid-item-container'>
+                                <label className="bid-item-label">Name</label>
+                                <p className="bid-item-text" >{item.name}</p>
+                            </div>
+                            <div>
+                                <label className="bid-item-label">Description</label>
+                                <p className="bid-item-text" >{item.description}</p>
+                            </div>
+                            <div>
+                                <label className="bid-item-label">Start date</label>
+                                <p className="bid-item-text" >{new Date(item.startDate).getDate()}-{new Date(item.startDate).getMonth()+1}-{new Date(item.startDate).getFullYear()}</p>
+                            </div>
+                            <div>
+                                <label className="bid-item-label">End date</label>
+                                <p className="bid-item-text" >{new Date(item.endDate).getDate()}-{new Date(item.endDate).getMonth()+1}-{new Date(item.endDate).getFullYear()}</p>
+                            </div>
+                            <div>
+                                <label className="bid-item-label">Categories</label>
+                                <p className="bid-item-text" >{itemCategories}</p>
+                            </div>
+                            <div>
+                                <label className="bid-item-label">Minimum Bid</label>
+                                <p className="bid-item-text" >{item.minBid} €</p>
+                            </div>
+                            <div>
+                                <label className="bid-item-label">Buyout Price</label>
+                                <p className="bid-item-text" >{item.buy_price} €</p>
+                            </div>
+                            <div>
+                                <label className="bid-item-label">Current Price</label>
+                                <p className="bid-item-text" >{item.current_price>0 ? item.current_price : "~ €"}</p>
+                            </div>
                         </div>
-                        <div>
-                            <label className="bid-item-label">Description</label>
-                            <p className="bid-item-text" >{item.description}</p>
-                        </div>
-                        <div>
-                            <label className="bid-item-label">Start date</label>
-                            <p className="bid-item-text" >{item.startDate}</p>
-                        </div>
-                        <div>
-                            <label className="bid-item-label">End date</label>
-                            <p className="bid-item-text" >{item.endDate}</p>
-                        </div>
-                        <div>
-                            <label className="bid-item-label">Categories</label>
-                            <p className="bid-item-text" >{itemCategories}</p>
-                        </div>
-                        <div>
-                            <label className="bid-item-label">Minimum Bid</label>
-                            <p className="bid-item-text" >{item.minBid} €</p>
-                        </div>
-                        <div>
-                            <label className="bid-item-label">Buyout Price</label>
-                            <p className="bid-item-text" >{item.buy_price} €</p>
-                        </div>
-                        <div>
-                            <label className="bid-item-label">Current Price</label>
-                            <p className="bid-item-text" >{item.current_price>0 ? item.current_price : "~ €"}</p>
-                        </div>
-                    </div>
-                    <div className='bid-input-btn'>
-                        <input className='bid-input' placeholder='Insert bid' type='number' value={usersBid} onChange={handleUsersBid}/>
-                        <button className='bid-btn' disabled={placeBidButtonDisabled} onClick={handlePlaceBidButton}>place bid</button>
-                        {error!=="" && <p className="bid-input-error">{error}</p>}
-                        {confirmBidButtonShowing && <button className='bid-btn-confirm' onClick={handleConfirmButton}>Confirm</button>}
+                        <div className='bid-input-btn'>
+                            <input className='bid-input' placeholder='Insert bid' type='number' value={usersBid} onChange={handleUsersBid}/>
+                            <button className='bid-btn' disabled={placeBidButtonDisabled} onClick={handlePlaceBidButton}>place bid</button>
+                            {error!=="" && <p className="bid-input-error">{error}</p>}
+                            {confirmBidButtonShowing && <button className='bid-btn-confirm' onClick={handleConfirmButton}>Confirm</button>}
 
-                    </div>
-                </div>
-                {
-                    (position.length!==0) ?
-                    <div className='bid-item-map'>
-                        <link
-                            rel="stylesheet"
-                            href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
-                            integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
-                            crossOrigin=""
-                        />
-                        <MapContainer center={position} zoom={13} scrollWheelZoom={true}>
-                            <TileLayer
-                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                                attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                            />
-                            <Marker key={`marker-${id}`} position={position} icon={myIcon}/>
-                        </MapContainer>
-                    </div> : null
-                }
-                {
-                    (images.length!==0) ?
-                    <div className='bid-img-component'>
-                        <img className='show-img-test' src={"data:"+String(images[currentImage].contentType)+";base64,"+String(images[currentImage].content)}/>
-                        <div className="bid-change-image-btn">
-                            <button className="change-page-btn" onClick={handlePrevClick}>←</button>
-                            <button className="change-page-btn" onClick={handleNextClick}>→</button>
                         </div>
                     </div>
-                        : null
-                }
+                    {
+                        (images.length!==0) ?
+                            <div className='bid-img-component'>
+                                <img className='bid-show-img' src={"data:"+String(images[currentImage].contentType)+";base64,"+String(images[currentImage].content)}/>
+                                <div className="bid-change-image-btn">
+                                    <button className="change-image-btn" onClick={handlePrevClick}>←</button>
+                                    <button className="change-image-btn" onClick={handleNextClick}>→</button>
+                                </div>
+                            </div>
+                            : null
+                    }
+                    {
+                        (position.length!==0) ?
+                        <div className='bid-item-map'>
+                            <link
+                                rel="stylesheet"
+                                href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+                                integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+                                crossOrigin=""
+                            />
+                            <MapContainer center={position} zoom={13} scrollWheelZoom={true}>
+                                <TileLayer
+                                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                    attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                                />
+                                <Marker key={`marker-${id}`} position={position} icon={myIcon}/>
+                            </MapContainer>
+                        </div> : null
+                    }
+                </div>
             </div>
         </div>
     );

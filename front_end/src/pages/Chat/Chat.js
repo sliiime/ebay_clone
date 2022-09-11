@@ -19,9 +19,28 @@ const Chat = () => {
                 <button className='chat-preview-refresh-btn' onClick={handleRefreshButton}>
                     <img src={refreshIcon}/>
                 </button>
-                <h4>Talking with: {name}</h4>
+                <h4 className='talking-to'>Talking with: {name}</h4>
                 <div className='chat-preview-panel'>
-
+                    <div className='chat-div'>
+                        <label>you:</label>
+                        <p className='chat-text'>hello</p>
+                    </div>
+                    <div className='chat-div'>
+                        <label>you:</label>
+                        <p className='chat-text'>hello</p>
+                    </div>
+                    <div className='chat-div'>
+                        <label>you:</label>
+                        <p className='chat-text'>hello</p>
+                    </div>
+                    <div className='chat-div'>
+                        <label>you:</label>
+                        <p className='chat-text'>hello</p>
+                    </div>
+                    <div className='chat-div'>
+                        <label>you:</label>
+                        <p className='chat-text'>hello</p>
+                    </div>
                 </div>
             </div>
         </div>

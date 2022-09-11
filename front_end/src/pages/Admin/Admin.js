@@ -54,8 +54,8 @@ const Admin = () => {
 
     return (
         <div>
-            <nav className="navbar">
-                <img className="marketPlaceIcon" src={market} alt=""/>
+            <nav className="admin-navbar">
+                <img className="admin-marketPlaceIcon" src={market} alt=""/>
                 <h1 className="admin-text">~ADMIN~</h1>
                 <button className="admin-logout-button" onClick={handleLogoutClick}>
                     Logout

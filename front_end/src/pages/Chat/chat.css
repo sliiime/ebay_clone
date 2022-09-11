@@ -2,10 +2,11 @@
     width: 100%;
     text-align: center;
     align-items: center;
+    display: grid;
 }
 
 .chat-preview-panel {
-    width: 50%;
+    width: 55%;
     display: grid;
     align-items: center;
 
@@ -43,4 +44,24 @@
 .chat-preview-user-btn:active {
     transform: scale(0.98);
     box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+}
+
+.chat-text {
+    width: 90%;
+    text-align: left;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding-left: 10px;
+    border-color: black;
+    background-color: lightblue;
+    color: black;
+}
+
+.talking-to {
+    color: darkred;
+}
+
+.chat-div {
+    display: flex;
+    width: 100%;
 }
