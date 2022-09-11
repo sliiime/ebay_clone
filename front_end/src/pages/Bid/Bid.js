@@ -50,7 +50,6 @@ const Bid = () => {
             })
             .then((response) => {
                 console.log(response?.data)
-                setPosition([response?.data?.longitude,response?.data?.latitude])
                 setItem({
                     name: response?.data?.name,
                     description: response?.data?.description,
@@ -67,6 +66,9 @@ const Bid = () => {
                 //console.log(response?.data?.category)
                 setItemCategories(response?.data?.category.join(', '))
                 setImages(response?.data?.images)
+                if ((response?.data?.longitude!==null)&&(response?.data?.latitude!==null)) {
+                    setPosition([response?.data?.longitude,response?.data?.latitude])
+                }
             })
     },[id])
 

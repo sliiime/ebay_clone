@@ -3,10 +3,10 @@ const UpdatedData = (item,updatedItem) => {
     let data = {
         startDate: updatedItem.startDate,
         endDate: updatedItem.endDate,
-        category: updatedItem.categories
+        categories: updatedItem.categories
     }
 
-    let fields = ["START_DATE","END_DATE","CATEGORY"]
+    let fields = ["START_DATE","END_DATE","CATEGORIES"]
 
     if(item.name !== updatedItem.name) {
         fields.push("NAME")
