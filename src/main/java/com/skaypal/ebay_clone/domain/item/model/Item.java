@@ -234,6 +234,9 @@ public class Item {
         return status;
     }
 
+    public void clearCategories(){
+        this.categories = new ArrayList<>();
+    }
     public List<ItemImage> getImages() {
         return this.images;
     }
@@ -294,7 +297,7 @@ public class Item {
         this.images = images;
     }
 
-    public void updateItemWithDto(UpdateItemDto updateItemDto) {
+    public void updateItemFromDto(UpdateItemDto updateItemDto) {
         for (ItemFields field : updateItemDto.getToUpdate()) {
             switch (field) {
                 case NAME:

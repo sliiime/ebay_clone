@@ -9,13 +9,13 @@ import com.skaypal.ebay_clone.domain.item.dto.*;
 import com.skaypal.ebay_clone.domain.item.exceptions.ItemBadRequestException;
 import com.skaypal.ebay_clone.domain.item.exceptions.ItemNotFoundException;
 import com.skaypal.ebay_clone.domain.item.model.Item;
+import com.skaypal.ebay_clone.domain.item.model.ItemFields;
 import com.skaypal.ebay_clone.domain.item.model.ItemImage;
 import com.skaypal.ebay_clone.domain.item.repositories.item.ItemRepository;
 import com.skaypal.ebay_clone.domain.item.repositories.item_image.ItemImageRepository;
 import com.skaypal.ebay_clone.domain.item.repositories.queries.Filter;
 import com.skaypal.ebay_clone.domain.item.validator.ItemValidator;
 import com.skaypal.ebay_clone.properties.ImageStorageProperty;
-import com.skaypal.ebay_clone.utils.exceptions.BadRequestException;
 import com.skaypal.ebay_clone.utils.validator.ValidationResult;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
@@ -25,7 +25,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -153,12 +152,24 @@ public class ItemService {
 
         Item item = itemRepository.findById(updateItemDto.getId()).orElseThrow(() -> new ItemNotFoundException("id", updateItemDto.getId().toString()));
 
-        List<String> categoriesStr = updateItemDto.getCategories();
-        setItemCategories(item,categoriesStr);
+        updateItemFromDto(item,updateItemDto);
 
-        item.updateItemWithDto(updateItemDto);
 
         itemRepository.save(item);
+    }
+
+    private void updateItemFromDto(Item item,UpdateItemDto updateItemDto) {
+
+        List<ItemFields> fields = updateItemDto.getToUpdate();
+
+        if (fields.contains(ItemFields.CATEGORIES)) {
+            List<String> categoriesStr = updateItemDto.getCategories();
+            item.clearCategories();
+            setItemCategories(item, categoriesStr);
+        }
+
+        item.updateItemFromDto(updateItemDto);
+
     }
 
     public void deleteItem(Integer id) {
