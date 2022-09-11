@@ -84,7 +84,7 @@ public class ItemService {
                 }
                 break;
             case PREVIEW:
-                if (item.getStartDate().compareTo(new Date()) >= 0){
+                if (item.getStartDate().compareTo(new Date()) <= 0){
                     item.setStatus(ItemStatusEnum.ONGOING);
                     isChanged = true;
                 }
