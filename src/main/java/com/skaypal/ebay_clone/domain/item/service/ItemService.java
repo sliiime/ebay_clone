@@ -4,6 +4,7 @@ import com.skaypal.ebay_clone.domain.bid.model.Bid;
 import com.skaypal.ebay_clone.domain.category.exceptions.CategoryNotFoundException;
 import com.skaypal.ebay_clone.domain.category.model.Category;
 import com.skaypal.ebay_clone.domain.category.service.CategoryService;
+import com.skaypal.ebay_clone.domain.item.ItemStatusEnum;
 import com.skaypal.ebay_clone.domain.item.dto.*;
 import com.skaypal.ebay_clone.domain.item.exceptions.ItemBadRequestException;
 import com.skaypal.ebay_clone.domain.item.exceptions.ItemNotFoundException;
@@ -22,15 +23,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Base64Utils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -70,6 +72,32 @@ public class ItemService {
         return itemRepository.findAll().stream().map((i) -> new ViewItemDto(i)).collect(Collectors.toList());
     }*/
 
+    private boolean checkAndUpdateStatus(Item item){
+
+        boolean isChanged = false;
+        ItemStatusEnum itemStatus = item.getStatus();
+        switch (itemStatus){
+            case ONGOING :
+                if (item.hasExpired()){
+                    if (itemRepository.getNumOfBids(item.getId()) == 0) item.setStatus(ItemStatusEnum.NOT_BOUGHT);
+                    else item.setStatus(ItemStatusEnum.BOUGHT_TIMEOUT);
+                    isChanged = true;
+                }
+                break;
+            case PREVIEW:
+                if (item.getStartDate().compareTo(new Date()) >= 0){
+                    item.setStatus(ItemStatusEnum.ONGOING);
+                    isChanged = true;
+                }
+                break;
+        }
+        return isChanged;
+    }
+
+    public void checkItemStatusAndUpdate(Item item){
+        if (checkAndUpdateStatus(item)) itemRepository.save(item);
+    }
+
     private Path resolveItemImageDirectoryPath(Integer id){
         String relativePathStr = String.format("item_%s", id.toString());
         return imageStoragePath.resolve(relativePathStr);
@@ -80,7 +108,7 @@ public class ItemService {
 
         Item item = itemRepository.findById(id).orElseThrow(() -> new ItemNotFoundException("id", id.toString()));
 
-        itemValidator.auctionIsEligibleForBids(id);
+        checkItemStatusAndUpdate(item);
 
         ViewItemDto viewItemDto = new ViewItemDto(item);
         initializeDependedFields(viewItemDto);
@@ -118,7 +146,16 @@ public class ItemService {
 
 
     public void updateItem(UpdateItemDto updateItemDto) {
+
+        ValidationResult validationResult = itemValidator.validateUpdateItemDto(updateItemDto);
+
+        if (!validationResult.isValid()) throw new ItemBadRequestException(validationResult.getErrorMessage());
+
         Item item = itemRepository.findById(updateItemDto.getId()).orElseThrow(() -> new ItemNotFoundException("id", updateItemDto.getId().toString()));
+
+        List<String> categoriesStr = updateItemDto.getCategories();
+        setItemCategories(item,categoriesStr);
+
         item.updateItemWithDto(updateItemDto);
 
         itemRepository.save(item);
@@ -136,7 +173,7 @@ public class ItemService {
             List<Filter> filters = filtersDto.getFilters().stream().collect(Collectors.toCollection(ArrayList::new));
             itemPage = itemRepository.findAll(filters, PageRequest.of(p, ITEM_PAGE_SIZE));
         }
-        itemPage.forEach((i) -> itemValidator.auctionIsEligibleForBids(i.getId()));
+        itemPage.forEach((i) -> checkItemStatusAndUpdate(i));
         Page<ViewItemDto> viewItemDtoPage = itemPage.map(item -> new ViewItemDto(item));
         viewItemDtoPage.forEach(i -> initializeDependedFields(i));
         return viewItemDtoPage;
@@ -202,6 +239,7 @@ public class ItemService {
 
     private void setItemCategories(Item item, List<String> categoryNames) {
 
+        if (categoryNames == null) return;
         for (String str : categoryNames) {
             Optional<Category> category = categoryService.getCategory(str);
             if (category.isEmpty()) throw new CategoryNotFoundException(str);

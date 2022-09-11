@@ -1,12 +1,15 @@
 package com.skaypal.ebay_clone.domain.item.validator;
 
 import static com.skaypal.ebay_clone.domain.item.ItemStatusEnum.*;
+import static com.skaypal.ebay_clone.domain.item.model.ItemFields.*;
+
 
 import com.skaypal.ebay_clone.domain.item.dto.UpdateItemDto;
 import com.skaypal.ebay_clone.domain.item.exceptions.ItemNotFoundException;
 import com.skaypal.ebay_clone.domain.item.model.Item;
 import com.skaypal.ebay_clone.domain.item.model.ItemFields;
 import com.skaypal.ebay_clone.domain.item.repositories.item.ItemRepository;
+import com.skaypal.ebay_clone.domain.item.validator.steps.*;
 import com.skaypal.ebay_clone.domain.user.exceptions.UserNotFoundException;
 import com.skaypal.ebay_clone.domain.user.model.User;
 import com.skaypal.ebay_clone.utils.validator.AlwaysValid;
@@ -15,7 +18,8 @@ import com.skaypal.ebay_clone.utils.validator.ValidationStep;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.validation.Valid;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -41,18 +45,24 @@ public class ItemValidator {
         return seller.getId().equals(sellerId);
     }
 
-    public boolean auctionIsEligibleForBids(Integer itemId) {
-        Optional<Item> item = itemRepository.findById(itemId);
+    public boolean validateItemBidEligibility(Item item) {
 
-        Item i = item.orElseThrow(() -> new ItemNotFoundException("id",itemId.toString()));
 
-        if (BOUGHT_TIMEOUT.equals(i.getStatus()) || NOT_BOUGHT.equals(i.getStatus()) || BOUGHT_BUYOUT.equals(i.getStatus()))
+        if (BOUGHT_TIMEOUT.equals(item.getStatus()) || NOT_BOUGHT.equals(item.getStatus()) || BOUGHT_BUYOUT.equals(item.getStatus()) || item.hasExpired())
             return false;
-        else if (i.hasExpired()){
-            if (itemRepository.getNumOfBids(itemId) > 0) i.setStatus(BOUGHT_TIMEOUT);
-            else i.setStatus(NOT_BOUGHT);
+
+        return true;
+
+    }
+
+    public boolean validateItemBidEligibility(Integer id) {
+
+        Optional<Item> optionalItem = itemRepository.findById(id);
+        Item item = optionalItem.orElseThrow(()-> new ItemNotFoundException("id",id.toString() ));
+
+
+        if (BOUGHT_TIMEOUT.equals(item.getStatus()) || NOT_BOUGHT.equals(item.getStatus()) || BOUGHT_BUYOUT.equals(item.getStatus()) || item.hasExpired())
             return false;
-        }
 
         return true;
 
@@ -68,36 +78,36 @@ public class ItemValidator {
     }
 
 
-        /*
-        ValidationStep<UpdateItemDto> steps = new AlwaysValid();
+    public ValidationResult validateUpdateItemDto(UpdateItemDto updateItemDto) {
+
+        ValidationStep<UpdateItemDto> steps = new ItemIsEligibleForUpdate(itemRepository);
+        List<ItemFields> updatedFields = updateItemDto.getToUpdate();
+
         for (ItemFields field : updateItemDto.getToUpdate()) {
             switch (field) {
                 case NAME:
-                    steps.linkWith(updatedNameValidation(updateItemDto));
                     break;
                 case BUY_PRICE:
-                    steps.linkWith(updatedBuyPriceValidation(updateItemDto));
+                    if (!updatedFields.contains(MIN_BID)) steps.linkWith(new UpdatedBuyPriceValidation(itemRepository));
                     break;
                 case DESCRIPTION:
-                    steps.linkWith(updatedDescriptionValidation(updateItemDto));
                     break;
                 case MIN_BID:
-                    steps.linkWith(updatedMinBidValidation(updateItemDto));
+                    if (!updatedFields.contains(BUY_PRICE)) steps.linkWith(new UpdatedMinBidValidation(itemRepository));
                     break;
                 case END_DATE:
-                    steps.linkWith(updatedEndDateValidation(updateItemDto));
+                    if (!updatedFields.contains(START_DATE)) steps.linkWith(new UpdatedEndDateValidation(itemRepository));
                     break;
                 case LATITUDE:
-                    steps.linkWith(updatedLatitudeValidation(updateItemDto));
                     break;
                 case LONGITUDE:
-                    steps.linkWith(longitudeValidation(updateItemDto));
                     break;
                 case START_DATE:
-                    steps.linkWith(updatedStartDateValidation(updateItemDto));
+                    if (!updatedFields.contains(END_DATE)) steps.linkWith(new UpdatedStartDateValidation(itemRepository));
                     break;
             }
         }
-        /*
-         */
+
+        return steps.validate(updateItemDto);
+    }
 }

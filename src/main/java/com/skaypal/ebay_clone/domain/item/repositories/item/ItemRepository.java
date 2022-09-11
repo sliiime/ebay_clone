@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,6 +33,10 @@ public interface ItemRepository {
 
     public Float getBuyoutPrice(Integer id);
 
+    public Date getStartDate(int id);
+
+    public Date getEndDate(int id);
+    public Float getMinimumPossibleBid(int id);
     public void itemBought(Integer itemId,Integer boughtById);
 
     int xBoughtFromYCount(Integer receiverId, Integer senderId);

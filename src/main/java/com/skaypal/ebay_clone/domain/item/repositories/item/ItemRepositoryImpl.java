@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.criteria.Join;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,6 +47,7 @@ public class ItemRepositoryImpl implements ItemRepository {
         return jpaItemRepository.save(item);
     }
 
+
     @Override
     public void delete(Item item) {
         jpaItemRepository.delete(item);
@@ -61,16 +63,26 @@ public class ItemRepositoryImpl implements ItemRepository {
         return bidRepository.getTotalBidsOfItem(itemId);
     }
 
+    @Override
     public Bid getHighestBid(Integer itemId) {
         List<Bid> bids = bidRepository.getBidsOfItem(itemId);
         if (bids.size() == 0) return null;
         return bids.get(0);
     }
 
+    @Override
     public Float getBuyoutPrice(Integer itemId) {
         return jpaItemRepository.getBuyoutPrice(itemId);
     }
 
+    @Override
+    public Float getMinimumPossibleBid(int id){return jpaItemRepository.getMinBid(id);}
+
+    @Override
+    public Date getStartDate(int id){return jpaItemRepository.getStartDate(id);}
+
+    @Override
+    public Date getEndDate(int id){return jpaItemRepository.getEndDate(id);}
     @Override
     @Transactional
     public void itemBought(Integer itemId, Integer boughtBy) {

@@ -62,12 +62,12 @@ public class MessageController {
     }
 
 
-    @MessageMapping("/chat")
-    public void processMessage(@Payload CreateMessageDto messageDto){
-            messageDto.setSenderId(jwtUtil.retrieveUserId(messageDto.getAuthToken()));
-            ViewMessageDto viewMessageDto = messageService.createMessage(messageDto);
-            simp.convertAndSendToUser(messageDto.getReceiverId().toString(),"/private",viewMessageDto);
-    }
+//    @MessageMapping("/chat")
+//    public void processMessage(@Payload CreateMessageDto messageDto){
+//            messageDto.setSenderId(jwtUtil.retrieveUserId(messageDto.getAuthToken()));
+//            ViewMessageDto viewMessageDto = messageService.createMessage(messageDto);
+//            simp.convertAndSendToUser(messageDto.getReceiverId().toString(),"/private",viewMessageDto);
+//    }
 
     @PutMapping(path = "/{id}")
     public ResponseEntity<?> updateMessage(@Valid @RequestBody UpdateMessageDto updateMessageDto,
