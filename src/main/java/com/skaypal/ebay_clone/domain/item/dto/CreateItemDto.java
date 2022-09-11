@@ -7,6 +7,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
@@ -30,6 +31,16 @@ public class CreateItemDto implements ValidatableItemDto {
 
     @Length(max = 200)
     private String description;
+
+    @Nullable
+    @Min(value = -90)
+    @Max(value = 90)
+    private Double latitude;
+
+    @Nullable
+    @Min(value = -180)
+    @Max(value = 180)
+    private Double longitude;
 
     @NotNull
     private List<String> categories;
@@ -97,6 +108,10 @@ public class CreateItemDto implements ValidatableItemDto {
 
     public Date getStartDate(){return startDate;}
     public List<MultipartFile> getImages() {return images;}
+
+    public Double getLatitude(){return this.latitude;}
+
+    public Double getLongitude(){return this.longitude;}
     public void setName(String name) {this.name = name;}
     public void setBuyPrice(Float buyPrice) {this.buyPrice = buyPrice; }
     public void setDescription(String description) {this.description = description; }
@@ -106,4 +121,8 @@ public class CreateItemDto implements ValidatableItemDto {
     public void setStartDate(Date startDate) {this.startDate = startDate;}
     public void setOwnerId(Integer ownerId){this.ownerId = ownerId;}
     public void setImages(List<MultipartFile> images){this.images = images;}
+
+    public void setLongitude(Double longitude){this.longitude = longitude;}
+    public void setLatitude(Double latitude){this.latitude = latitude;}
+
 }

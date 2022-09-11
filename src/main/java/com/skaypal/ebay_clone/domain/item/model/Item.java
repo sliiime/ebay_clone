@@ -179,6 +179,8 @@ public class Item {
         this.startDate = createItemDto.getStartDate();
         this.minBid = createItemDto.getMinBid() == null ? 0 : createItemDto.getMinBid();
         this.endDate = createItemDto.getEndDate();
+        this.longitude = createItemDto.getLongitude();
+        this.latitude = createItemDto.getLatitude();
         this.status = createItemDto.getStartDate().compareTo(new Date()) <= 0 ? ItemStatusEnum.ONGOING : ItemStatusEnum.PREVIEW;
     }
 
