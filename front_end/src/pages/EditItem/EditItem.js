@@ -1,14 +1,17 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import NavBar from "../MainMenu/Navbar";
 import {useNavigate, useParams} from "react-router-dom";
 import validation from "../AddItem/validation";
 import errorsExist from "../AddItem/errorsExist";
 import axios from "axios";
-import UpdatedData from "./UpdatedFields";
+import getFormData from "./UpdatedFields";
+import L from "leaflet";
+import marker from "../Bid/marker.svg";
+import {MapContainer, Marker, TileLayer} from "react-leaflet";
 
 const EditItem = () => {
 
-    const [item,setItem] = useState({
+    const [item, setItem] = useState({
         name: "",
         buyPrice: "",
         description: "",
@@ -20,7 +23,7 @@ const EditItem = () => {
         latitude: ""
     })
 
-    const [updatedItem,setUpdatedItem] = useState({
+    const [updatedItem, setUpdatedItem] = useState({
         name: "",
         buyPrice: "",
         description: "",
@@ -32,15 +35,34 @@ const EditItem = () => {
         latitude: ""
     })
 
-    const { id } = useParams()
+    const myIcon = new L.Icon({
+        iconUrl: marker,
+        iconRetinaUrl: marker,
+        popupAnchor: [-0, -0],
+        iconSize: [20, 20],
+    });
+
+    const {id} = useParams()
 
     let navigate = useNavigate()
 
-    const [errors,setErrors] = useState({});
+    const [errors, setErrors] = useState({});
     const addItemError = "Something went wrong. Try again."
     const [disableButton, setDisableButton] = useState(false);
-    const [submitButtonPressed,setSubmitButtonPressed] = useState(false)
-    const [isCorrectSubmission,setIsCorrectSubmission] = useState(0)
+    const [submitButtonPressed, setSubmitButtonPressed] = useState(false)
+    const [isCorrectSubmission, setIsCorrectSubmission] = useState(0)
+
+    const [images, setImages] = useState([]);
+    const [previewImages, setPreviewImages] = useState([])
+
+    const [position, setPosition] = useState([37.983810, 23.727539])
+    const [finalPos, setFinalPos] = useState([])
+    const markerRef = useRef();
+
+    const [markerPos, setMarkerPos] = useState({
+        lat: 37.983810,
+        lng: 23.727539,
+    })
 
     const handleChange = (event) => {
         setUpdatedItem({
@@ -76,9 +98,9 @@ const EditItem = () => {
         setSubmitButtonPressed(true)
     }
 
-    useEffect( () => {
+    useEffect(() => {
         axios
-            .get("http://localhost:8080/ebay_clone/api/item/"+String(id),{
+            .get("http://localhost:8080/ebay_clone/api/item/" + String(id), {
                 headers: {
                     'Authorization': JSON.parse(localStorage.getItem('accessToken'))
                 }
@@ -107,15 +129,20 @@ const EditItem = () => {
                     longitude: response?.data?.longitude ? response?.data?.longitude : "",
                     latitude: response?.data?.latitude ? response?.data?.latitude : ""
                 })
+                //[37.983810, 23.727539]
+                setMarkerPos({
+                    lat: response?.data?.latitude ? response?.data?.latitude : 37.983810,
+                    lng: response?.data?.longitude ? response?.data?.longitude : 23.727539
+                })
             })
             .catch((error) => {
                 console.log(error)
             })
-    },[])
+    }, [])
 
-    useEffect( () => {
-        if(!errorsExist(submitButtonPressed,errors)) {
-            const data = UpdatedData(item,updatedItem)
+    useEffect(() => {
+        if (!errorsExist(submitButtonPressed, errors)) {
+            const data = getFormData(item, updatedItem,markerPos)
             console.log(data)
             axios
                 .put("http://localhost:8080/ebay_clone/api/item/" + String(id),
@@ -129,11 +156,11 @@ const EditItem = () => {
                     endDate: updatedItem.endDate.replaceAll("-","/"),
                     longitude: updatedItem.longitude,
                     latitude: updatedItem.latitude*/
-                , {
-                    headers: {
-                        'Authorization': JSON.parse(localStorage.getItem('accessToken'))
-                    }
-                })
+                    , {
+                        headers: {
+                            'Authorization': JSON.parse(localStorage.getItem('accessToken'))
+                        }
+                    })
                 .then((response) => {
                     setIsCorrectSubmission(1);
                     setDisableButton(true);
@@ -145,10 +172,160 @@ const EditItem = () => {
                     setIsCorrectSubmission(2);
                 });
         }
-    }, [submitButtonPressed,errors]);
+    }, [submitButtonPressed, errors]);
+
+    const handleImages = (event) => {
+        for (const file of event.target.files) {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => {
+                setPreviewImages((imgs) => [...imgs, reader.result]);
+            };
+            reader.onerror = () => {
+                console.log(reader.error);
+            };
+        }
+        let image_as_files = event.target.files[0];
+        let temp = images
+        temp.push(image_as_files)
+        setImages(temp)
+    };
+
+    const removeImages = () => {
+        setImages([])
+        setPreviewImages([])
+    }
+
+    const onMapClick = (event) => {
+        const marker = markerRef.current
+        console.log("marker" + marker._latlng)
+        setMarkerPos({
+            lat: marker._latlng.lat,
+            lng: marker._latlng.lng
+        })
+    }
 
     return (
         <div>
+            <NavBar/>
+            <p className="add-item-welcome-text">Hello! Here you can add a new item! Please fill the blank spaces.</p>
+            <div className='add-item-full-body'>
+                <div className="add-item-panel">
+                    <div className="item-attributes">
+                        <label className="item-item-label">Name</label>
+                        {errors.name && <p className="add-item-input-error">{errors.name}</p>}
+                        <input className="add-item-input-box" maxLength={45} placeholder="Name" type="text" name="name"
+                               value={item.name} onChange={handleChange}></input>
+                    </div>
+                    <div className="item-attributes">
+                        <label className="item-item-label">Description</label>
+                        {errors.description && <p className="add-item-input-error">{errors.description}</p>}
+                        <input className="add-item-input-box" maxLength={200} placeholder="Description" type="text"
+                               name="description" value={item.description} onChange={handleChange}></input>
+                    </div>
+                    <div className="item-attributes">
+                        <label className="item-item-label">Buyout Price</label>
+                        {errors.buyPrice && <p className="add-item-input-error">{errors.buyPrice}</p>}
+                        <input className="add-item-input-box" placeholder="Buyout Price" type="number" name="buyPrice"
+                               value={item.buyPrice} onChange={handleChange}></input>
+                    </div>
+                    <div className="item-attributes">
+                        <label className="item-item-label">Minimum Bid</label>
+                        {errors.minBid && <p className="add-item-input-error">{errors.minBid}</p>}
+                        <input className="add-item-input-box" placeholder="Minimum Bid" type="number" name="minBid"
+                               value={item.minBid} onChange={handleChange}></input>
+                    </div>
+                    <div className="item-attributes">
+                        <label className="item-item-label">Start Date</label>
+                        {errors.startDate && <p className="add-item-input-error">{errors.startDate}</p>}
+                        <input className="add-item-input-box" type="date" name="startDate" value={item.startDate}
+                               onChange={handleChange}></input>
+                    </div>
+                    <div className="item-attributes">
+                        <label className="item-item-label">End Date</label>
+                        {errors.endDate && <p className="add-item-input-error">{errors.endDate}</p>}
+                        <input className="add-item-input-box" type="date" name="endDate" value={item.endDate}
+                               onChange={handleChange}></input>
+                    </div>
+                    <div className="item-attributes">
+                        <label className="item-item-label">Category</label>
+                        {errors.categories && <p className="add-item-input-error">{errors.categories}</p>}
+                        <select multiple={true} name="categories" value={item.categories} onChange={handleCategory}
+                                className="select-category-box">
+                            <option className="add-item-option" value="">~Empty selection~</option>
+                            <option className="add-item-option" value="Technology">Technology</option>
+                            <option className="add-item-option" value="Home & Kitchen">Home & Kitchen</option>
+                            <option className="add-item-option" value="Beauty & Personal Care">Beauty & Personal Care
+                            </option>
+                            <option className="add-item-option" value="Toys & Games">Toys & Games</option>
+                            <option className="add-item-option" value="Clothing, Shoes & Jewelry">Clothing, Shoes &
+                                Jewelry
+                            </option>
+                            <option className="add-item-option" value="Sports & Outdoors">Sports & Outdoors</option>
+                            <option className="add-item-option" value="Books">Books</option>
+                            <option className="add-item-option" value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div className="item-attributes">
+                        <label className="item-item-label">Longitude</label>
+                        <p className="add-item-longlat-box" placeholder="Longitude">{markerPos.lng}</p>
+                    </div>
+                    <div className="item-attributes">
+                        <label className="item-item-label">Latitude</label>
+                        <p className="add-item-longlat-box" placeholder="Latitude">{markerPos.lat}</p>
+                    </div>
+                    {/*<a href='https://support.google.com/maps/answer/18539?hl=en&co=GENIE.Platform%3DDesktop'
+                       target='_blank' rel="noopener noreferrer">Click here to see how to find your longitude and
+                        latitude!</a>*/}
+                    <div className="item-attributes">
+                        <label className="item-item-label">Add photos</label>
+                        <input formEncType="multipart/form-data" onChange={(e) => handleImages(e)} type="file"
+                               name="file"/>
+                        {
+                            previewImages.map((previewImage) => (
+                                <img className="add-item-image" src={previewImage} key={previewImage}/>
+                            ))
+                        }
+                        {
+                            images.length > 0 ? <button onClick={removeImages}>Remove</button> : null
+                        }
+                    </div>
+                    <div className="add-item-div-btn">
+                        <button className="add-item-submit-btn" onClick={handleSubmit} disabled={disableButton}>Place
+                            item
+                        </button>
+                    </div>
+                </div>
+
+                <div className='add-item-map'>
+                    <link
+                        rel="stylesheet"
+                        href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+                        integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+                        crossOrigin=""
+                    />
+                    <MapContainer center={[markerPos.lat,markerPos.lng]} zoom={13} scrollWheelZoom={true}>
+                        <TileLayer
+                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                        />
+                        <Marker
+                            position={[markerPos.lat, markerPos.lng]}
+                            draggable={true}
+                            eventHandlers={{dragend: onMapClick}}
+                            ref={markerRef}
+                            icon={myIcon}/>
+                    </MapContainer>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default EditItem;
+
+/*
+<div>
             <NavBar/>
             <p className="add-item-welcome-text">Feel free to edit your item.</p>
             <div className="add-item-panel">
@@ -225,7 +402,4 @@ const EditItem = () => {
                 }
             </div>
         </div>
-    );
-};
-
-export default EditItem;
+ */

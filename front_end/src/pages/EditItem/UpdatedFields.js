@@ -1,20 +1,15 @@
-const UpdatedData = (item,updatedItem) => {
+const getFormData = (item, updatedItem, markerPos) => {
 
-    let data = {
-        startDate: updatedItem.startDate,
-        endDate: updatedItem.endDate,
-        categories: updatedItem.categories
-    }
+    let formData = new FormData()
 
-    let fields = ["START_DATE","END_DATE","CATEGORIES"]
+    const endDateValue = item.endDate.replaceAll("-", "/")
+    const startDateValue = item.startDate.replaceAll("-", "/")
 
     if(item.name !== updatedItem.name) {
-        fields.push("NAME")
-        data["name"] = updatedItem.name
+        formData.append("name", updatedItem.name)
     }
     if(item.description !== updatedItem.description) {
-        fields.push("DESCRIPTION")
-        data["description"] = updatedItem.description
+        formData.append("description", updatedItem.description)
     }
     if(parseFloat(item.buyPrice) !== parseFloat(updatedItem.buyPrice)) {
         fields.push("BUY_PRICE")
@@ -38,4 +33,4 @@ const UpdatedData = (item,updatedItem) => {
     return data
 }
 
-export default UpdatedData;
+export default getFormData;

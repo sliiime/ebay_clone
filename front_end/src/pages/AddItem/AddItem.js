@@ -79,8 +79,6 @@ const AddItem = () => {
     }
 
     useEffect(() => {
-        console.log("on submit " + markerPos.lat + " " + markerPos.lng)
-        return
         if (!errorsExist(submitButtonPressed, errors)) {
             let formData = new FormData()
             const endDateValue = item.endDate.replaceAll("-", "/")
