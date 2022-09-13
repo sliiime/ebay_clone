@@ -219,9 +219,7 @@ const AddItem = () => {
                         <label className="item-item-label">Latitude</label>
                         <p className="add-item-longlat-box" placeholder="Latitude">{markerPos.lat}</p>
                     </div>
-                    {/*<a href='https://support.google.com/maps/answer/18539?hl=en&co=GENIE.Platform%3DDesktop'
-                       target='_blank' rel="noopener noreferrer">Click here to see how to find your longitude and
-                        latitude!</a>*/}
+                    <h5>Move the marker in the map to match the location you want!</h5>
                     <div className="item-attributes">
                         <label className="item-item-label">Add photos</label>
                         <input formEncType="multipart/form-data" onChange={(e) => handleImages(e)} type="file"

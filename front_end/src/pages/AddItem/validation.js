@@ -2,6 +2,7 @@ const validation = (item) => {
 
     let errors = {}
     const today = new Date()
+    const startDate = new Date(item.startDate)
 
     if (!item.name) {
         errors.name = "Name is required."
@@ -33,7 +34,9 @@ const validation = (item) => {
 
     if(!item.startDate){
         errors.startDate="Starting date is required."
-    } else if (Date.parse(item.startDate) < Date.parse(today)) {
+    } else if ((startDate.getDate()===today.getDate()) && (startDate.getMonth()===today.getMonth()) && (startDate.getFullYear()===today.getFullYear()) ) {
+        errors.startDate = ""
+    } else if (Date.parse(startDate) < Date.parse(today)) {
         errors.startDate="Enter a valid Starting date."
     } else if (Date.parse(item.startDate) > Date.parse(item.endDate)) {
         errors.startDate="Starting date must be before End date."

@@ -4,6 +4,7 @@ import {NavLink} from "react-router-dom";
 
 function MyItemCard ({item}) {
 
+    const startDate = new Date(item.startDate)
     const endDate = new Date(item.endDate)
 
     return (
@@ -23,6 +24,8 @@ function MyItemCard ({item}) {
                 <div className="card-body">
                     <p className="card-item-info">Description: {item.description}</p>
                     <p className="card-item-info">Buy price: {item.buyPrice}€</p>
+                    <p className="card-item-info">Minimum bid: {item.minBid}€</p>
+                    <p className="card-item-info">Start date: {startDate.getDate()}-{startDate.getMonth()}-{startDate.getFullYear()}</p>
                     <p className="card-item-info">End date: {endDate.getDate()}-{endDate.getMonth()}-{endDate.getFullYear()}</p>
                 </div>
             </div>
