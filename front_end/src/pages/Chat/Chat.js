@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import NavBar from "../MainMenu/Navbar";
 import {useParams} from "react-router-dom";
 import refreshIcon from "./refresh-icon.png";
@@ -8,8 +8,18 @@ const Chat = () => {
 
     const { name } = useParams()
 
+    const [userInput,setUserInput] = useState("")
+
     const handleRefreshButton = () => {
         window.location.reload(false)
+    }
+
+    const handleUserInput = (event) => {
+        setUserInput(event.target.value)
+    }
+
+    const handleSendMessageButton = (event) => {
+        event.preventDefault()
     }
 
     return (
@@ -41,6 +51,10 @@ const Chat = () => {
                         <label>you:</label>
                         <p className='chat-text'>hello</p>
                     </div>
+                </div>
+                <div className="user-input-and-btn">
+                    <input className='user-input' type='text' value={userInput} onChange={handleUserInput}/>
+                    <button className='send-msg-btn' onClick={handleSendMessageButton}>➤</button>
                 </div>
             </div>
         </div>

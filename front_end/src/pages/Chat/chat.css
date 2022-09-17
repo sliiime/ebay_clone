@@ -65,3 +65,31 @@
     display: flex;
     width: 100%;
 }
+
+.user-input-and-btn {
+    margin-top: 35px;
+    width: 55%;
+}
+
+.user-input {
+    width: 70%;
+    margin-right: 5px;
+    padding-left: 5px;
+    border: 1px solid gray;
+    border-radius: 10px;
+}
+
+.send-msg-btn {
+    border: 1px solid black;
+    border-radius: 3px;
+}
+
+.send-msg-btn:active {
+    transform: scale(0.98);
+    box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+}
+
+.send-msg-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
