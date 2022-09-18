@@ -4,6 +4,7 @@ import com.skaypal.ebay_clone.domain.item.model.ItemFields;
 import com.skaypal.ebay_clone.domain.item.validator.controllerValidators.EndDateValidation;
 import com.skaypal.ebay_clone.domain.item.validator.controllerValidators.MinBidBuyPriceValidation;
 import com.skaypal.ebay_clone.domain.item.validator.controllerValidators.UpdateItemDtoValidation;
+import com.skaypal.ebay_clone.utils.geo.LatLongMapped;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.lang.Nullable;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,7 +18,7 @@ import java.util.List;
 @MinBidBuyPriceValidation
 @EndDateValidation
 @UpdateItemDtoValidation
-public class UpdateItemDto implements ValidatableItemDto {
+public class UpdateItemDto implements ValidatableItemDto, LatLongMapped {
 
     @Null
     Integer id;

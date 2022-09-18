@@ -18,6 +18,8 @@ import com.skaypal.ebay_clone.domain.item.repositories.item_image.ItemImageRepos
 import com.skaypal.ebay_clone.domain.item.repositories.queries.Filter;
 import com.skaypal.ebay_clone.domain.item.validator.ItemValidator;
 import com.skaypal.ebay_clone.properties.ImageStorageProperty;
+import com.skaypal.ebay_clone.utils.exceptions.BadRequestException;
+import com.skaypal.ebay_clone.utils.geo.LatLongMapped;
 import com.skaypal.ebay_clone.utils.validator.ValidationResult;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
@@ -123,16 +125,20 @@ public class ItemService {
         return viewItemDto;
     }
 
+    private void setCountry(Item item,LatLongMapped dto){ //throws bad request exception in case latitude/longitude cannot be mapped to a country
+
+        Country country = latLongToCountry(dto);
+
+        item.setCountry(country); //There has been already a validation that the country exists
+
+    }
+
 
     private Item saveItem(CreateItemDto createItemDto) {
 
         Item item = new Item(createItemDto);
 
-        String iso = latLongToISO(createItemDto);
-
-        Optional<Country> country = countryService.findByIso(iso);
-
-        item.setCountry(country.get()); //There has been already a validation that the country exists
+        setCountry(item,createItemDto);
 
         List<String> categoryNames = createItemDto.getCategories();
 
@@ -142,6 +148,18 @@ public class ItemService {
 
         return item;
 
+    }
+
+    private Country latLongToCountry(LatLongMapped location) {
+        String iso = latLongToISO(location);
+        Optional<Country> country = countryService.findByIso(iso);
+
+        String errorMessage = String.format("Cannot map latitude [%s] and longitude [%s] to any Country",location.getLatitude().toString(),location.getLongitude().toString());
+
+        if (country.isEmpty()) throw new BadRequestException(errorMessage);
+
+
+        return country.get();
     }
 
     public ViewItemDto createItem(CreateItemDto createItemDto) throws IOException {
@@ -185,6 +203,22 @@ public class ItemService {
             item.clearCategories();
             setItemCategories(item, categoriesStr);
         }
+
+        if (fields.contains(ItemFields.LATITUDE) || fields.contains(ItemFields.LONGITUDE)){
+            Double latitude = fields.contains(ItemFields.LATITUDE) ?
+                    updateItemDto.getLatitude() :
+                    item.getLatitude();
+
+            Double longitude = fields.contains(ItemFields.LONGITUDE) ?
+                    updateItemDto.getLongitude() :
+                    item.getLongitude();
+
+            updateItemDto.setLongitude(longitude);
+            updateItemDto.setLatitude(latitude);
+
+            setCountry(item,updateItemDto);
+        }
+
 
         item.updateItemFromDto(updateItemDto);
 
