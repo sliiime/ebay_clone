@@ -8,4 +8,6 @@ import java.util.Optional;
 public interface CountryRepository {
     public Optional<Country> findByCountry(String country);
     public List<Country> findAll();
+
+    public Optional<Country> findByIso(String iso);
 }

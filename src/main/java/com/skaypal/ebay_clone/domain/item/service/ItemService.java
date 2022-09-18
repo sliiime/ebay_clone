@@ -4,6 +4,8 @@ import com.skaypal.ebay_clone.domain.bid.model.Bid;
 import com.skaypal.ebay_clone.domain.category.exceptions.CategoryNotFoundException;
 import com.skaypal.ebay_clone.domain.category.model.Category;
 import com.skaypal.ebay_clone.domain.category.service.CategoryService;
+import com.skaypal.ebay_clone.domain.country.model.Country;
+import com.skaypal.ebay_clone.domain.country.service.CountryService;
 import com.skaypal.ebay_clone.domain.item.ItemStatusEnum;
 import com.skaypal.ebay_clone.domain.item.dto.*;
 import com.skaypal.ebay_clone.domain.item.exceptions.ItemBadRequestException;
@@ -24,6 +26,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import uk.recurse.geocoding.reverse.ReverseGeocoder;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,6 +39,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.skaypal.ebay_clone.utils.geo.GeoUtils.latLongToISO;
+
 @Service
 public class ItemService {
 
@@ -43,6 +48,7 @@ public class ItemService {
 
     private final ItemValidator itemValidator;
 
+    private final CountryService countryService;
     private final CategoryService categoryService;
 
     private final ItemImageRepository itemImageRepository;
@@ -54,12 +60,14 @@ public class ItemService {
     public ItemService(ItemRepository itemRepository,
                        ItemValidator itemValidator,
                        CategoryService categoryService,
+                       CountryService countryService,
                        ItemImageRepository itemImageRepository,
                        ImageStorageProperty imageStorageProperty) throws IOException {
 
         this.itemRepository = itemRepository;
         this.itemValidator = itemValidator;
         this.categoryService = categoryService;
+        this.countryService = countryService;
         this.itemImageRepository = itemImageRepository;
         this.imageStoragePath = Paths.get(imageStorageProperty.getUploadDirectory()).toAbsolutePath().normalize();
 
@@ -117,7 +125,14 @@ public class ItemService {
 
 
     private Item saveItem(CreateItemDto createItemDto) {
+
         Item item = new Item(createItemDto);
+
+        String iso = latLongToISO(createItemDto);
+
+        Optional<Country> country = countryService.findByIso(iso);
+
+        item.setCountry(country.get()); //There has been already a validation that the country exists
 
         List<String> categoryNames = createItemDto.getCategories();
 
@@ -130,6 +145,9 @@ public class ItemService {
     }
 
     public ViewItemDto createItem(CreateItemDto createItemDto) throws IOException {
+
+
+
 
         Item item = saveItem(createItemDto);
 
