@@ -24,6 +24,12 @@ public class BidValidator {
         this.itemValidator = itemValidator;
     }
 
+    public ValidationResult itemExists(int itemId){
+        Integer id = itemId;
+        return itemValidator.itemExists(itemId) ?
+                ValidationResult.valid() :
+                ValidationResult.invalid(String.format("Item with id [%s] does not exist",id.toString()));
+    }
 
     public ValidationResult validateCreateBidDto(CreateBidDto createBidDto) {
 

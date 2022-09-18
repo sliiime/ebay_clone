@@ -110,4 +110,8 @@ public class ItemValidator {
 
         return steps.validate(updateItemDto);
     }
+
+    public boolean itemExists(int id){
+        return !itemRepository.findById(id).isEmpty();
+    }
 }
