@@ -29,8 +29,10 @@ public class UpdateItemDtoValidator implements ConstraintValidator<UpdateItemDto
                     if (updateItemDto.getEndDate() == null) return false;
                     break;
                 case LATITUDE:
+                    if (updateItemDto.getLatitude() == null ) return false;
                     break;
                 case LONGITUDE:
+                    if (updateItemDto.getLongitude() == null) return false;
                     break;
                 case START_DATE:
                     if (updateItemDto.getStartDate() == null) return false;
