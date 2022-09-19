@@ -104,8 +104,8 @@ public class ItemController {
         return Responses.created(location + "/" + item.getId());
     }
 
-    @PutMapping(path = "/{id}")
-    public ResponseEntity<?> updateItem(@PathVariable Integer id, @Valid @RequestBody UpdateItemDto updateItemDto) {
+    @PutMapping(path = "/{id}",consumes = "multipart/form-data")
+    public ResponseEntity<?> updateItem(@PathVariable Integer id, @Valid @ModelAttribute UpdateItemDto updateItemDto) {
         updateItemDto.setId(id);
         itemService.updateItem(updateItemDto);
         return ResponseEntity.ok().build();

@@ -20,7 +20,6 @@ import java.util.List;
 @UpdateItemDtoValidation
 public class UpdateItemDto implements ValidatableItemDto, LatLongMapped {
 
-    @Null
     Integer id;
 
     @NotNull
