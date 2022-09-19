@@ -142,12 +142,30 @@ const EditItem = () => {
 
     useEffect(() => {
         if (!errorsExist(submitButtonPressed, errors)) {
-            const data = getFormData(item, updatedItem,markerPos)
-            for (var pair of data.entries()) {
+            const formData = getFormData(item, updatedItem,markerPos)
+            for (var pair of formData.entries()) {
                 console.log(pair[0]+ ', ' + pair[1]);
             }
-            return
-            axios
+            //return
+            try {
+                const response = axios({
+                    method: "put",
+                    url: "http://localhost:8080/ebay_clone/api/item"+String(id),
+                    data: formData,
+                    headers: {
+                        'Authorization': JSON.parse(localStorage.getItem('accessToken')),
+                        'Accept': '*/*',
+                        'Content-Type': "multipart/form-data"
+                    },
+                })
+            } catch (error) {
+                console.log(error)
+            }
+            setDisableButton(true)
+            setTimeout(() => {
+                navigate('..')
+            }, 2000)
+            /*axios
                 .put("http://localhost:8080/ebay_clone/api/item/" + String(id),
                     data
                     , {
@@ -164,7 +182,7 @@ const EditItem = () => {
                 .catch((error) => {
                     console.log(error)
                     setIsCorrectSubmission(2);
-                });
+                });*/
         }
     }, [submitButtonPressed, errors]);
 
