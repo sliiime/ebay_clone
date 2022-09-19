@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.xml.bind.JAXBContext;
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "ebay_clone/api/bid")
@@ -36,8 +37,14 @@ public class BidController {
         return ResponseEntity.ok(bidService.getBid(id));
     }
 
-    @PostMapping
-    public ResponseEntity<?> createBid(@Valid @RequestBody CreateBidDto createBidDto, HttpServletRequest request){
+
+    @GetMapping(path = "/item/{id}")
+    public ResponseEntity<List<ViewBidDto>> getItemBids(@PathVariable Integer id){
+            return ResponseEntity.ok(bidService.getItemBids(id));
+    }
+
+    @PostMapping(consumes = "multipart/form-data")
+    public ResponseEntity<?> createBid(@Valid @ModelAttribute CreateBidDto createBidDto, HttpServletRequest request){
         String token = request.getHeader("Authorization");
         
         createBidDto.setBidderId(jwtUtil.retrieveUserId(token));

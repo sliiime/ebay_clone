@@ -75,7 +75,6 @@ CREATE TABLE IF NOT EXISTS `ebay_clone`.`item` (
   `start_date` DATETIME NULL,
   `end_date` DATETIME NULL,
   `description` VARCHAR(200) NULL,
-  `category` VARCHAR(45) NULL,
   `country_id` INT NOT NULL DEFAULT 1,
   `seller` INT NOT NULL DEFAULT 1,
   `status` ENUM("PREVIEW", "ONGOING", "NOT_BOUGHT", "BOUGHT_TIMEOUT", "BOUGHT_BUYOUT") NULL,

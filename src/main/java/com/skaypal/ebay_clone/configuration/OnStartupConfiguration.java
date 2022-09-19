@@ -91,7 +91,9 @@ public class OnStartupConfiguration {
                     "peri",
                     List.of(new Category(1),new Category(3),new Category(5),new Category(7)),
                     ItemStatusEnum.ONGOING,
-                    new User(1)
+                    new User(1),
+                    null,
+                    new Country(123)
             ));
             Item item2 = (new Item("Thornmail",
                     15f,
@@ -103,7 +105,9 @@ public class OnStartupConfiguration {
                     "perigrafh",
                     List.of(new Category(2),new Category(4),new Category(6),new Category(8)),
                     ItemStatusEnum.ONGOING,
-                    new User(1)
+                    new User(1),
+                    null,
+                    new Country(99)
             ));
             Item item3 = (new Item("email",
                     20f,
@@ -115,7 +119,9 @@ public class OnStartupConfiguration {
                     "perigrafhsee",
                     List.of(new Category(3),new Category(8),new Category(5),new Category(7)),
                     ItemStatusEnum.ONGOING,
-                    new User(1)
+                    new User(1),
+                    null,
+                    new Country(6)
             ));
             Item item4 = (new Item("moggolos",
                     25f,
@@ -128,7 +134,8 @@ public class OnStartupConfiguration {
                     List.of(new Category(4)),
                     ItemStatusEnum.BOUGHT_BUYOUT,
                     new User(1),
-                    new User(2)
+                    new User(2),
+                    new Country(4)
             ));
             Item item5 = (new Item("Amogus",
                     140f,
@@ -141,7 +148,8 @@ public class OnStartupConfiguration {
                     List.of(new Category(1),new Category(4)),
                     ItemStatusEnum.BOUGHT_TIMEOUT,
                     new User(1),
-                    new User(2)
+                    new User(2),
+                    new Country(5)
             ));
             Item item6 = (new Item("Thumbemail",
                     20f,
@@ -153,7 +161,9 @@ public class OnStartupConfiguration {
                     "perigrafh",
                     List.of(new Category(2)),
                     ItemStatusEnum.ONGOING,
-                    new User(1)
+                    new User(1),
+                    null,
+                    new Country(1)
             ));
             Item item7 = (new Item("Thumbroller",
                     20f,
@@ -165,7 +175,9 @@ public class OnStartupConfiguration {
                     "grafh ths peri",
                     List.of(new Category(2),new Category(3)),
                     ItemStatusEnum.ONGOING,
-                    new User(2)
+                    new User(2),
+                    null,
+                    new Country(1)
             ));
             Item item8 = (new Item("broller de france",
                     20f,
@@ -177,7 +189,9 @@ public class OnStartupConfiguration {
                     "en peasant de france",
                     List.of(new Category(2),new Category(3),new Category(5)),
                     ItemStatusEnum.ONGOING,
-                    new User(2)
+                    new User(2),
+                    null,
+                    new Country(3)
             ));
 
             JPAItemRepository.saveAll(List.of(item1,item2,item3,item4,item5,item6,item7,item8));

@@ -26,4 +26,8 @@ public class CountryRepositoryImpl implements CountryRepository {
     public List<Country> findAll() {
         return jpaCountryRepository.findAll();
     }
+
+    public Optional<Country> findByIso(String iso){
+        return jpaCountryRepository.findByIso(iso);
+    }
 }

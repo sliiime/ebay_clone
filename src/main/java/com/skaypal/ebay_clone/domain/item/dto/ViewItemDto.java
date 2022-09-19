@@ -1,5 +1,6 @@
 package com.skaypal.ebay_clone.domain.item.dto;
 
+import com.skaypal.ebay_clone.domain.country.model.Country;
 import com.skaypal.ebay_clone.domain.item.ItemStatusEnum;
 import com.skaypal.ebay_clone.domain.item.model.Item;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,6 +19,7 @@ public class ViewItemDto {
     private Integer numOfBids;
     private Double latitude;
     private Double longitude;
+    private String country;
     private Date startDate;
     private Date endDate;
     private String description;
@@ -34,6 +36,8 @@ public class ViewItemDto {
     private List<ItemImageDto> images;
 
 
+
+
     public ViewItemDto(Item item) {
         this.id = item.getId();
         this.name = item.getName();
@@ -48,6 +52,7 @@ public class ViewItemDto {
         this.status = item.getStatus();
         this.sellerId = item.getSeller().getId();
         this.boughtById = item.getBoughtBy() == null ? null : item.getBoughtBy().getId();
+        this.country = item.getCountry().getCountry();
     }
 
 
@@ -102,6 +107,8 @@ public class ViewItemDto {
     public List<String> getCategory() {
         return categories;
     }
+
+    public String getCountry(){return country;}
 
     public ItemStatusEnum getStatus() {
         return status;
@@ -159,6 +166,7 @@ public class ViewItemDto {
         this.categories = categories;
     }
 
+    public void setCountry(String country) {this.country = country;}
     public void setStatus(ItemStatusEnum status) {
         this.status = status;
     }

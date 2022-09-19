@@ -4,6 +4,8 @@ import com.skaypal.ebay_clone.domain.bid.model.Bid;
 import com.skaypal.ebay_clone.domain.category.exceptions.CategoryNotFoundException;
 import com.skaypal.ebay_clone.domain.category.model.Category;
 import com.skaypal.ebay_clone.domain.category.service.CategoryService;
+import com.skaypal.ebay_clone.domain.country.model.Country;
+import com.skaypal.ebay_clone.domain.country.service.CountryService;
 import com.skaypal.ebay_clone.domain.item.ItemStatusEnum;
 import com.skaypal.ebay_clone.domain.item.dto.*;
 import com.skaypal.ebay_clone.domain.item.exceptions.ItemBadRequestException;
@@ -16,6 +18,8 @@ import com.skaypal.ebay_clone.domain.item.repositories.item_image.ItemImageRepos
 import com.skaypal.ebay_clone.domain.item.repositories.queries.Filter;
 import com.skaypal.ebay_clone.domain.item.validator.ItemValidator;
 import com.skaypal.ebay_clone.properties.ImageStorageProperty;
+import com.skaypal.ebay_clone.utils.exceptions.BadRequestException;
+import com.skaypal.ebay_clone.utils.geo.LatLongMapped;
 import com.skaypal.ebay_clone.utils.validator.ValidationResult;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
@@ -24,6 +28,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import uk.recurse.geocoding.reverse.ReverseGeocoder;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,6 +41,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.skaypal.ebay_clone.utils.geo.GeoUtils.latLongToISO;
+
 @Service
 public class ItemService {
 
@@ -43,6 +50,7 @@ public class ItemService {
 
     private final ItemValidator itemValidator;
 
+    private final CountryService countryService;
     private final CategoryService categoryService;
 
     private final ItemImageRepository itemImageRepository;
@@ -54,12 +62,14 @@ public class ItemService {
     public ItemService(ItemRepository itemRepository,
                        ItemValidator itemValidator,
                        CategoryService categoryService,
+                       CountryService countryService,
                        ItemImageRepository itemImageRepository,
                        ImageStorageProperty imageStorageProperty) throws IOException {
 
         this.itemRepository = itemRepository;
         this.itemValidator = itemValidator;
         this.categoryService = categoryService;
+        this.countryService = countryService;
         this.itemImageRepository = itemImageRepository;
         this.imageStoragePath = Paths.get(imageStorageProperty.getUploadDirectory()).toAbsolutePath().normalize();
 
@@ -115,9 +125,20 @@ public class ItemService {
         return viewItemDto;
     }
 
+    private void setCountry(Item item,LatLongMapped dto){ //throws bad request exception in case latitude/longitude cannot be mapped to a country
+
+        Country country = latLongToCountry(dto);
+
+        item.setCountry(country); //There has been already a validation that the country exists
+
+    }
+
 
     private Item saveItem(CreateItemDto createItemDto) {
+
         Item item = new Item(createItemDto);
+
+        setCountry(item,createItemDto);
 
         List<String> categoryNames = createItemDto.getCategories();
 
@@ -129,7 +150,22 @@ public class ItemService {
 
     }
 
+    private Country latLongToCountry(LatLongMapped location) {
+        String iso = latLongToISO(location);
+        Optional<Country> country = countryService.findByIso(iso);
+
+        String errorMessage = String.format("Cannot map latitude [%s] and longitude [%s] to any Country",location.getLatitude().toString(),location.getLongitude().toString());
+
+        if (country.isEmpty()) throw new BadRequestException(errorMessage);
+
+
+        return country.get();
+    }
+
     public ViewItemDto createItem(CreateItemDto createItemDto) throws IOException {
+
+
+
 
         Item item = saveItem(createItemDto);
 
@@ -167,6 +203,22 @@ public class ItemService {
             item.clearCategories();
             setItemCategories(item, categoriesStr);
         }
+
+        if (fields.contains(ItemFields.LATITUDE) || fields.contains(ItemFields.LONGITUDE)){
+            Double latitude = fields.contains(ItemFields.LATITUDE) ?
+                    updateItemDto.getLatitude() :
+                    item.getLatitude();
+
+            Double longitude = fields.contains(ItemFields.LONGITUDE) ?
+                    updateItemDto.getLongitude() :
+                    item.getLongitude();
+
+            updateItemDto.setLongitude(longitude);
+            updateItemDto.setLatitude(latitude);
+
+            setCountry(item,updateItemDto);
+        }
+
 
         item.updateItemFromDto(updateItemDto);
 

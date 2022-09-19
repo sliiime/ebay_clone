@@ -3,6 +3,7 @@ package com.skaypal.ebay_clone.domain.item.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.skaypal.ebay_clone.domain.bid.model.Bid;
 import com.skaypal.ebay_clone.domain.category.model.Category;
+import com.skaypal.ebay_clone.domain.country.model.Country;
 import com.skaypal.ebay_clone.domain.item.ItemStatusEnum;
 import com.skaypal.ebay_clone.domain.item.dto.CreateItemDto;
 import com.skaypal.ebay_clone.domain.item.dto.UpdateItemDto;
@@ -36,6 +37,9 @@ public class Item {
     @JsonFormat(pattern = "dd/MM/yyyy")
     private Date endDate;
     private String description;
+
+    @ManyToOne
+    private Country country;
 
 
     @ManyToMany
@@ -170,6 +174,35 @@ public class Item {
         this.boughtBy = boughtBy;
     }
 
+    public Item(String name,
+                Float buyPrice,
+                Float minBid,
+                Double latitude,
+                Double longitude,
+                Date startDate,
+                Date endDate,
+                String description,
+                List<Category> categories,
+                ItemStatusEnum status,
+                User seller,
+                User boughtBy,
+                Country country) {
+
+        this.name = name;
+        this.buyPrice = buyPrice;
+        this.minBid = minBid;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.description = description;
+        this.categories = categories;
+        this.status = status;
+        this.seller = seller;
+        this.boughtBy = boughtBy;
+        this.country = country;
+    }
+
 
     public Item(CreateItemDto createItemDto) {
         this.name = createItemDto.getName();
@@ -182,6 +215,7 @@ public class Item {
         this.longitude = createItemDto.getLongitude();
         this.latitude = createItemDto.getLatitude();
         this.status = createItemDto.getStartDate().compareTo(new Date()) <= 0 ? ItemStatusEnum.ONGOING : ItemStatusEnum.PREVIEW;
+
     }
 
     public Item(Integer id) {
@@ -247,6 +281,8 @@ public class Item {
         return boughtBy;
     }
 
+    public Country getCountry(){return country;}
+
     public void setId(Integer id) {
         this.id = id;
     }
@@ -299,6 +335,7 @@ public class Item {
         this.images = images;
     }
 
+    public void setCountry(Country country){this.country = country;}
     public void updateItemFromDto(UpdateItemDto updateItemDto) {
         for (ItemFields field : updateItemDto.getToUpdate()) {
             switch (field) {

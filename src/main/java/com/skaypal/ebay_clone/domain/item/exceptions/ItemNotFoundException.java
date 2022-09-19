@@ -7,4 +7,9 @@ public class ItemNotFoundException extends NotFoundException {
     public ItemNotFoundException(String fieldName, String fieldValue) {
         this.message = String.format("Item with %s [%s] was not found",fieldName,fieldValue);
     }
+
+    public ItemNotFoundException(Integer id){
+        this.message = String.format("Item with id [%s] was not found",id.toString());
+
+    }
 }

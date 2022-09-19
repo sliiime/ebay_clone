@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface JPACountryRepository extends JpaRepository<Country,Integer> {
     public Optional<Country> findByCountry(String country);
+    public Optional<Country> findByIso(String iso);
 }

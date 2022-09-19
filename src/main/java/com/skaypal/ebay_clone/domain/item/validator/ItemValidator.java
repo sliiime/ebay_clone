@@ -4,6 +4,7 @@ import static com.skaypal.ebay_clone.domain.item.ItemStatusEnum.*;
 import static com.skaypal.ebay_clone.domain.item.model.ItemFields.*;
 
 
+import com.skaypal.ebay_clone.domain.item.dto.CreateItemDto;
 import com.skaypal.ebay_clone.domain.item.dto.UpdateItemDto;
 import com.skaypal.ebay_clone.domain.item.exceptions.ItemNotFoundException;
 import com.skaypal.ebay_clone.domain.item.model.Item;
@@ -12,6 +13,7 @@ import com.skaypal.ebay_clone.domain.item.repositories.item.ItemRepository;
 import com.skaypal.ebay_clone.domain.item.validator.steps.*;
 import com.skaypal.ebay_clone.domain.user.exceptions.UserNotFoundException;
 import com.skaypal.ebay_clone.domain.user.model.User;
+import com.skaypal.ebay_clone.utils.geo.LatLongMapped;
 import com.skaypal.ebay_clone.utils.validator.AlwaysValid;
 import com.skaypal.ebay_clone.utils.validator.ValidationResult;
 import com.skaypal.ebay_clone.utils.validator.ValidationStep;
@@ -110,4 +112,9 @@ public class ItemValidator {
 
         return steps.validate(updateItemDto);
     }
+
+    public boolean itemExists(int id){
+        return !itemRepository.findById(id).isEmpty();
+    }
+
 }
