@@ -43,8 +43,8 @@ public class BidController {
             return ResponseEntity.ok(bidService.getItemBids(id));
     }
 
-    @PostMapping(consumes = "multipart/form-data")
-    public ResponseEntity<?> createBid(@Valid @ModelAttribute CreateBidDto createBidDto, HttpServletRequest request){
+    @PostMapping
+    public ResponseEntity<?> createBid(@Valid CreateBidDto createBidDto, HttpServletRequest request){
         String token = request.getHeader("Authorization");
         
         createBidDto.setBidderId(jwtUtil.retrieveUserId(token));
