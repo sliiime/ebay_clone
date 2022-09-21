@@ -20,7 +20,8 @@ const EditItem = () => {
         endDate: "",
         startDate: "",
         longitude: "",
-        latitude: ""
+        latitude: "",
+        images: []
     })
 
     const [updatedItem, setUpdatedItem] = useState({
@@ -32,7 +33,8 @@ const EditItem = () => {
         endDate: "",
         startDate: "",
         longitude: "",
-        latitude: ""
+        latitude: "",
+        images: []
     })
 
     const myIcon = new L.Icon({
@@ -50,13 +52,11 @@ const EditItem = () => {
     const addItemError = "Something went wrong. Try again."
     const [disableButton, setDisableButton] = useState(false);
     const [submitButtonPressed, setSubmitButtonPressed] = useState(false)
-    const [isCorrectSubmission, setIsCorrectSubmission] = useState(0)
+    //const [isCorrectSubmission, setIsCorrectSubmission] = useState(0)
 
     const [images, setImages] = useState([]);
     const [previewImages, setPreviewImages] = useState([])
 
-    const [position, setPosition] = useState([37.983810, 23.727539])
-    const [finalPos, setFinalPos] = useState([])
     const markerRef = useRef();
 
     const [markerPos, setMarkerPos] = useState({
@@ -116,7 +116,8 @@ const EditItem = () => {
                     endDate: "",
                     startDate: "",
                     longitude: response?.data?.longitude ? response?.data?.longitude : "",
-                    latitude: response?.data?.latitude ? response?.data?.latitude : ""
+                    latitude: response?.data?.latitude ? response?.data?.latitude : "",
+                    images: response?.data?.images
                 })
                 setUpdatedItem({
                     name: response?.data?.name,
@@ -127,7 +128,8 @@ const EditItem = () => {
                     endDate: "",
                     startDate: "",
                     longitude: response?.data?.longitude ? response?.data?.longitude : "",
-                    latitude: response?.data?.latitude ? response?.data?.latitude : ""
+                    latitude: response?.data?.latitude ? response?.data?.latitude : "",
+                    images: response?.data?.images
                 })
                 //[37.983810, 23.727539]
                 setMarkerPos({
@@ -142,15 +144,17 @@ const EditItem = () => {
 
     useEffect(() => {
         if (!errorsExist(submitButtonPressed, errors)) {
-            const formData = getFormData(item, updatedItem,markerPos)
+            const formData = getFormData(item, updatedItem,markerPos,images)
             for (var pair of formData.entries()) {
                 console.log(pair[0]+ ', ' + pair[1]);
             }
+            let url = "http://localhost:8080/ebay_clone/api/item/"+String(id)
+            console.log("url: " + url)
             //return
             try {
                 const response = axios({
                     method: "put",
-                    url: "http://localhost:8080/ebay_clone/api/item"+String(id),
+                    url: "http://localhost:8080/ebay_clone/api/item/"+String(id),
                     data: formData,
                     headers: {
                         'Authorization': JSON.parse(localStorage.getItem('accessToken')),
@@ -165,42 +169,27 @@ const EditItem = () => {
             setTimeout(() => {
                 navigate('..')
             }, 2000)
-            /*axios
-                .put("http://localhost:8080/ebay_clone/api/item/" + String(id),
-                    data
-                    , {
-                        headers: {
-                            'Authorization': JSON.parse(localStorage.getItem('accessToken'))
-                        }
-                    })
-                .then((response) => {
-                    setIsCorrectSubmission(1);
-                    setDisableButton(true);
-                    const timer = setTimeout(() => navigate('../'), 2000);
-                    return () => clearTimeout(timer);
-                })
-                .catch((error) => {
-                    console.log(error)
-                    setIsCorrectSubmission(2);
-                });*/
         }
     }, [submitButtonPressed, errors]);
 
     const handleImages = (event) => {
-        for (const file of event.target.files) {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => {
-                setPreviewImages((imgs) => [...imgs, reader.result]);
-            };
-            reader.onerror = () => {
-                console.log(reader.error);
-            };
+        if(event.target.files[0].type==="image/png" || event.target.files[0].type==="image/jpeg") {
+            for (const file of event.target.files) {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => {
+                    setPreviewImages((imgs) => [...imgs, reader.result]);
+                };
+                reader.onerror = () => {
+                    console.log(reader.error);
+                };
+            }
+            let image_as_files = event.target.files[0];
+            console.log(image_as_files)
+            let temp = images
+            temp.push(image_as_files)
+            setImages(temp)
         }
-        let image_as_files = event.target.files[0];
-        let temp = images
-        temp.push(image_as_files)
-        setImages(temp)
     };
 
     const removeImages = () => {

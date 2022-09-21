@@ -36,7 +36,7 @@ const Chat = () => {
                         <p className='chat-text'>hello</p>
                     </div>
                     <div className='chat-div'>
-                        <label>you:</label>
+                        <label>KOSTANTINOS:</label>
                         <p className='chat-text'>hello</p>
                     </div>
                     <div className='chat-div'>

@@ -86,13 +86,18 @@ const AddItem = () => {
             formData.append("name", item.name)
             formData.append("buyPrice", item.buyPrice)
             formData.append("description", item.description)
-            formData.append("category", item.categories)
+            //formData.append("categories", item.categories)
+            item.categories.forEach(category => formData.append("category",category))
             formData.append("minBid", item.minBid)
             formData.append("startDate", startDateValue)
             formData.append("endDate", endDateValue)
-            formData.append("longitude", item.longitude)
-            formData.append("latitude", item.latitude)
+            formData.append("longitude", markerPos.lng)
+            formData.append("latitude", markerPos.lat)
             images.forEach((image) => formData.append("images[]", image))
+            for (var pair of formData.entries()) {
+                console.log(pair[0]+ ', ' + pair[1]);
+            }
+            //return
             try {
                 const response = axios({
                     method: "post",
