@@ -2,6 +2,7 @@ package com.skaypal.ebay_clone.domain.item.validator.controllerValidators;
 
 import com.skaypal.ebay_clone.domain.item.dto.UpdateItemDto;
 import com.skaypal.ebay_clone.domain.item.model.ItemFields;
+import com.skaypal.ebay_clone.utils.exceptions.BadRequestException;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -12,6 +13,7 @@ public class UpdateItemDtoValidator implements ConstraintValidator<UpdateItemDto
 
     @Override
     public boolean isValid(UpdateItemDto updateItemDto, ConstraintValidatorContext ctx){
+        if (updateItemDto.getToUpdate() == null) throw new BadRequestException("Item Update Request contains no fields to be updated");
         for (ItemFields field : updateItemDto.getToUpdate()) {
             switch (field) {
                 case NAME:
@@ -39,6 +41,8 @@ public class UpdateItemDtoValidator implements ConstraintValidator<UpdateItemDto
                 case START_DATE:
                     if (updateItemDto.getStartDate() == null) return false;
                     break;
+                case CATEGORIES:
+                    if (updateItemDto.getCategories() == null || updateItemDto.getCategories().size() == 0) return false;
             }
         }
         return true;
