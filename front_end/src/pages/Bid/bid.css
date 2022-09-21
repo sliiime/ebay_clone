@@ -133,3 +133,35 @@
     padding-bottom: 3px;
 }
 
+.bid-export-auction {
+    margin-bottom: 10px;
+}
+
+.bid-export-xml {
+    align-items: center;
+    height: 25px;
+    background: white;
+    border: 1px solid lightblue;
+    border-radius: 4px;
+    margin-left: 10px;
+}
+
+.bid-export-json {
+    align-items: center;
+    height: 25px;
+    background: white;
+    border: 1px solid lightblue;
+    border-radius: 4px;
+    margin-right: 10px;
+}
+
+.bid-export-xml:active {
+    transform: scale(0.98);
+    box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+}
+
+
+.bid-export-json:active {
+    transform: scale(0.98);
+    box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+}

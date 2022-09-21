@@ -115,11 +115,11 @@ const Bid = () => {
             })
             .then((response) => {
                 console.log(response)
-                window.location.reload(false)
+                //window.location.reload(false)
             })
             .catch((error) => {
                 console.log(error)
-                window.location.reload(false)
+                //window.location.reload(false)
             })
     }
 
@@ -133,6 +133,15 @@ const Bid = () => {
         currentImage===0 ? setCurrentImage(images.length-1) : setCurrentImage(temp-1)    }
     //[37.983810, 23.727539]
     const [position,setPosition] = useState([])
+
+    const handleExportJson = (event) => {
+        event.preventDefault()
+        let auction = {}
+    }
+
+    const handleExportXML = (event) => {
+        event.preventDefault()
+    }
 
     return (
         <div>
@@ -172,6 +181,10 @@ const Bid = () => {
                             <div>
                                 <label className="bid-item-label">Current Price</label>
                                 <p className="bid-item-text" >{item.current_price>0 ? item.current_price : "~ €"}</p>
+                            </div>
+                            <div className='bid-export-auction'>
+                                <button className='bid-export-json'>Export to JSON</button>
+                                <button className='bid-export-xml'>Export to XML</button>
                             </div>
                         </div>
                         <div className='bid-input-btn'>
