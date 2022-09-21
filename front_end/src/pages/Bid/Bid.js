@@ -7,6 +7,9 @@ import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import marker from './marker.svg';
+import getExportedData from "./getExportedData";
+import downloadXML from "./downloadXML";
+import downloadJSON from "./downloadJSON";
 
 const Bid = () => {
 
@@ -65,7 +68,11 @@ const Bid = () => {
                     buy_price: response?.data?.buyPrice,
                     current_price: response?.data?.bestBid,
                     minBid: response?.data?.minBid,
-                    status: response?.data?.status
+                    status: response?.data?.status,
+                    numOfBids: response?.data?.numOfBids,
+                    country: response?.data?.country,
+                    sellerId: response?.data?.sellerId,
+                    id: response?.data?.id
                 })
                 //console.log(response?.data?.category)
                 setItemCategories(response?.data?.category.join(', '))
@@ -115,11 +122,11 @@ const Bid = () => {
             })
             .then((response) => {
                 console.log(response)
-                //window.location.reload(false)
+                window.location.reload(false)
             })
             .catch((error) => {
                 console.log(error)
-                //window.location.reload(false)
+                window.location.reload(false)
             })
     }
 
@@ -136,11 +143,14 @@ const Bid = () => {
 
     const handleExportJson = (event) => {
         event.preventDefault()
-        let auction = {}
+        let auction = getExportedData(item)
+        downloadJSON(auction,id)
     }
 
     const handleExportXML = (event) => {
         event.preventDefault()
+        const auction = getExportedData(item)
+        downloadXML(auction,id)
     }
 
     return (
@@ -183,8 +193,8 @@ const Bid = () => {
                                 <p className="bid-item-text" >{item.current_price>0 ? item.current_price : "~ €"}</p>
                             </div>
                             <div className='bid-export-auction'>
-                                <button className='bid-export-json'>Export to JSON</button>
-                                <button className='bid-export-xml'>Export to XML</button>
+                                <button className='bid-export-json' onClick={handleExportJson}>Export to JSON</button>
+                                <button className='bid-export-xml' onClick={handleExportXML}>Export to XML</button>
                             </div>
                         </div>
                         <div className='bid-input-btn'>
