@@ -44,7 +44,7 @@ public class BidController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createBid(@Valid CreateBidDto createBidDto, HttpServletRequest request){
+    public ResponseEntity<?> createBid(@Valid @RequestBody CreateBidDto createBidDto, HttpServletRequest request){
         String token = request.getHeader("Authorization");
         
         createBidDto.setBidderId(jwtUtil.retrieveUserId(token));
