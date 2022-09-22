@@ -14,7 +14,7 @@ function MyItemCard ({item}) {
                     ?
                     <img src={missingImage} alt=""/>
                     :
-                    <img className='show-img-test' src={"data:"+String(item.images[0].contentType)+";base64,"+String(item.images[0].content)}/>
+                    <img className='show-img-testCalls' src={"data:"+String(item.images[0].contentType)+";base64,"+String(item.images[0].content)}/>
                 }
             </div>
             <div className="card-content">

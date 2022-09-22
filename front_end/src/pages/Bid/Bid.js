@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useSyncExternalStore} from 'react';
+import React, {useEffect, useState} from 'react';
 import NavBar from "../MainMenu/Navbar";
 import {useParams} from "react-router-dom";
 import axios from "axios";
@@ -7,9 +7,7 @@ import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import marker from './marker.svg';
-import getExportedData from "./getExportedData";
-import downloadXML from "./downloadXML";
-import downloadJSON from "./downloadJSON";
+import downloadFile from "./downloadFile";
 
 const Bid = () => {
 
@@ -34,6 +32,22 @@ const Bid = () => {
     const [startDate,setStartDate] = useState(null)
     const [endDate,setEndDate] = useState(null)
 
+    const [auction,setAuction] = useState({
+        Bids: [],
+        Categories: [],
+        Country: "",
+        CurrentPrice: "",
+        Description: "",
+        Ends: "",
+        MinimumBid: "",
+        Name: "",
+        Number_of_bids: "",
+        Seller: {
+            Rating: "",
+            Username: ""
+        },
+        Started: ""
+    })
 
     const [item,setItem] = useState({
         name: "",
@@ -143,14 +157,12 @@ const Bid = () => {
 
     const handleExportJson = (event) => {
         event.preventDefault()
-        let auction = getExportedData(item)
-        downloadJSON(auction,id)
+        downloadFile(item,"json")
     }
 
     const handleExportXML = (event) => {
         event.preventDefault()
-        const auction = getExportedData(item)
-        downloadXML(auction,id)
+        downloadFile(item,"xml")
     }
 
     return (
