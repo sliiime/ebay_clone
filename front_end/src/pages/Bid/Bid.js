@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useSyncExternalStore} from 'react';
+import React, {useEffect, useState} from 'react';
 import NavBar from "../MainMenu/Navbar";
 import {useParams} from "react-router-dom";
 import axios from "axios";
@@ -7,6 +7,7 @@ import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import marker from './marker.svg';
+import downloadFile from "./downloadFile";
 
 const Bid = () => {
 
@@ -31,6 +32,22 @@ const Bid = () => {
     const [startDate,setStartDate] = useState(null)
     const [endDate,setEndDate] = useState(null)
 
+    const [auction,setAuction] = useState({
+        Bids: [],
+        Categories: [],
+        Country: "",
+        CurrentPrice: "",
+        Description: "",
+        Ends: "",
+        MinimumBid: "",
+        Name: "",
+        Number_of_bids: "",
+        Seller: {
+            Rating: "",
+            Username: ""
+        },
+        Started: ""
+    })
 
     const [item,setItem] = useState({
         name: "",
@@ -65,7 +82,11 @@ const Bid = () => {
                     buy_price: response?.data?.buyPrice,
                     current_price: response?.data?.bestBid,
                     minBid: response?.data?.minBid,
-                    status: response?.data?.status
+                    status: response?.data?.status,
+                    numOfBids: response?.data?.numOfBids,
+                    country: response?.data?.country,
+                    sellerId: response?.data?.sellerId,
+                    id: response?.data?.id
                 })
                 //console.log(response?.data?.category)
                 setItemCategories(response?.data?.category.join(', '))
@@ -134,6 +155,16 @@ const Bid = () => {
     //[37.983810, 23.727539]
     const [position,setPosition] = useState([])
 
+    const handleExportJson = (event) => {
+        event.preventDefault()
+        downloadFile(item,"json")
+    }
+
+    const handleExportXML = (event) => {
+        event.preventDefault()
+        downloadFile(item,"xml")
+    }
+
     return (
         <div>
             <NavBar/>
@@ -172,6 +203,10 @@ const Bid = () => {
                             <div>
                                 <label className="bid-item-label">Current Price</label>
                                 <p className="bid-item-text" >{item.current_price>0 ? item.current_price : "~ €"}</p>
+                            </div>
+                            <div className='bid-export-auction'>
+                                <button className='bid-export-json' onClick={handleExportJson}>Export to JSON</button>
+                                <button className='bid-export-xml' onClick={handleExportXML}>Export to XML</button>
                             </div>
                         </div>
                         <div className='bid-input-btn'>

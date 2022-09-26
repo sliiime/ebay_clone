@@ -12,11 +12,6 @@ const getFormData = (item, updatedItem, markerPos,images) => {
     formData.append("startDate", startDateValue)
     formData.append("endDate", endDateValue)
     updatedItem.categories.forEach(category => formData.append("categories",category))
-    //formData.append("categories",updatedItem.categories)
-
-    // formData.append("toUpdate","START_DATE")
-    // formData.append("toUpdate","END_DATE")
-    // formData.append("toUpdate","CATEGORY")
 
     if(item.name !== updatedItem.name) {
         formData.append("name", updatedItem.name)
