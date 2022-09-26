@@ -86,6 +86,16 @@ public class MessageController {
 
     }
 
+    @GetMapping(path = "/users")
+    public ResponseEntity<?> getConversationUsers(@RequestParam Integer page, HttpServletRequest request){
+
+        String token = request.getHeader("Authorization");
+        int ofUser = jwtUtil.retrieveUserId(token);
+
+        return ResponseEntity.ok(messageService.getConversationUsers(ofUser,page));
+
+    }
+
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<?> deleteMessage(@PathVariable Integer id,HttpServletRequest request){
 

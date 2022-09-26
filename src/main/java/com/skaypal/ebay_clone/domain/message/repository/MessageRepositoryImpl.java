@@ -1,7 +1,10 @@
 package com.skaypal.ebay_clone.domain.message.repository;
 
 import com.skaypal.ebay_clone.domain.message.model.Message;
+import com.skaypal.ebay_clone.domain.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -35,5 +38,10 @@ public class MessageRepositoryImpl implements MessageRepository{
     @Override
     public void deleteById(Integer id){
         jpaMessageRepository.deleteById(id);
+    }
+
+    @Override
+    public Page<Integer> getConversationUsers(User ofUser, PageRequest pageRequest){
+            return jpaMessageRepository.getConversationUsers(ofUser,pageRequest);
     }
 }

@@ -10,8 +10,12 @@ import com.skaypal.ebay_clone.domain.message.exceptions.MessageNotFoundException
 import com.skaypal.ebay_clone.domain.message.model.Message;
 import com.skaypal.ebay_clone.domain.message.repository.MessageRepository;
 import com.skaypal.ebay_clone.domain.message.validator.MessageValidator;
+import com.skaypal.ebay_clone.domain.user.dto.ViewUserDto;
+import com.skaypal.ebay_clone.domain.user.model.User;
 import com.skaypal.ebay_clone.utils.validator.ValidationResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +23,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class MessageService {
+    private static final int CONVERSATION_USERS_PAGE_SIZE = 10;
     private MessageRepository messageRepository;
     private MessageValidator messageValidator;
 
@@ -67,5 +72,11 @@ public class MessageService {
         messageRepository.findById(deleteMessageDto.getId()).orElseThrow(() -> new MessageNotFoundException(String.format("Message with id [%s] was not found",deleteMessageDto.getId())));
 
         messageRepository.deleteById(deleteMessageDto.getId());
+    }
+
+    public Page<Integer> getConversationUsers(int idOfUser, Integer page) {
+
+        User ofUser = new User(idOfUser);
+        return messageRepository.getConversationUsers(ofUser, PageRequest.of(page,CONVERSATION_USERS_PAGE_SIZE));
     }
 }
