@@ -86,7 +86,7 @@ public class MessageController {
 
     }
 
-    @GetMapping(path = "/users")
+    @GetMapping(path = "/users/")
     public ResponseEntity<?> getConversationUsers(@RequestParam Integer page, HttpServletRequest request){
 
         String token = request.getHeader("Authorization");
