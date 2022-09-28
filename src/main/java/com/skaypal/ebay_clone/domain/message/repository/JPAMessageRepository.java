@@ -20,4 +20,12 @@ public interface JPAMessageRepository extends JpaRepository<Message,Integer> {
 
     )
     public Page<Integer> getConversationUsers(User ofUser, PageRequest pageRequest);
+
+
+    @Query("SELECT m FROM Message m WHERE (" +
+            "(m.receiver = ?1 AND m.sender = ?2) " +
+            "OR " +
+            "(m.receiver =?2 AND m.sender = ?1)" +
+            ")")
+    Page<Message> getConversationMessages(User user1, User user2,PageRequest pageRequest);
 }

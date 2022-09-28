@@ -44,4 +44,9 @@ public class MessageRepositoryImpl implements MessageRepository{
     public Page<Integer> getConversationUsers(User ofUser, PageRequest pageRequest){
             return jpaMessageRepository.getConversationUsers(ofUser,pageRequest);
     }
+
+    @Override
+    public Page<Message> getConversationMessages(User user1,User user2,PageRequest pageRequest){
+        return jpaMessageRepository.getConversationMessages(user1,user2,pageRequest);
+    }
 }

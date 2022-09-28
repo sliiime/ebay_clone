@@ -6,20 +6,21 @@ import org.springframework.lang.Nullable;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 import javax.validation.constraints.Size;
+import java.util.Date;
 
 public class CreateMessageDto {
 
     @Size(min = 1,max = 200)
-    String body;
+    private String body;
 
     @NotNull
-    Integer receiverId;
+    private Integer receiverId;
 
     @Null
-    Integer senderId;
+    private Integer senderId;
 
-    @Nullable
-    String authToken;
+    @Null
+    private Date sentDate;
 
 
     public CreateMessageDto(){}
@@ -28,13 +29,11 @@ public class CreateMessageDto {
     public Integer getReceiverId(){return receiverId;}
     public Integer getSenderId(){return senderId;}
 
-    public String getAuthToken(){return this.authToken;}
+    public Date getSentDate(){return sentDate;}
     public void setBody(String body){this.body = body;}
     public void setReceiverId(Integer receiverId){this.receiverId = receiverId;}
     public void setSenderId(Integer senderId){this.senderId = senderId;}
-
-    public void setAuthToken(String authToken){this.authToken = authToken;}
-
+    public void setSentDate(Date sentDate){this.sentDate = sentDate;}
 
 
 }

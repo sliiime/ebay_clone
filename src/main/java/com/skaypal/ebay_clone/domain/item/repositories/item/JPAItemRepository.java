@@ -37,6 +37,8 @@ public interface JPAItemRepository extends JpaRepository<Item, Integer> {
     @Query("UPDATE Item SET status = com.skaypal.ebay_clone.domain.item.ItemStatusEnum.BOUGHT_BUYOUT, boughtBy = ?2 WHERE id = ?1")
     public void itemBought(Integer itemId,User user);
 
+    //public Page<Item> findItemsByBoughtBy(User user);
+
     @Query("SELECT count(i) FROM Item i WHERE i.boughtBy.id = ?1 AND i.seller.id = ?2")
     public int xBoughtFromYCount(Integer x,Integer y);
 

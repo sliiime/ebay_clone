@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 @Service
 public class MessageService {
     private static final int CONVERSATION_USERS_PAGE_SIZE = 10;
+    private static final int CONVERSATION_MESSAGES_PAGE_SIZE = 8;
     private final MessageRepository messageRepository;
 
     private final UserRepository userRepository;
@@ -78,12 +79,22 @@ public class MessageService {
         messageRepository.deleteById(deleteMessageDto.getId());
     }
 
-    public Page<ViewUserDto> getConversationUsers(int idOfUser, Integer page) {
+    public Page<ViewUserDto> getConversationUsers(int idOfUser, int page) {
 
         User ofUser = new User(idOfUser);
         //Check if any auctioned items that "ofUser" has bid on have been bought by timeout and change their status to bought
         Page<User> transactionParticipantsPage = userRepository.getTransactionParticipants(ofUser,PageRequest.of(page,CONVERSATION_USERS_PAGE_SIZE));
         Page<ViewUserDto> transactionParticipantsDtoPage = transactionParticipantsPage.map(ViewUserDto::new);
         return transactionParticipantsDtoPage;
+    }
+
+    public Page<ViewMessageDto> getConversationMessages(int ofUser, int withUser,int page) {
+        User user1 = new User(ofUser);
+        User user2 = new User(withUser);
+
+        Page<Message> conversationMessagesPage = messageRepository.getConversationMessages(user1,user2,PageRequest.of(page,CONVERSATION_MESSAGES_PAGE_SIZE));
+        Page<ViewMessageDto> conversationMessagesDtoPage = conversationMessagesPage.map(ViewMessageDto::new);
+
+        return conversationMessagesDtoPage;
     }
 }
