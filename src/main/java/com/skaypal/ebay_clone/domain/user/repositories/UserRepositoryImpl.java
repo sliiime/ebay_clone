@@ -3,6 +3,8 @@ package com.skaypal.ebay_clone.domain.user.repositories;
 
 import com.skaypal.ebay_clone.domain.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -55,4 +57,6 @@ public class UserRepositoryImpl implements UserRepository{
     public void delete(User user){
         jpaUserRepository.delete(user);
     }
+
+    public Page<User> getTransactionParticipants(User user, PageRequest pageRequest){return jpaUserRepository.getTransactionPartners(user,pageRequest);}
 }

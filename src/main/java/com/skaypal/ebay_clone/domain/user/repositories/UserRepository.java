@@ -1,6 +1,8 @@
 package com.skaypal.ebay_clone.domain.user.repositories;
 
 import com.skaypal.ebay_clone.domain.user.model.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,4 +23,6 @@ public interface UserRepository {
     public User save(User user);
 
     public void delete(User user);
+
+    public Page<User> getTransactionParticipants(User user, PageRequest pageRequest);
 }

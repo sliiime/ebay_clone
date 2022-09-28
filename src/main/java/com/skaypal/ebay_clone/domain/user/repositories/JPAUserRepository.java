@@ -1,6 +1,8 @@
 package com.skaypal.ebay_clone.domain.user.repositories;
 
 import com.skaypal.ebay_clone.domain.user.model.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -20,9 +22,9 @@ public interface JPAUserRepository extends JpaRepository<User,Integer> {
 
     @Query(
             "SELECT u FROM User u WHERE u.id IN " +
-                    "(SELECT u.id FROM Item i, User u WHERE i.seller.id = ?1 AND i.boughtBy.id = u.id) " +
+                    "(SELECT u.id FROM Item i, User u WHERE i.seller = ?1 AND i.boughtBy.id = u.id) " +
                     "OR u.id IN " +
-                    "(SELECT u.id FROM Item i, User u WHERE i.boughtBy.id = ?1 AND u.id = i.seller.id)")
-    public List<User> getTransactionPartners(User user);
+                    "(SELECT u.id FROM Item i, User u WHERE i.boughtBy = ?1 AND u.id = i.seller.id)")
+    public Page<User> getTransactionPartners(User user, PageRequest pageRequest);
 }
 

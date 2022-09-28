@@ -12,6 +12,7 @@ import com.skaypal.ebay_clone.domain.message.repository.MessageRepository;
 import com.skaypal.ebay_clone.domain.message.validator.MessageValidator;
 import com.skaypal.ebay_clone.domain.user.dto.ViewUserDto;
 import com.skaypal.ebay_clone.domain.user.model.User;
+import com.skaypal.ebay_clone.domain.user.repositories.UserRepository;
 import com.skaypal.ebay_clone.utils.validator.ValidationResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,12 +25,15 @@ import java.util.stream.Collectors;
 @Service
 public class MessageService {
     private static final int CONVERSATION_USERS_PAGE_SIZE = 10;
-    private MessageRepository messageRepository;
-    private MessageValidator messageValidator;
+    private final MessageRepository messageRepository;
+
+    private final UserRepository userRepository;
+    private final MessageValidator messageValidator;
 
     @Autowired
-    public MessageService(MessageRepository messageRepository, MessageValidator messageValidator){
+    public MessageService(MessageRepository messageRepository,UserRepository userRepository, MessageValidator messageValidator){
         this.messageRepository = messageRepository;
+        this.userRepository = userRepository;
         this.messageValidator = messageValidator;
     }
 
@@ -74,9 +78,12 @@ public class MessageService {
         messageRepository.deleteById(deleteMessageDto.getId());
     }
 
-    public Page<Integer> getConversationUsers(int idOfUser, Integer page) {
+    public Page<ViewUserDto> getConversationUsers(int idOfUser, Integer page) {
 
         User ofUser = new User(idOfUser);
-        return messageRepository.getConversationUsers(ofUser, PageRequest.of(page,CONVERSATION_USERS_PAGE_SIZE));
+        //Check if any auctioned items that "ofUser" has bid on have been bought by timeout and change their status to bought
+        Page<User> transactionParticipantsPage = userRepository.getTransactionParticipants(ofUser,PageRequest.of(page,CONVERSATION_USERS_PAGE_SIZE));
+        Page<ViewUserDto> transactionParticipantsDtoPage = transactionParticipantsPage.map(ViewUserDto::new);
+        return transactionParticipantsDtoPage;
     }
 }
