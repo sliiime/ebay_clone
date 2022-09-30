@@ -40,10 +40,6 @@ public class MessageRepositoryImpl implements MessageRepository{
         jpaMessageRepository.deleteById(id);
     }
 
-    @Override
-    public Page<Integer> getConversationUsers(User ofUser, PageRequest pageRequest){
-            return jpaMessageRepository.getConversationUsers(ofUser,pageRequest);
-    }
 
     @Override
     public Page<Message> getConversationMessages(User user1,User user2,PageRequest pageRequest){

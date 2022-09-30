@@ -17,7 +17,5 @@ public interface MessageRepository {
 
     public void deleteById(Integer id);
 
-    Page<Integer> getConversationUsers(User ofUser, PageRequest pageRequest);
-
     Page<Message> getConversationMessages(User user1, User user2,PageRequest pageRequest);
 }
