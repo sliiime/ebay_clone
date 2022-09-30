@@ -45,7 +45,7 @@ function SignUp() {
     useEffect(() => {
         if(!errorsExist(submitButtonPressed,errors)) {
             axios
-                .post("http://localhost:8080/ebay_clone/api/user/", {
+                .post("http://localhost:8080/ebay_clone/api/user", {
                     username : credentials.username,
                     password : credentials.password,
                     name     : credentials.firstName,
@@ -63,6 +63,7 @@ function SignUp() {
                     return () => clearTimeout(timer);
                 })
                 .catch((error) => {
+                    console.log(error)
                     setSignUpError(error.response.data);
                     setIsCorrectSubmission(2);
                 });

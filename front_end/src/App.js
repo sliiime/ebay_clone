@@ -59,7 +59,7 @@ function App() {
                       </Route>
 
                       <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
-                          <Route path="chat/:name" element={<Chat />} />
+                          <Route path="chat/:talkerId/:talkerName" element={<Chat />} />
                       </Route>
 
                       {/* catch all */}
