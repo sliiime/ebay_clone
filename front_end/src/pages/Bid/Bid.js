@@ -211,7 +211,7 @@ const Bid = () => {
                         </div>
                         <div className='bid-input-btn'>
                             <input className='bid-input' placeholder='Insert bid' type='number' value={usersBid} onChange={handleUsersBid}/>
-                            <button className='bid-btn' disabled={placeBidButtonDisabled} onClick={handlePlaceBidButton}>place bid</button>
+                            <button className='bid-btn' disabled={placeBidButtonDisabled || item.current_price>=item.buy_price} onClick={handlePlaceBidButton}>place bid</button>
                             {error!=="" && <p className="bid-input-error">{error}</p>}
                             {confirmBidButtonShowing && <button className='bid-btn-confirm' onClick={handleConfirmButton}>Confirm</button>}
 
