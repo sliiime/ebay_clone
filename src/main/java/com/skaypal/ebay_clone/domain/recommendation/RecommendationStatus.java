@@ -1,4 +1,4 @@
-package com.skaypal.ebay_clone.domain.matrix_factorization.recommendation;
+package com.skaypal.ebay_clone.domain.recommendation;
 
 public enum RecommendationStatus {
     RECOMMEND,

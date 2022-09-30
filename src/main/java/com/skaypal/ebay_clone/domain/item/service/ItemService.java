@@ -6,6 +6,7 @@ import com.skaypal.ebay_clone.domain.category.model.Category;
 import com.skaypal.ebay_clone.domain.category.service.CategoryService;
 import com.skaypal.ebay_clone.domain.country.model.Country;
 import com.skaypal.ebay_clone.domain.country.service.CountryService;
+import com.skaypal.ebay_clone.domain.interaction.service.InteractionService;
 import com.skaypal.ebay_clone.domain.item.ItemStatusEnum;
 import com.skaypal.ebay_clone.domain.item.dto.*;
 import com.skaypal.ebay_clone.domain.item.exceptions.ItemBadRequestException;
@@ -55,6 +56,8 @@ public class ItemService {
 
     private final ItemImageRepository itemImageRepository;
 
+    private final InteractionService interactionService;
+
     private final Path imageStoragePath;
     private final Integer ITEM_PAGE_SIZE = 4;
 
@@ -62,6 +65,7 @@ public class ItemService {
     public ItemService(ItemRepository itemRepository,
                        ItemValidator itemValidator,
                        CategoryService categoryService,
+                       InteractionService interactionService,
                        CountryService countryService,
                        ItemImageRepository itemImageRepository,
                        ImageStorageProperty imageStorageProperty) throws IOException {
@@ -71,6 +75,7 @@ public class ItemService {
         this.categoryService = categoryService;
         this.countryService = countryService;
         this.itemImageRepository = itemImageRepository;
+        this.interactionService = interactionService;
         this.imageStoragePath = Paths.get(imageStorageProperty.getUploadDirectory()).toAbsolutePath().normalize();
 
         FileUtils.deleteDirectory(new File(imageStorageProperty.getUploadDirectory()));
@@ -241,6 +246,7 @@ public class ItemService {
         viewItemDtoPage.forEach(i -> initializeDependedFields(i));
         return viewItemDtoPage;
     }
+
 
     public boolean newBidSubmitted(Bid bid) {
         Float buyoutPrice = itemRepository.getBuyoutPrice(bid.getItem().getId());

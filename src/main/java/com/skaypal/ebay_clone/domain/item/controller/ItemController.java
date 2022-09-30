@@ -1,29 +1,30 @@
 package com.skaypal.ebay_clone.domain.item.controller;
 
+import com.skaypal.ebay_clone.domain.interaction.model.Interaction;
+import com.skaypal.ebay_clone.domain.interaction.model.InteractionStatus;
 import com.skaypal.ebay_clone.domain.item.dto.*;
-import com.skaypal.ebay_clone.domain.item.model.Item;
 import com.skaypal.ebay_clone.domain.item.repositories.queries.Filter;
 import com.skaypal.ebay_clone.domain.item.repositories.queries.QueryOperator;
 import com.skaypal.ebay_clone.domain.item.service.ItemService;
+import com.skaypal.ebay_clone.domain.interaction.service.InteractionService;
 import com.skaypal.ebay_clone.utils.Responses;
 import com.skaypal.ebay_clone.utils.jwt.JWTUtil;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.Nullable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+
 import javax.servlet.http.HttpServletRequest;
-import javax.swing.text.View;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
+import static com.skaypal.ebay_clone.domain.interaction.model.InteractionStatus.VIEWED;
 
 @RestController
 @RequestMapping(path = "ebay_clone/api/item")
@@ -36,12 +37,16 @@ public class ItemController {
 
     private final JWTUtil jwtUtil;
 
+    private final InteractionService interactionService;
+
     @Autowired
     public ItemController(ItemService itemService,
+                          InteractionService interactionService,
                           JWTUtil jwtUtil) {
 
         this.itemService = itemService;
         this.jwtUtil = jwtUtil;
+        this.interactionService = interactionService;
     }
 
     /*@GetMapping
@@ -57,12 +62,24 @@ public class ItemController {
 
         FiltersDto filtersDto = filters.isPresent() ? filters.get() : null;
 
-        return ResponseEntity.ok(itemService.getPage(filtersDto,p));
+        Page<ViewItemDto> viewItemDtoPage = itemService.getPage(filtersDto,p);
+
+        InteractionService.initializeInteractions(viewItemDtoPage);
+
+        return ResponseEntity.ok(viewItemDtoPage);
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<ViewItemDto> getItem(@PathVariable Integer id) {
-        return ResponseEntity.ok(itemService.getItem(id));
+    public ResponseEntity<ViewItemDto> getItem(@PathVariable("id") Integer itemId,HttpServletRequest request) {
+
+        String token = request.getHeader("Authorization");
+        Integer userId = jwtUtil.retrieveUserId(token);
+
+        interactionService.saveInteraction(userId,itemId, VIEWED);
+
+
+        return ResponseEntity.ok(itemService.getItem(itemId));
+
     }
 
     @GetMapping(path = "/user/")

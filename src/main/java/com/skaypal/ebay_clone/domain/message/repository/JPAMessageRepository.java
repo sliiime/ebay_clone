@@ -17,6 +17,7 @@ public interface JPAMessageRepository extends JpaRepository<Message,Integer> {
             "(m.receiver = ?1 AND m.sender = ?2) " +
             "OR " +
             "(m.receiver =?2 AND m.sender = ?1)" +
-            ")")
+            ")" +
+            "ORDER BY m.sentDate DESC")
     Page<Message> getConversationMessages(User user1, User user2,PageRequest pageRequest);
 }

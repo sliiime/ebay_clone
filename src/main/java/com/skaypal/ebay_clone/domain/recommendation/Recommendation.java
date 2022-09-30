@@ -1,4 +1,4 @@
-package com.skaypal.ebay_clone.domain.matrix_factorization.recommendation;
+package com.skaypal.ebay_clone.domain.recommendation;
 
 import com.skaypal.ebay_clone.domain.item.model.Item;
 import com.skaypal.ebay_clone.domain.user.model.User;

@@ -1,14 +1,15 @@
-package com.skaypal.ebay_clone.domain.matrix_factorization.interaction.model;
+package com.skaypal.ebay_clone.domain.interaction.model;
 
+import com.skaypal.ebay_clone.domain.item.dto.ViewItemDto;
 import com.skaypal.ebay_clone.domain.item.model.Item;
-import com.skaypal.ebay_clone.domain.matrix_factorization.interaction.model.InteractionStatus;
 import com.skaypal.ebay_clone.domain.user.model.User;
+import org.springframework.data.domain.Page;
 
 import javax.persistence.*;
 
 public class Interaction {
 
-    private Interaction(User user, Item item, InteractionStatus interactionStatus){
+    public Interaction(User user, Item item, InteractionStatus interactionStatus){
         this.user = user;
         this.item = item;
         this.interactionStatus = interactionStatus;
@@ -27,6 +28,7 @@ public class Interaction {
 
     @Column(name = "interaction")
     private InteractionStatus interactionStatus;
+
 
     public Integer getId(){return this.id;}
     public User getUser(){return this.user;}
