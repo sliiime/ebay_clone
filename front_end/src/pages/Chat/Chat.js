@@ -32,23 +32,23 @@ const Chat = () => {
                 <h4 className='talking-to'>Talking with: {name}</h4>
                 <div className='chat-preview-panel'>
                     <div className='chat-div'>
-                        <label>you:</label>
+                        <label className='chat-label'>you:</label>
                         <p className='chat-text'>hello</p>
                     </div>
                     <div className='chat-div'>
-                        <label>KOSTANTINOS:</label>
+                        <label className='chat-label'>KOSTANTINOS:</label>
                         <p className='chat-text'>hello</p>
                     </div>
                     <div className='chat-div'>
-                        <label>you:</label>
+                        <label className='chat-label'>you:</label>
                         <p className='chat-text'>hello</p>
                     </div>
                     <div className='chat-div'>
-                        <label>you:</label>
+                        <label className='chat-label'>you:</label>
                         <p className='chat-text'>hello</p>
                     </div>
                     <div className='chat-div'>
-                        <label>you:</label>
+                        <label className='chat-label'>you:</label>
                         <p className='chat-text'>hello</p>
                     </div>
                 </div>

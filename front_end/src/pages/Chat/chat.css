@@ -62,8 +62,13 @@
 }
 
 .chat-div {
-    display: flex;
+    display: grid;
     width: 100%;
+}
+
+.chat-label{
+    width: 97%;
+    text-align: left;
 }
 
 .user-input-and-btn {
