@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -55,6 +56,7 @@ public class MessageController {
         String token = request.getHeader("Authorization");
 
         createMessageDto.setSenderId(jwtUtil.retrieveUserId(token));
+        createMessageDto.setSentDate(new Date());
 
         ViewMessageDto message = messageService.createMessage(createMessageDto);
 
@@ -94,6 +96,14 @@ public class MessageController {
 
         return ResponseEntity.ok(messageService.getConversationUsers(ofUser,page));
 
+    }
+
+    @GetMapping(path = "/users/{id}")
+    public ResponseEntity<?> getConversationMessages(@PathVariable("id") int withUser,@RequestParam("p")int page,HttpServletRequest request){
+        String token = request.getHeader("Authorization");
+        int ofUser = jwtUtil.retrieveUserId(token);
+
+        return ResponseEntity.ok(messageService.getConversationMessages(ofUser,withUser,page));
     }
 
     @DeleteMapping(path = "/{id}")

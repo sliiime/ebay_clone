@@ -4,6 +4,7 @@ import com.skaypal.ebay_clone.domain.message.dto.CreateMessageDto;
 import com.skaypal.ebay_clone.domain.user.model.User;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table
@@ -11,20 +12,23 @@ public class Message {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    private Integer id;
 
-    String body;
+    private String body;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sender")
-    User sender;
+    private User sender;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "receiver")
-    User receiver;
+    private User receiver;
 
     @Column(nullable = false, columnDefinition = "TINYINT(1)")
-    Boolean seen;
+    private Boolean seen;
+
+    private Date sentDate;
+
 
     public Message(){}
 
@@ -64,6 +68,7 @@ public class Message {
         this.body = createMessageDto.body();
         this.receiver = new User(createMessageDto.getReceiverId());
         this.seen = false;
+        this.sentDate = createMessageDto.getSentDate();
     }
 
     public Integer getId() {
@@ -86,6 +91,8 @@ public class Message {
         return body;
     }
 
+    public Date getSentDate(){return this.sentDate;}
+
     public void setSeen(Boolean read) {
         this.seen = read;
     }
@@ -105,4 +112,6 @@ public class Message {
     public void setBody(String body) {
         this.body = body;
     }
+
+    public void setSentDate(Date sentDate){this.sentDate = sentDate;}
 }

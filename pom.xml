@@ -68,6 +68,12 @@
 			<version>2.11.0</version>
 		</dependency>
 		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<version>5.9.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>uk.recurse</groupId>
 			<artifactId>reverse-country-code</artifactId>
 			<version>1.0.0</version>
