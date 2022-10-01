@@ -45,5 +45,5 @@ public interface ItemRepository {
     int getTotalItemsCount();
 
 
-    Page<Item> getRecommendations(List<Item> itemList, User user,Pageable pageable);
+    Page<Item> getRecommendations(List<Integer> itemList, User user,Pageable pageable);
 }

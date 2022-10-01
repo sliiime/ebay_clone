@@ -116,7 +116,7 @@ public class ItemRepositoryImpl implements ItemRepository {
     }
 
     @Override
-    public Page<Item> getRecommendations(List<Item> recommendations,User user,Pageable pageable){
+    public Page<Item> getRecommendations(List<Integer> recommendations,User user,Pageable pageable){
         return jpaItemRepository.getRecommendations(recommendations,user,pageable);
     }
 

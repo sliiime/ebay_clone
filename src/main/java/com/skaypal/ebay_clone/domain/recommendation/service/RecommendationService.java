@@ -53,7 +53,7 @@ public class RecommendationService {
 
             Page<Recommendation> recommendationPage = recommendationRepository.getUsersRecommendations(user,0);
 
-            List<Item> itemList = recommendationPage.get().map((r)->new Item(r.getId())).toList();
+            List<Integer> itemList = recommendationPage.get().map((r) -> r.getItem().getId()).toList();
 
             Page<ViewItemDto> recommendedItems = itemRepository.getRecommendations(itemList,user, PageRequest.of(0, ITEM_PAGE_SIZE)).map(ViewItemDto::new);
 

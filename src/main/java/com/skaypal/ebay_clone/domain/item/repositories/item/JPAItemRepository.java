@@ -48,8 +48,8 @@ public interface JPAItemRepository extends JpaRepository<Item, Integer> {
     @Query("SELECT count(i) FROM Item i WHERE i.boughtBy.id = ?1 AND i.seller.id = ?2")
     public int xBoughtFromYCount(Integer x,Integer y);
 
-    @Query("SELECT i FROM Item i WHERE i IN ?1 AND (i.seller <> ?2 AND i.status = com.skaypal.ebay_clone.domain.item.ItemStatusEnum.ONGOING) ")
-    public Page<Item> getRecommendations(List<Item> recommendations,User user,Pageable pageable);
+    @Query("SELECT i FROM Item i WHERE i.id IN ?1 AND (i.seller <> ?2 AND i.status = com.skaypal.ebay_clone.domain.item.ItemStatusEnum.ONGOING) ")
+    public Page<Item> getRecommendations(List<Integer> recommendations,User user,Pageable pageable);
 
 
 
