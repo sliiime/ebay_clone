@@ -72,7 +72,7 @@ public class InteractionService {
         return interactionRepository.save(interaction);
 
     }
-    public static double convertInteractionStatusToDouble(InteractionStatus interactionStatus){
+    public static double interactionStatusToDouble(InteractionStatus interactionStatus){
         return interactionStatus == VIEWED ? 2 : interactionStatus == IGNORED ? 1 : 0;
     }
 }

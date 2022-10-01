@@ -9,4 +9,6 @@ public interface RecommendationRepository {
 
 
     Page<Recommendation> getUsersRecommendations(User user,int page);
+
+    Recommendation saveOrUpdate(Recommendation recommendation);
 }

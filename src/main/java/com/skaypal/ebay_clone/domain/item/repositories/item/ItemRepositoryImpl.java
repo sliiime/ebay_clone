@@ -91,7 +91,7 @@ public class ItemRepositoryImpl implements ItemRepository {
 
     @Override
     public int getTotalItemsCount(){
-        return jpaItemRepository.countItemsById();
+        return jpaItemRepository.countItems();
     }
 
     @Override
