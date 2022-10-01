@@ -287,6 +287,58 @@ CREATE TABLE IF NOT EXISTS `ebay_clone`.`item_image` (
 ENGINE = InnoDB;
 
 
+-- -----------------------------------------------------
+-- Table `ebay_clone`.`user_item_interaction`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `ebay_clone`.`user_item_interaction` ;
+
+CREATE TABLE IF NOT EXISTS `ebay_clone`.`user_item_interaction` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `user_id` INT NOT NULL,
+  `item_id` INT NOT NULL,
+  `interaction` ENUM("VIEWED", "IGNORED", "UNDEFINED") NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_user_item_interaction_user1_idx` (`user_id` ASC) VISIBLE,
+  INDEX `fk_user_item_interaction_item1_idx` (`item_id` ASC) VISIBLE,
+  CONSTRAINT `fk_user_item_interaction_user1`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `ebay_clone`.`user` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_user_item_interaction_item1`
+    FOREIGN KEY (`item_id`)
+    REFERENCES `ebay_clone`.`item` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `ebay_clone`.`user_item_recommendation`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `ebay_clone`.`user_item_recommendation` ;
+
+CREATE TABLE IF NOT EXISTS `ebay_clone`.`user_item_recommendation` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `user_id` INT NOT NULL,
+  `item_id` INT NOT NULL,
+  `status` ENUM("RECOMMEND", "IGNORE", "VIEWED") NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_user_item_recommendation_user1_idx` (`user_id` ASC) VISIBLE,
+  INDEX `fk_user_item_recommendation_item1_idx` (`item_id` ASC) VISIBLE,
+  CONSTRAINT `fk_user_item_recommendation_user1`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `ebay_clone`.`user` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_user_item_recommendation_item1`
+    FOREIGN KEY (`item_id`)
+    REFERENCES `ebay_clone`.`item` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

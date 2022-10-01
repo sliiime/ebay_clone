@@ -10,6 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static com.skaypal.ebay_clone.domain.interaction.model.InteractionStatus.IGNORED;
+import static com.skaypal.ebay_clone.domain.interaction.model.InteractionStatus.VIEWED;
+
 @Service
 public class InteractionService {
 
@@ -21,16 +28,46 @@ public class InteractionService {
             this.interactionRepository = interactionRepository;
     }
 
-    public static void initializeInteractions(Page<ViewItemDto> viewItemDtoPage) {
+    public void initializeInteractions(Page<ViewItemDto> viewItemDtoPage,int userId) {
+
+        User user = new User(userId);
+
+        List<Item> items = viewItemDtoPage.stream().map((viewItemDto) -> new Item(viewItemDto.getId())).collect(Collectors.toList());
+
+        for (Item item : items){
+            Optional<Interaction> interactionOptional = interactionRepository.findInteractionByUserAndItem(user,item);
+
+            Interaction interaction;
+
+            if (interactionOptional.isEmpty()) {
+                interaction = new Interaction(user, item, IGNORED);
+                interactionRepository.save(interaction);
+            }
+        }
+
 
     }
 
 
-    public Interaction saveInteraction(Integer userId, Integer itemId, InteractionStatus interactionStatus){
+    public Interaction updateInteraction(Integer userId, Integer itemId, InteractionStatus interactionStatus){
 
         User user = new User(userId);
         Item item = new Item(itemId);
-        Interaction interaction = new Interaction(user,item,interactionStatus);
+
+        Optional<Interaction> optionalInteraction = interactionRepository.findInteractionByUserAndItem(user,item);
+
+        Interaction interaction = new Interaction(user,item,VIEWED);
+
+
+        if (optionalInteraction.isPresent()){
+
+            Interaction persistedInteraction = optionalInteraction.get();
+
+            if (persistedInteraction.getInteractionStatus() == IGNORED){
+                persistedInteraction.setInteractionStatus(VIEWED);
+                interaction = persistedInteraction;
+            }
+        }
 
         return interactionRepository.save(interaction);
 

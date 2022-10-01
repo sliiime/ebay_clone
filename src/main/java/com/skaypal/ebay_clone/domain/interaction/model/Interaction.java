@@ -7,6 +7,9 @@ import org.springframework.data.domain.Page;
 
 import javax.persistence.*;
 
+
+@Table(name = "user_item_interaction")
+@Entity
 public class Interaction {
 
     public Interaction(User user, Item item, InteractionStatus interactionStatus){
@@ -27,6 +30,7 @@ public class Interaction {
     private Item item;
 
     @Column(name = "interaction")
+    @Enumerated(EnumType.STRING)
     private InteractionStatus interactionStatus;
 
 
