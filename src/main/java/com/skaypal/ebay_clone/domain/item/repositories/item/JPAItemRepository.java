@@ -1,6 +1,7 @@
 package com.skaypal.ebay_clone.domain.item.repositories.item;
 
 import com.skaypal.ebay_clone.domain.item.model.Item;
+import com.skaypal.ebay_clone.domain.recommendation.model.Recommendation;
 import com.skaypal.ebay_clone.domain.user.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,6 +11,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.Date;
+import java.util.List;
 
 public interface JPAItemRepository extends JpaRepository<Item, Integer> {
 
@@ -45,6 +47,9 @@ public interface JPAItemRepository extends JpaRepository<Item, Integer> {
 
     @Query("SELECT count(i) FROM Item i WHERE i.boughtBy.id = ?1 AND i.seller.id = ?2")
     public int xBoughtFromYCount(Integer x,Integer y);
+
+    @Query("SELECT i FROM Item i WHERE i IN ?1 AND (i.seller <> ?2 AND i.status = com.skaypal.ebay_clone.domain.item.ItemStatusEnum.ONGOING) ")
+    public Page<Item> getRecommendations(List<Item> recommendations,User user,Pageable pageable);
 
 
 

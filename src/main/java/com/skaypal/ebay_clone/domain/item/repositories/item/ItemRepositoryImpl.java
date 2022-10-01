@@ -115,6 +115,11 @@ public class ItemRepositoryImpl implements ItemRepository {
         return specification == null ? jpaItemRepository.findAll(pageable) : jpaItemRepository.findAll(specification,pageable);
     }
 
+    @Override
+    public Page<Item> getRecommendations(List<Item> recommendations,User user,Pageable pageable){
+        return jpaItemRepository.getRecommendations(recommendations,user,pageable);
+    }
+
     private Specification<Item> createSpecification(Filter filter) {
 
         switch (filter.getQueryOperator()) {
@@ -186,4 +191,5 @@ public class ItemRepositoryImpl implements ItemRepository {
 
         return specification;
     }
+
 }

@@ -59,7 +59,7 @@ public class ItemService {
     private final InteractionService interactionService;
 
     private final Path imageStoragePath;
-    private final Integer ITEM_PAGE_SIZE = 4;
+    public static final Integer ITEM_PAGE_SIZE = 4;
 
     @Autowired
     public ItemService(ItemRepository itemRepository,

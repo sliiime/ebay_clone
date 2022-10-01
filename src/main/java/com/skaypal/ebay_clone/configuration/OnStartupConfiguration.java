@@ -8,6 +8,7 @@ import com.skaypal.ebay_clone.domain.country.model.Country;
 import com.skaypal.ebay_clone.domain.interaction.model.Interaction;
 import com.skaypal.ebay_clone.domain.interaction.service.InteractionService;
 import com.skaypal.ebay_clone.domain.item.ItemStatusEnum;
+import com.skaypal.ebay_clone.domain.item.dto.ViewItemDto;
 import com.skaypal.ebay_clone.domain.item.model.Item;
 import com.skaypal.ebay_clone.domain.item.repositories.item.JPAItemRepository;
 import com.skaypal.ebay_clone.domain.item.service.ItemService;
@@ -21,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.Instant;
@@ -213,6 +215,7 @@ public class OnStartupConfiguration {
 
             JPAItemRepository.saveAll(List.of(item1,item2,item3,item4,item5,item6,item7,item8));
         };
+
     }
 
     @Bean
@@ -245,6 +248,32 @@ public class OnStartupConfiguration {
 
 
             JPABidRepository.saveAll(List.of(bid1,bid2,bid3,bid4));
+        };
+    }
+
+    @Bean
+    CommandLineRunner recommendationsInit(){
+        return args -> {
+            Page<ViewItemDto> viewItemDtoPage = itemService.getPage(null,0);
+
+            interactionService.initializeInteractions(viewItemDtoPage,1);
+            interactionService.initializeInteractions(viewItemDtoPage,2);
+            interactionService.initializeInteractions(viewItemDtoPage,3);
+
+            interactionService.itemViewed(1,6);
+            interactionService.itemViewed(1,7);
+            interactionService.itemViewed(1,3);
+            interactionService.itemViewed(1,1);
+
+            interactionService.itemViewed(2,1);
+            interactionService.itemViewed(2,8);
+
+
+            interactionService.itemViewed(3,5);
+
+
+            recommendationService.getRecommendations(2);
+
         };
     }
 }

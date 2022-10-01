@@ -1,6 +1,7 @@
 package com.skaypal.ebay_clone.domain.item.repositories.item;
 
 import com.skaypal.ebay_clone.domain.bid.model.Bid;
+import com.skaypal.ebay_clone.domain.item.dto.ViewItemDto;
 import com.skaypal.ebay_clone.domain.item.model.Item;
 import com.skaypal.ebay_clone.domain.item.repositories.queries.Filter;
 import com.skaypal.ebay_clone.domain.user.model.User;
@@ -44,4 +45,5 @@ public interface ItemRepository {
     int getTotalItemsCount();
 
 
+    Page<Item> getRecommendations(List<Item> itemList, User user,Pageable pageable);
 }
