@@ -1,4 +1,4 @@
-package com.skaypal.ebay_clone.domain.recommendation;
+package com.skaypal.ebay_clone.domain.recommendation.model;
 
 import com.skaypal.ebay_clone.domain.item.model.Item;
 import com.skaypal.ebay_clone.domain.user.model.User;
@@ -42,4 +42,7 @@ public class Recommendation {
     public void setRecommendationStatus(RecommendationStatus recommendationStatus){this.recommendationStatus = recommendationStatus;}
 
 
+    public void update(Recommendation recommendation) {
+        this.recommendationStatus = recommendation.recommendationStatus;
+    }
 }

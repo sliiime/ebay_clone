@@ -21,6 +21,10 @@ public interface JPAItemRepository extends JpaRepository<Item, Integer> {
 
     public Page<Item> findItemsBySeller(User seller,Pageable pageable);
 
+
+    @Query("SELECT count(i) FROM Item i")
+    public Integer countItems();
+
     @Query("SELECT i.buyPrice FROM Item i WHERE i.id = ?1")
     public Float getBuyoutPrice(Integer itemId);
 

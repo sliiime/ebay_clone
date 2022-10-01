@@ -41,5 +41,7 @@ public interface ItemRepository {
 
     int xBoughtFromYCount(Integer receiverId, Integer senderId);
 
+    int getTotalItemsCount();
+
 
 }

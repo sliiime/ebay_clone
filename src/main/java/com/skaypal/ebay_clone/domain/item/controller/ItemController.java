@@ -5,6 +5,7 @@ import com.skaypal.ebay_clone.domain.item.repositories.queries.Filter;
 import com.skaypal.ebay_clone.domain.item.repositories.queries.QueryOperator;
 import com.skaypal.ebay_clone.domain.item.service.ItemService;
 import com.skaypal.ebay_clone.domain.interaction.service.InteractionService;
+import com.skaypal.ebay_clone.domain.recommendation.service.RecommendationService;
 import com.skaypal.ebay_clone.utils.Responses;
 import com.skaypal.ebay_clone.utils.jwt.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,14 +38,19 @@ public class ItemController {
 
     private final InteractionService interactionService;
 
+    private final RecommendationService recommendationService;
+
     @Autowired
     public ItemController(ItemService itemService,
                           InteractionService interactionService,
+                          RecommendationService recommendationService,
                           JWTUtil jwtUtil) {
 
         this.itemService = itemService;
         this.jwtUtil = jwtUtil;
         this.interactionService = interactionService;
+        this.recommendationService = recommendationService;
+
     }
 
     /*@GetMapping
@@ -54,30 +60,39 @@ public class ItemController {
     }*/
 
 
-
     @PostMapping(path = "/search/")
-    public ResponseEntity<Page<ViewItemDto>> getItemsPage(@RequestParam Integer p,@RequestBody Optional<FiltersDto> filters,HttpServletRequest request){
+    public ResponseEntity<Page<ViewItemDto>> getItemsPage(@RequestParam Integer p, @RequestBody Optional<FiltersDto> filters, HttpServletRequest request) {
 
-        String token = request.getHeader("Authorization");
-
-        Integer userId = jwtUtil.retrieveUserId(token);
 
         FiltersDto filtersDto = filters.isPresent() ? filters.get() : null;
 
-        Page<ViewItemDto> viewItemDtoPage = itemService.getPage(filtersDto,p);
+        Page<ViewItemDto> viewItemDtoPage = itemService.getPage(filtersDto, p);
 
-        interactionService.initializeInteractions(viewItemDtoPage,userId);
+
+        String token = request.getHeader("Authorization");
+
+        if (token != null) {
+
+            Integer userId = jwtUtil.retrieveUserId(token);
+
+            interactionService.initializeInteractions(viewItemDtoPage, userId);
+
+        }
+
 
         return ResponseEntity.ok(viewItemDtoPage);
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<ViewItemDto> getItem(@PathVariable("id") Integer itemId,HttpServletRequest request) {
+    public ResponseEntity<ViewItemDto> getItem(@PathVariable("id") Integer itemId, HttpServletRequest request) {
 
         String token = request.getHeader("Authorization");
-        Integer userId = jwtUtil.retrieveUserId(token);
 
-        interactionService.updateInteraction(userId,itemId, VIEWED);
+        if (token != null) {
+            Integer userId = jwtUtil.retrieveUserId(token);
+
+            interactionService.itemViewed(userId, itemId);
+        }
 
 
         return ResponseEntity.ok(itemService.getItem(itemId));
@@ -85,18 +100,18 @@ public class ItemController {
     }
 
     @GetMapping(path = "/user/")
-    public ResponseEntity<Page<ViewItemDto>> getUserItems(@RequestParam Integer p, HttpServletRequest request){
+    public ResponseEntity<Page<ViewItemDto>> getUserItems(@RequestParam Integer p, HttpServletRequest request) {
         String token = request.getHeader("Authorization");
 
         Integer userId = jwtUtil.retrieveUserId(token);
 
         FiltersDto filtersDto = new FiltersDto();
         List<Filter> filters = new ArrayList<>();
-        filters.add(new Filter("seller", QueryOperator.EQUALS,userId.toString()));
+        filters.add(new Filter("seller", QueryOperator.EQUALS, userId.toString()));
 
         filtersDto.setFilters(filters);
 
-        return ResponseEntity.ok(itemService.getPage(filtersDto,p));
+        return ResponseEntity.ok(itemService.getPage(filtersDto, p));
 
     }
 
@@ -123,7 +138,7 @@ public class ItemController {
         return Responses.created(location + "/" + item.getId());
     }
 
-    @PutMapping(path = "/{id}",consumes = "multipart/form-data")
+    @PutMapping(path = "/{id}", consumes = "multipart/form-data")
     public ResponseEntity<?> updateItem(@PathVariable Integer id, @Valid @ModelAttribute UpdateItemDto updateItemDto) {
         updateItemDto.setId(id);
         itemService.updateItem(updateItemDto);
@@ -134,6 +149,19 @@ public class ItemController {
     public ResponseEntity<?> deleteItem(@PathVariable Integer id) {
         itemService.deleteItem(id);
         return ResponseEntity.ok().build();
+
+    }
+
+    @GetMapping(path = "/recommendations")
+    public ResponseEntity<?> getRecommendations(HttpServletRequest request) {
+
+        String token = request.getHeader("Authorization");
+
+
+        Integer userId = jwtUtil.retrieveUserId(token);
+
+        return ResponseEntity.ok(recommendationService.getRecommendations(userId));
+
 
     }
 }

@@ -6,6 +6,7 @@ import com.skaypal.ebay_clone.domain.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -26,6 +27,16 @@ public class InteractionRepositoryImpl implements InteractionRepository{
 
     public Optional<Interaction> findInteractionByUserAndItem(User user, Item item){
         return jpaInteractionRepository.findInteractionByUserAndItem(user,item);
+    }
+
+    @Override
+    public List<Interaction> findUsersInteractions(User user) {
+        return jpaInteractionRepository.findInteractionsByUserOrderByItem(user);
+    }
+
+    @Override
+    public List<Integer> getUserIds(){
+        return jpaInteractionRepository.getUserIds();
     }
 
 }

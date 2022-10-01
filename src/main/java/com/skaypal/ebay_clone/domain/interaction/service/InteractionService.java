@@ -49,7 +49,7 @@ public class InteractionService {
     }
 
 
-    public Interaction updateInteraction(Integer userId, Integer itemId, InteractionStatus interactionStatus){
+    public Interaction itemViewed(Integer userId, Integer itemId){
 
         User user = new User(userId);
         Item item = new Item(itemId);
@@ -71,5 +71,8 @@ public class InteractionService {
 
         return interactionRepository.save(interaction);
 
+    }
+    public static double interactionStatusToDouble(InteractionStatus interactionStatus){
+        return interactionStatus == VIEWED ? 2 : interactionStatus == IGNORED ? 1 : 0;
     }
 }
