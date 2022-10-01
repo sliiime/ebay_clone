@@ -134,7 +134,7 @@ public class ItemService {
 
         Country country = latLongToCountry(dto);
 
-        item.setCountry(country); //There has been already a validation that the country exists
+        item.setCountry(country); //There has already been a validation that the country exists
 
     }
 
@@ -343,6 +343,16 @@ public class ItemService {
         List<ItemImageDto> images = getItemImages(viewItemDto.getId());
         setBidData(viewItemDto);
         viewItemDto.setImages(images);
+
+    }
+
+    public boolean userIsOwnerOfItem(int userId, Integer itemId) {
+        Optional<Item> item = itemRepository.findById(itemId);
+
+        if (item.isPresent())
+            if (item.get().getSeller().getId() == userId) return true;
+
+        return false;
 
     }
 }
