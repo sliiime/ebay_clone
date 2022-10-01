@@ -7,6 +7,7 @@ import com.skaypal.ebay_clone.domain.country.model.Country;
 import com.skaypal.ebay_clone.domain.item.ItemStatusEnum;
 import com.skaypal.ebay_clone.domain.item.dto.CreateItemDto;
 import com.skaypal.ebay_clone.domain.item.dto.UpdateItemDto;
+import com.skaypal.ebay_clone.domain.item.dto.ViewItemDto;
 import com.skaypal.ebay_clone.domain.user.model.User;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -217,6 +218,7 @@ public class Item {
         this.status = createItemDto.getStartDate().compareTo(new Date()) <= 0 ? ItemStatusEnum.ONGOING : ItemStatusEnum.PREVIEW;
 
     }
+
 
     public Item(Integer id) {
         this.id = id;

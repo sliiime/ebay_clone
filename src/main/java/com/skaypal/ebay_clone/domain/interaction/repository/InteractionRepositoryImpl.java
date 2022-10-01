@@ -1,8 +1,12 @@
 package com.skaypal.ebay_clone.domain.interaction.repository;
 
 import com.skaypal.ebay_clone.domain.interaction.model.Interaction;
+import com.skaypal.ebay_clone.domain.item.model.Item;
+import com.skaypal.ebay_clone.domain.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
 
 
 @Repository
@@ -18,6 +22,10 @@ public class InteractionRepositoryImpl implements InteractionRepository{
 
     public Interaction save(Interaction interaction){
         return jpaInteractionRepository.save(interaction);
+    }
+
+    public Optional<Interaction> findInteractionByUserAndItem(User user, Item item){
+        return jpaInteractionRepository.findInteractionByUserAndItem(user,item);
     }
 
 }

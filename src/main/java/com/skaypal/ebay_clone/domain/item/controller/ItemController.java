@@ -1,7 +1,5 @@
 package com.skaypal.ebay_clone.domain.item.controller;
 
-import com.skaypal.ebay_clone.domain.interaction.model.Interaction;
-import com.skaypal.ebay_clone.domain.interaction.model.InteractionStatus;
 import com.skaypal.ebay_clone.domain.item.dto.*;
 import com.skaypal.ebay_clone.domain.item.repositories.queries.Filter;
 import com.skaypal.ebay_clone.domain.item.repositories.queries.QueryOperator;
@@ -58,13 +56,17 @@ public class ItemController {
 
 
     @PostMapping(path = "/search/")
-    public ResponseEntity<Page<ViewItemDto>> getItemsPage(@RequestParam Integer p,@RequestBody Optional<FiltersDto> filters){
+    public ResponseEntity<Page<ViewItemDto>> getItemsPage(@RequestParam Integer p,@RequestBody Optional<FiltersDto> filters,HttpServletRequest request){
+
+        String token = request.getHeader("Authorization");
+
+        Integer userId = jwtUtil.retrieveUserId(token);
 
         FiltersDto filtersDto = filters.isPresent() ? filters.get() : null;
 
         Page<ViewItemDto> viewItemDtoPage = itemService.getPage(filtersDto,p);
 
-        InteractionService.initializeInteractions(viewItemDtoPage);
+        interactionService.initializeInteractions(viewItemDtoPage,userId);
 
         return ResponseEntity.ok(viewItemDtoPage);
     }
@@ -75,7 +77,7 @@ public class ItemController {
         String token = request.getHeader("Authorization");
         Integer userId = jwtUtil.retrieveUserId(token);
 
-        interactionService.saveInteraction(userId,itemId, VIEWED);
+        interactionService.updateInteraction(userId,itemId, VIEWED);
 
 
         return ResponseEntity.ok(itemService.getItem(itemId));
