@@ -15,6 +15,7 @@ import com.skaypal.ebay_clone.domain.item.service.ItemService;
 import com.skaypal.ebay_clone.domain.recommendation.service.RecommendationService;
 import com.skaypal.ebay_clone.domain.role.model.Role;
 import com.skaypal.ebay_clone.domain.user.UserRegStatus;
+import com.skaypal.ebay_clone.domain.user.dto.CreateUserDto;
 import com.skaypal.ebay_clone.domain.user.model.User;
 import com.skaypal.ebay_clone.domain.user.repositories.JPAUserRepository;
 import com.skaypal.ebay_clone.domain.user.service.UserService;
@@ -51,49 +52,61 @@ public class OnStartupConfiguration {
     @Bean
     CommandLineRunner userRepoInit(JPAUserRepository JPAUserRepository) {
         return args -> {
-            User user1 = (new User(
+            CreateUserDto user1 = (new CreateUserDto(
                     "Bratsaras420",
-                    encoder.encode( "Psemouto4"),
+                     "Psemouto4",
                     "Kostis",
                     "Palamidas",
                     "Spiti sou 3",
                     "kke@youjizz.com",
-                    "123456789", 1F,
-                    UserRegStatus.ACCEPTED,
+                    "123456789",
                     "69696969",
-                    new Country(5),
-                    List.of(new Role(2,"AUTHORIZED_USER"))
+                    "Greece"
             ));
 
-            User user2 = (new User(
+            CreateUserDto user2 = (new CreateUserDto(
                     "Boubounis666",
-                    encoder.encode( "TzouraApoTzina"),
+                     "TzouraApoTzina",
                     "Kyrios",
                     "Eugenios",
                     "Lilipoupoli 2",
                     "syriza@sugarbabes.com",
                     "123456788",
-                    1F,
-                    UserRegStatus.PENDING,
                     "12121312",
-                    new Country(88),
-                    List.of(new Role(1,"UNAUTHORIZED_USER"))
+                    "Albania"
+            ));
+
+            CreateUserDto user3 = (new CreateUserDto(
+                    "Damianoskow",
+                    "Polovskis6",
+                    "Karpos",
+                    "Emiratwn",
+                    "Panep 5",
+                    "salamanca@hector.com",
+                    "123453288",
+                    "8889001234",
+                    "Albania"
             ));
 
             User admin = ( AdminFactory.admin(
                     "Katsikas",
-                    encoder.encode("backfrombarca6"),
+                    encoder.encode("Backfrombarca6*"),
                     "Panais",
                     "Palamidis",
                     "Negroniou 7",
                     "koulourades@yahoo.pub",
-                    "778994332",
+                    "778994662",
                     "6945455420",
                     new Country(153)
             )
             );
 
-            JPAUserRepository.saveAll(List.of(user1, user2,admin));
+            userService.createUser(user1);
+            userService.createUser(user2);
+            userService.createUser(user3);
+            JPAUserRepository.save(admin);
+
+            userService.approveUser(1);
         };
     }
 
