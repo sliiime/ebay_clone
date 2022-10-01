@@ -90,6 +90,11 @@ public class ItemRepositoryImpl implements ItemRepository {
     }
 
     @Override
+    public int getTotalItemsCount(){
+        return jpaItemRepository.countItemsById();
+    }
+
+    @Override
     public int xBoughtFromYCount(Integer receiverId, Integer senderId) {
         return jpaItemRepository.xBoughtFromYCount(receiverId, senderId);
     }
