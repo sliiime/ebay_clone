@@ -51,6 +51,7 @@ public class RecommendationService {
 
     }
 
+
     private void generateRecommendations(int forUser) {
 
         List<Integer> userIds = interactionRepository.getUserIds();
@@ -152,14 +153,20 @@ public class RecommendationService {
 
         }
         double[][] recommendationMatrix = MatrixFactorization.run(interactionMatrix,30000,0.0002,0.02);
-        for (int i = 0 ; i < totalUserIds; i++){
+        for (int i = 1 ; i <= totalItems; i++){
+            if (itemToCell.get(i) == null){
+                cellToItem.put(itemAvailablePos,i);
+                itemAvailablePos++;
+            }
+        }
+        for (int i = 0 ; i < totalPicks; i++){
             int userId = cellToUser.get(i);
             user = new User(userId);
             for (int j = 0; j < totalItems; j++){
                 int itemId = cellToItem.get(j);
                 Item item = new Item(itemId);
 
-                RecommendationStatus recommendationStatus = doubleToRecommendationStatus(recommendationMatrix[userId][itemId]);
+                RecommendationStatus recommendationStatus = doubleToRecommendationStatus(recommendationMatrix[i][j]);
 
                 Recommendation recommendation = new Recommendation(user,item,recommendationStatus);
 

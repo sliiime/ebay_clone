@@ -5,13 +5,18 @@ import com.skaypal.ebay_clone.domain.bid.model.Bid;
 import com.skaypal.ebay_clone.domain.bid.repository.JPABidRepository;
 import com.skaypal.ebay_clone.domain.category.model.Category;
 import com.skaypal.ebay_clone.domain.country.model.Country;
+import com.skaypal.ebay_clone.domain.interaction.model.Interaction;
+import com.skaypal.ebay_clone.domain.interaction.service.InteractionService;
 import com.skaypal.ebay_clone.domain.item.ItemStatusEnum;
 import com.skaypal.ebay_clone.domain.item.model.Item;
 import com.skaypal.ebay_clone.domain.item.repositories.item.JPAItemRepository;
+import com.skaypal.ebay_clone.domain.item.service.ItemService;
+import com.skaypal.ebay_clone.domain.recommendation.service.RecommendationService;
 import com.skaypal.ebay_clone.domain.role.model.Role;
 import com.skaypal.ebay_clone.domain.user.UserRegStatus;
 import com.skaypal.ebay_clone.domain.user.model.User;
 import com.skaypal.ebay_clone.domain.user.repositories.JPAUserRepository;
+import com.skaypal.ebay_clone.domain.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -29,6 +34,18 @@ public class OnStartupConfiguration {
 
     @Autowired
     PasswordEncoder encoder;
+
+    @Autowired
+    UserService userService;
+
+    @Autowired
+    ItemService itemService;
+
+    @Autowired
+    InteractionService interactionService;
+
+    @Autowired
+    RecommendationService recommendationService;
     @Bean
     CommandLineRunner userRepoInit(JPAUserRepository JPAUserRepository) {
         return args -> {

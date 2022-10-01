@@ -29,6 +29,7 @@ public class Recommendation {
     private Item item;
 
     @Column(name = "status")
+    @Enumerated(EnumType.STRING)
     private RecommendationStatus recommendationStatus;
 
     public Integer getId(){return this.id;}
