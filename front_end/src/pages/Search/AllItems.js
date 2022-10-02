@@ -9,9 +9,14 @@ const AllItems = () => {
     const [itemsShown, setItemsShown] = useState([])
 
     useEffect(() => {
+        const accessToken = JSON.parse(localStorage.getItem('accessToken'))
         axios
             .post("http://localhost:8080/ebay_clone/api/item/search/?p="+(currentPage-1),{
                 filters: []
+            }, accessToken && {
+                headers: {
+                    'Authorization': JSON.parse(localStorage.getItem('accessToken'))
+                }
             })
             .then((response) => {
                 console.log(response?.data)
@@ -42,7 +47,7 @@ const AllItems = () => {
                             <div key={item.id}>
                                 <SearchItemCard item={item}/>
                             </div>
-                        ) : null
+                        ) : <p>No items found!</p>
                 }
             </div>
             <div className="change-page-container">

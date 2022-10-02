@@ -51,7 +51,7 @@ const MyItems = () => {
                             <div key={item.id}>
                                 <MyItemCard item={item}/>
                             </div>
-                        ) : null
+                        ) : <p>You have no items!</p>
                 }
             </div>
             <div className="change-page-container">
