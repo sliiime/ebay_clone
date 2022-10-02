@@ -123,6 +123,7 @@ const AddItem = () => {
         for (const file of event.target.files) {
             const reader = new FileReader();
             reader.readAsDataURL(file);
+            console.log(reader.result)
             reader.onload = () => {
                 setPreviewImages((imgs) => [...imgs, reader.result]);
             };
@@ -131,6 +132,7 @@ const AddItem = () => {
             };
         }
         let image_as_files = event.target.files[0];
+        console.log(image_as_files)
         let temp = images
         temp.push(image_as_files)
         setImages(temp)

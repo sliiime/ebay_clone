@@ -12,7 +12,7 @@ const AllItems = () => {
         axios
             .post("http://localhost:8080/ebay_clone/api/item/search/?p="+(currentPage-1),{
                 filters: []
-            }, {
+            }, JSON.parse(localStorage.getItem('accessToken')) && {
                 headers: {
                     'Authorization': JSON.parse(localStorage.getItem('accessToken'))
                 }

@@ -1,4 +1,4 @@
-const getFormData = (item, updatedItem, markerPos,images) => {
+const getFormData = (item, updatedItem, markerPos/*,images*/) => {
 
     let formData = new FormData()
     let toUpdate = []

@@ -52,10 +52,9 @@ const EditItem = () => {
     const addItemError = "Something went wrong. Try again."
     const [disableButton, setDisableButton] = useState(false);
     const [submitButtonPressed, setSubmitButtonPressed] = useState(false)
-    //const [isCorrectSubmission, setIsCorrectSubmission] = useState(0)
 
-    const [images, setImages] = useState([]);
-    const [previewImages, setPreviewImages] = useState([])
+    //const [images, setImages] = useState([]);
+    //const [previewImages, setPreviewImages] = useState([])
 
     const markerRef = useRef();
 
@@ -144,7 +143,7 @@ const EditItem = () => {
 
     useEffect(() => {
         if (!errorsExist(submitButtonPressed, errors)) {
-            const formData = getFormData(item, updatedItem,markerPos,images)
+            const formData = getFormData(item, updatedItem,markerPos/*,images*/)
             for (var pair of formData.entries()) {
                 console.log(pair[0]+ ', ' + pair[1]);
             }
@@ -172,7 +171,7 @@ const EditItem = () => {
         }
     }, [submitButtonPressed, errors]);
 
-    const handleImages = (event) => {
+    /*const handleImages = (event) => {
         if(event.target.files[0].type==="image/png" || event.target.files[0].type==="image/jpeg") {
             for (const file of event.target.files) {
                 const reader = new FileReader();
@@ -190,12 +189,12 @@ const EditItem = () => {
             temp.push(image_as_files)
             setImages(temp)
         }
-    };
+    };*/
 
-    const removeImages = () => {
+    /*const removeImages = () => {
         setImages([])
         setPreviewImages([])
-    }
+    }*/
 
     const onMapClick = (event) => {
         const marker = markerRef.current
@@ -276,19 +275,19 @@ const EditItem = () => {
                         <p className="add-item-longlat-box" placeholder="Latitude">{markerPos.lat}</p>
                     </div>
                     <h5>Move the marker in the map to match the location you want!</h5>
-                    <div className="item-attributes">
-                        <label className="item-item-label">Add photos</label>
-                        <input formEncType="multipart/form-data" onChange={(e) => handleImages(e)} type="file"
-                               name="file"/>
-                        {
-                            previewImages.map((previewImage) => (
-                                <img className="add-item-image" src={previewImage} key={previewImage}/>
-                            ))
-                        }
-                        {
-                            images.length > 0 ? <button onClick={removeImages}>Remove</button> : null
-                        }
-                    </div>
+                    {/*<div className="item-attributes">*/}
+                    {/*    <label className="item-item-label">Add photos</label>*/}
+                    {/*    <input formEncType="multipart/form-data" onChange={(e) => handleImages(e)} type="file"*/}
+                    {/*           name="file"/>*/}
+                    {/*    {*/}
+                    {/*        previewImages.map((previewImage) => (*/}
+                    {/*            <img className="add-item-image" src={previewImage} key={previewImage}/>*/}
+                    {/*        ))*/}
+                    {/*    }*/}
+                    {/*    {*/}
+                    {/*        images.length > 0 ? <button onClick={removeImages}>Remove</button> : null*/}
+                    {/*    }*/}
+                    {/*</div>*/}
                     <div className="add-item-div-btn">
                         <button className="add-item-submit-btn" onClick={handleSubmit} disabled={disableButton}>Place
                             item

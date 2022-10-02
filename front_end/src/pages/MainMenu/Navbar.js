@@ -19,12 +19,16 @@ const NavBar = () => {
                 <div className="navbar-left-side-items">
                     <img className="marketPlaceIcon" src={market} alt=""/>
                     <Link className="navbar-left-link" to="/">Home</Link>
-                    <Link className="navbar-left-link" to="/myitems">My Items</Link>
+                    {
+                        JSON.parse(localStorage.getItem('accessToken')) && <Link className="navbar-left-link" to="/myitems">My Items</Link>
+                    }
                     <Link className="navbar-left-link" to="/search">Search</Link>
                     {
                         JSON.parse(localStorage.getItem('accessToken')) && <Link className="navbar-left-link" to="/recommended">Recommended</Link>
                     }
-                    <Link className="navbar-left-link" to="/chat">Messages</Link>
+                    {
+                        JSON.parse(localStorage.getItem('accessToken')) && <Link className="navbar-left-link" to="/chat">Messages</Link>
+                    }
                 </div>
                 {   localStorage.getItem("accessToken")
                     ?

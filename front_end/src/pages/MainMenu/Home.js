@@ -27,7 +27,7 @@ const Home = () => {
                     <p className="welcomeBox-text">The best place to buy and sell brand new and used products!</p>
                     <p className="welcomeBox-text">How would you like to continue?</p>
                     <div className="homescreen-continue-links">
-                        <Link className="homescreen-continue-links-button" to="myitems">My Items</Link>
+                        {JSON.parse(localStorage.getItem('accessToken')) && <Link className="homescreen-continue-links-button" to="myitems">My Items</Link>}
                         <Link className="homescreen-continue-links-button" to="search">Search items</Link>
                     </div>
                 </div>

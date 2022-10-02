@@ -109,16 +109,18 @@
 
 
 .bid-img-component {
-    width: 200px;
-    height: 200px;
+    width: 100%;
+    height: 100%;
     text-align: center;
     align-items: center;
     justify-content: center;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 
-.bid-show-img image {
-    width: 50%;
-    height: 50%;
+.bid-show-img {
+    width: 100%;
+    height: 100%;
 }
 
 .bid-change-image-btn {
