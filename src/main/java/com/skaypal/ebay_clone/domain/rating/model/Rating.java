@@ -30,6 +30,12 @@ public class Rating {
         this.rating = createRatingDto.getRating();
     }
 
+    public Rating(User ratedBy,User rated,Integer rating){
+        this.ratedBy = ratedBy;
+        this.rated = rated;
+        this.rating = rating;
+    }
+
     protected Rating(){}
 
     public Integer getId() { return id;}

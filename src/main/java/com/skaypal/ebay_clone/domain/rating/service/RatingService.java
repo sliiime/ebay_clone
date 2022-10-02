@@ -8,11 +8,13 @@ import com.skaypal.ebay_clone.domain.rating.model.Rating;
 import com.skaypal.ebay_clone.domain.rating.repositories.JPARatingRepository;
 import com.skaypal.ebay_clone.domain.rating.repositories.RatingRepository;
 import com.skaypal.ebay_clone.domain.rating.validator.RatingValidator;
+import com.skaypal.ebay_clone.domain.user.model.User;
 import com.skaypal.ebay_clone.utils.validator.ValidationResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -45,4 +47,14 @@ public class RatingService {
         Rating rating = new Rating(createRatingDto);
         return new ViewRatingDto(ratingRepository.save(rating));
     }
+
+    public ViewRatingDto getUsersRating(Integer raterId, Integer ratedId) {
+        User rater = new User(raterId);
+        User rated = new User(ratedId);
+
+        Optional<Rating> rating = ratingRepository.findByRatedByAndRated(rater,rated);
+
+        return new ViewRatingDto(rating.orElseGet(() -> new Rating(rater,rated,null)));
+    }
+
 }
