@@ -15,6 +15,7 @@ import Search from "./pages/Search/Search";
 import Bid from "./pages/Bid/Bid";
 import ChatPreview from "./pages/Chat/ChatPreview";
 import Chat from "./pages/Chat/Chat";
+import Recommended from "./pages/Search/Recommended";
 
 const ROLES = {
     'User': 2001,
@@ -48,6 +49,10 @@ function App() {
 
                       <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
                           <Route path="myitems/editItem/:id" element={<EditItem />} />
+                      </Route>
+
+                      <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
+                          <Route path="recommended" element={<Recommended />} />
                       </Route>
 
                       <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>

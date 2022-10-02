@@ -1,6 +1,6 @@
 import React from 'react';
 import './search.css'
-import {NavLink, useNavigate} from "react-router-dom";
+import {NavLink} from "react-router-dom";
 import missingImage from "../UsersItems/missingImage.png";
 
 const SearchItemCard = ({item}) => {
@@ -11,7 +11,7 @@ const SearchItemCard = ({item}) => {
     return (
         <div className="card-container">
             <div className="card-image-container">
-                { item.images.length===0
+                {   (item.images===null || item.images.length===0)
                     ?
                     <img src={missingImage} alt=""/>
                     :

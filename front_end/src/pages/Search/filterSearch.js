@@ -17,14 +17,14 @@ const filterSearch = (search) => {
         }
         filters.push(filter)
     }
-    /*if (search.country) {
+    if (search.country) {
         let filter = {
             field: "country",
-            operator: "LIKE",
+            operator: "EQUALS",
             value: search.country
         }
         filters.push(filter)
-    }*/
+    }
     if (search.minPrice) {
         let filter = {
             field: "buyPrice",

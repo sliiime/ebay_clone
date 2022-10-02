@@ -42,10 +42,8 @@ const Admin = () => {
                 }
             })
             .then((response) => {
-                //registrationStatus
-                setUsers(response?.data);
-                console.log(users)
-                console.log(response?.data)
+                console.log(response)
+                setUsers(response?.data)
             })
             .catch((error) => {
                 console.log(error)
@@ -65,9 +63,12 @@ const Admin = () => {
                 users.length ?
                     users.map(user =>
                         <div className="admin-userInfo" key={user.id}>
-                            <p className="admin-userInfo-text">
-                                {user.username}, {user.afm}, {user.country}
-                            </p>
+                            {
+                                <p className="admin-userInfo-text">
+                                    {user.username}, {user.email} ,{user.afm}, {user.country}, {user.phone},
+                                    rating:{user.rating}
+                                </p>
+                            }
                             {
                                 (user.registrationStatus !== "ACCEPTED") ?
                                 <button className="admin-userInfo-button" onClick={() => handleAuthClick(user)}>
@@ -76,6 +77,7 @@ const Admin = () => {
                             }
                         </div>
                     ) : null
+
             }
         </div>
     );
