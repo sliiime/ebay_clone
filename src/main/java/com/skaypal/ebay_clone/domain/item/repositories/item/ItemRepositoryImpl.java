@@ -76,13 +76,20 @@ public class ItemRepositoryImpl implements ItemRepository {
     }
 
     @Override
-    public Float getMinimumPossibleBid(int id){return jpaItemRepository.getMinBid(id);}
+    public Float getMinimumPossibleBid(int id) {
+        return jpaItemRepository.getMinBid(id);
+    }
 
     @Override
-    public Date getStartDate(int id){return jpaItemRepository.getStartDate(id);}
+    public Date getStartDate(int id) {
+        return jpaItemRepository.getStartDate(id);
+    }
 
     @Override
-    public Date getEndDate(int id){return jpaItemRepository.getEndDate(id);}
+    public Date getEndDate(int id) {
+        return jpaItemRepository.getEndDate(id);
+    }
+
     @Override
     @Transactional
     public void itemBought(Integer itemId, Integer boughtBy) {
@@ -90,7 +97,7 @@ public class ItemRepositoryImpl implements ItemRepository {
     }
 
     @Override
-    public int getTotalItemsCount(){
+    public int getTotalItemsCount() {
         return jpaItemRepository.countItems();
     }
 
@@ -105,19 +112,19 @@ public class ItemRepositoryImpl implements ItemRepository {
     }
 
     @Override
-    public Page<Item> findItemsOfUser(Integer userId,Pageable pageable){
-        return jpaItemRepository.findItemsBySeller(new User(userId),pageable);
+    public Page<Item> findItemsOfUser(Integer userId, Pageable pageable) {
+        return jpaItemRepository.findItemsBySeller(new User(userId), pageable);
     }
 
     @Override
-    public Page<Item> findAll(List<Filter> filters,Pageable pageable) {
+    public Page<Item> findAll(List<Filter> filters, Pageable pageable) {
         Specification<Item> specification = getSpecificationFromFilters(filters);
-        return specification == null ? jpaItemRepository.findAll(pageable) : jpaItemRepository.findAll(specification,pageable);
+        return specification == null ? jpaItemRepository.findAll(pageable) : jpaItemRepository.findAll(specification, pageable);
     }
 
     @Override
-    public Page<Item> getRecommendations(List<Integer> recommendations,User user,Pageable pageable){
-        return jpaItemRepository.getRecommendations(recommendations,user,pageable);
+    public Page<Item> getRecommendations(List<Integer> recommendations, User user, Pageable pageable) {
+        return jpaItemRepository.getRecommendations(recommendations, user, pageable);
     }
 
     private Specification<Item> createSpecification(Filter filter) {
@@ -127,7 +134,10 @@ public class ItemRepositoryImpl implements ItemRepository {
                 return (root, query, criteriaBuilder) -> {
                     var field = "seller".equals(filter.getField()) ?
                             root.get(filter.getField()).get("id") :
-                            root.get(filter.getField());
+                            "country".equals(filter.getField()) ?
+                                    root.get(filter.getField()).get("country") :
+                                    root.get(filter.getField());
+
 
                     return criteriaBuilder.equal(field,
                             castToRequiredType(field.getJavaType(), filter.getValue()));
@@ -150,7 +160,7 @@ public class ItemRepositoryImpl implements ItemRepository {
                                 "%" + filter.getValue() + "%");
             case IN:
                 return (root, query, criteriaBuilder) -> {
-                    Join<Item,Category> itemCategory = root.join("categories");
+                    Join<Item, Category> itemCategory = root.join("categories");
                     var field = "category".equals(filter.getField()) ?
                             itemCategory.get("category") :
                             root.get(filter.getField());
@@ -158,7 +168,7 @@ public class ItemRepositoryImpl implements ItemRepository {
                     query.distinct(true);
 
 
-                    return  criteriaBuilder.in(field)
+                    return criteriaBuilder.in(field)
                             .value(castToRequiredType(field.getJavaType(), filter.getValues()));
                 };
             default:
@@ -174,18 +184,18 @@ public class ItemRepositoryImpl implements ItemRepository {
         return null;
     }
 
-    private Object castToRequiredType(Class fieldType,List<String> values){
+    private Object castToRequiredType(Class fieldType, List<String> values) {
         List<Object> list = new ArrayList<>();
-        for(String value : values){
-            list.add(castToRequiredType(fieldType,value));
+        for (String value : values) {
+            list.add(castToRequiredType(fieldType, value));
         }
         return list;
     }
 
-    private Specification<Item> getSpecificationFromFilters(List<Filter> filters){
+    private Specification<Item> getSpecificationFromFilters(List<Filter> filters) {
         Specification<Item> specification = null;
-        if (filters.size() > 0 ) {
-             specification = Specification.where(createSpecification(filters.remove(0)));
+        if (filters.size() > 0) {
+            specification = Specification.where(createSpecification(filters.remove(0)));
             for (Filter filter : filters) specification = specification.and(createSpecification(filter));
         }
 
