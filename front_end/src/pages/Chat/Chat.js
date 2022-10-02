@@ -89,7 +89,7 @@ const Chat = () => {
                         chat.length ?
                             chat.reverse().map(msg =>
                                 <div className='chat-div' key={msg.id}>
-                                    <label className='chat-label'>{String(msg.receiverId)===talkerId ? talkerName+":" : "you:"}</label>
+                                    <label className='chat-label'>{String(msg.receiverId)===talkerId ? "you:" : talkerName+":"}</label>
                                     <p className='chat-text'>{msg.body}</p>
                                 </div>
                             ) : <p>No messages yet!</p>
