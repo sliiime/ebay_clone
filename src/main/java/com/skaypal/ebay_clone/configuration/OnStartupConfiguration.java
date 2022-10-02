@@ -60,49 +60,49 @@ public class OnStartupConfiguration {
     CommandLineRunner userRepoInit(JPAUserRepository JPAUserRepository) {
         return args -> {
             CreateUserDto user1 = (new CreateUserDto(
-                    "Bratsaras420",
-                    "Psemouto4",
+                    "User1",
+                    "Password1",
                     "Kostis",
                     "Palamidas",
-                    "Spiti sou 3",
-                    "kke@youjizz.com",
+                    "Addr 1",
+                    "hello1@world.com",
                     "123456789",
                     "69696969",
-                    "Greece"
+                    "Albania"
             ));
 
             CreateUserDto user2 = (new CreateUserDto(
-                    "Boubounis666",
-                    "TzouraApoTzina",
-                    "Kyrios",
-                    "Eugenios",
-                    "Lilipoupoli 2",
-                    "syriza@sugarbabes.com",
+                    "User2",
+                    "Password2",
+                    "Panos",
+                    "Seiras",
+                    "Addr 2",
+                    "hello2@world.com",
                     "123456788",
-                    "12121312",
-                    "Albania"
+                    "1231231231",
+                    "France"
             ));
 
             CreateUserDto user3 = (new CreateUserDto(
-                    "Damianoskow",
-                    "Polovskis6",
-                    "Karpos",
-                    "Emiratwn",
-                    "Panep 5",
-                    "salamanca@hector.com",
+                    "User3",
+                    "Password3",
+                    "Io",
+                    "Chamo",
+                    "Addr 3",
+                    "hello3@world.com",
                     "123453288",
                     "8889001234",
-                    "Albania"
+                    "Greece"
             ));
 
             User admin = (AdminFactory.admin(
-                    "Katsikas",
+                    "admin",
                     encoder.encode("Backfrombarca6*"),
-                    "Panais",
-                    "Palamidis",
-                    "Negroniou 7",
-                    "koulourades@yahoo.pub",
-                    "778994662",
+                    "admin",
+                    "admin",
+                    "Admin 1",
+                    "admin@admin.com",
+                    "000000000",
                     "6945455420",
                     new Country(153)
             )

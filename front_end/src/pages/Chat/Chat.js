@@ -4,6 +4,7 @@ import {useParams} from "react-router-dom";
 import refreshIcon from "./refresh-icon.png";
 import './chat.css'
 import axios from "axios";
+import {Button} from "react-bootstrap";
 
 const Chat = () => {
 
@@ -14,6 +15,7 @@ const Chat = () => {
     const [userInput,setUserInput] = useState("")
     const [chat,setChat] = useState([])
     const [otherUser,setOtherUser] = useState([])
+    const [isRated,setIsRated] = useState(false)
 
     useEffect(() => {
         const url = "http://localhost:8080/ebay_clone/api/message/users/" + talkerId + "?p=" + currentPage
@@ -76,6 +78,27 @@ const Chat = () => {
         setCurrentPage(currentPage-1)
     }
 
+    const handleRateButton = (event) => {
+        event.preventDefault()
+        setIsRated(true)
+        axios
+            .post("http://localhost:8080/ebay_clone/api/rating",{
+                ratedId: talkerId,
+                rating: event.target.value
+            }, {
+                headers: {
+                    'Authorization': JSON.parse(localStorage.getItem('accessToken'))
+                }
+            })
+            .then((response) => {
+                console.log(response?.data)
+                window.location.reload(false)
+            })
+            .catch((error) => {
+                console.log(error)
+            })   
+    }
+
     return (
         <div>
             <NavBar/>
@@ -84,6 +107,16 @@ const Chat = () => {
                     <img src={refreshIcon}/>
                 </button>
                 <h4 className='talking-to'>Talking with: {talkerName}</h4>
+                {   !isRated &&
+                    <div>
+                        <label>Rate user: </label>
+                        <Button className='rate-btn' value={1} onClick={handleRateButton}>1</Button>
+                        <Button className='rate-btn' value={2} onClick={handleRateButton}>2</Button>
+                        <Button className='rate-btn' value={3} onClick={handleRateButton}>3</Button>
+                        <Button className='rate-btn' value={4} onClick={handleRateButton}>4</Button>
+                        <Button className='rate-btn' value={5} onClick={handleRateButton}>5</Button>
+                    </div>
+                }
                 <div className='chat-preview-panel'>
                     {
                         chat.length ?

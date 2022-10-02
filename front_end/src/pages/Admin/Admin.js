@@ -64,6 +64,7 @@ const Admin = () => {
                     users.map(user =>
                         <div className="admin-userInfo" key={user.id}>
                             {
+                                (user.username !== "admin") &&
                                 <p className="admin-userInfo-text">
                                     {user.username}, {user.email} ,{user.afm}, {user.country}, {user.phone},
                                     rating:{user.rating}
