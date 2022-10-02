@@ -23,10 +23,6 @@ const CategoryItems = ({category}) => {
                     operator: "IN",
                     values: currentCategory
                 }]
-            }, {
-                headers: {
-                    'Authorization': JSON.parse(localStorage.getItem('accessToken'))
-                }
             })
             .then((response) => {
                 console.log(response?.data)

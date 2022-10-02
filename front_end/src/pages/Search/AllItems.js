@@ -9,14 +9,10 @@ const AllItems = () => {
     const [itemsShown, setItemsShown] = useState([])
 
     useEffect(() => {
-        const accessToken = JSON.parse(localStorage.getItem('accessToken'))
+        const accessToken = JSON.parse(localStorage.getItem('accessToken')) ? JSON.parse(localStorage.getItem('accessToken')) : ""
         axios
             .post("http://localhost:8080/ebay_clone/api/item/search/?p="+(currentPage-1),{
                 filters: []
-            }, accessToken && {
-                headers: {
-                    'Authorization': JSON.parse(localStorage.getItem('accessToken'))
-                }
             })
             .then((response) => {
                 console.log(response?.data)

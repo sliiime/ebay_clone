@@ -51,7 +51,7 @@ function App() {
                       </Route>
 
                       <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
-                          <Route path="search/bid/:id" element={<Bid />} />
+                          <Route path="bid/:id" element={<Bid />} />
                       </Route>
 
                       <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>

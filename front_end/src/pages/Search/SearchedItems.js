@@ -20,10 +20,6 @@ const SearchedItems = ({search}) => {
         axios
             .post("http://localhost:8080/ebay_clone/api/item/search/?p=" + (currentPage - 1), {
                 filters: searchFilters
-            }, {
-                headers: {
-                    'Authorization': JSON.parse(localStorage.getItem('accessToken'))
-                }
             })
             .then((response) => {
                 console.log(response?.data)

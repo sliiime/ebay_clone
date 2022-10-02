@@ -8,13 +8,6 @@ const SearchItemCard = ({item}) => {
     const endDate = new Date(item.endDate)
     const startDate = new Date(item.startDate)
 
-    let navigate = useNavigate()
-
-    const handleEditButton = () => {
-        //localStorage.setItem("itemID", JSON.stringify(item.id));
-        //navigate('./checkItem')
-    }
-
     return (
         <div className="card-container">
             <div className="card-image-container">
@@ -42,8 +35,8 @@ const SearchItemCard = ({item}) => {
             <div className="card-editButton">
                 {
                     item.status === "ONGOING" ?
-                        <NavLink style={{ textDecoration: 'none'}} to={'/search/bid/'+String(item.id)}>
-                            <button onClick={handleEditButton}>
+                        <NavLink style={{ textDecoration: 'none'}} to={'/bid/'+String(item.id)}>
+                            <button>
                                 Check
                             </button>
                         </NavLink>
