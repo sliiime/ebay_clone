@@ -63,10 +63,11 @@ public class InteractionService {
 
             Interaction persistedInteraction = optionalInteraction.get();
 
+
             if (persistedInteraction.getInteractionStatus() == IGNORED){
                 persistedInteraction.setInteractionStatus(VIEWED);
                 interaction = persistedInteraction;
-            }
+            }else return persistedInteraction;
         }
 
         return interactionRepository.save(interaction);
