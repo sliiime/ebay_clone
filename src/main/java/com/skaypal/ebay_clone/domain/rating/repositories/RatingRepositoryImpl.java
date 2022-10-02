@@ -1,6 +1,7 @@
 package com.skaypal.ebay_clone.domain.rating.repositories;
 
 import com.skaypal.ebay_clone.domain.rating.model.Rating;
+import com.skaypal.ebay_clone.domain.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -32,4 +33,8 @@ public class RatingRepositoryImpl implements RatingRepository{
     }
 
     public int ratingsOf(Integer user1,Integer user2){ return jpaRatingRepository.ratingsOf(user1,user2);}
+
+    public Optional<Rating> findByRatedByAndRated(User ratedBy, User rated){
+        return jpaRatingRepository.findRatingByRatedByAndRated(ratedBy,rated);
+    }
 }

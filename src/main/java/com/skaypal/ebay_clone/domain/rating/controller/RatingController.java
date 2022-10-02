@@ -37,6 +37,14 @@ public class RatingController {
         return ResponseEntity.ok(ratingService.getRating(id));
     }
 
+    @GetMapping(path = "/user/{id}")
+    public ResponseEntity<ViewRatingDto> getUsersRating(@PathVariable("id") Integer rated,HttpServletRequest request){
+
+        String token = request.getHeader("Authorization");
+        Integer rater = jwtUtil.retrieveUserId(token);
+        return ResponseEntity.ok(ratingService.getUsersRating(rater,rated));
+    }
+
     @PostMapping
     public ResponseEntity<?> createRating(@Valid @RequestBody CreateRatingDto createRatingDto, HttpServletRequest request) {
 
