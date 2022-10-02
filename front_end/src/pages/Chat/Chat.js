@@ -18,6 +18,22 @@ const Chat = () => {
     const [isRated,setIsRated] = useState(false)
 
     useEffect(() => {
+        axios
+            .get("http://localhost:8080/ebay_clone/api/", {
+                headers: {
+                    'Authorization': JSON.parse(localStorage.getItem('accessToken'))
+                }
+            })
+            .then((response) => {
+                console.log(response)
+                setIsRated(response?.data)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+    },[])
+
+    useEffect(() => {
         const url = "http://localhost:8080/ebay_clone/api/message/users/" + talkerId + "?p=" + currentPage
         console.log(url)
         axios.get(url, {

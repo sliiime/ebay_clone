@@ -202,7 +202,7 @@ const Bid = () => {
                             </div>
                             <div>
                                 <label className="bid-item-label">Current Price</label>
-                                <p className="bid-item-text" >{item.current_price>0 ? item.current_price : "~ €"}</p>
+                                <p className="bid-item-text" >{item.current_price>0 ? item.current_price+"€" : "~ €"}</p>
                             </div>
                             <div className='bid-export-auction'>
                                 <button className='bid-export-json' onClick={handleExportJson}>Export to JSON</button>
