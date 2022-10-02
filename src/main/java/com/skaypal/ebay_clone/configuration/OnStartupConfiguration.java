@@ -1,13 +1,16 @@
 package com.skaypal.ebay_clone.configuration;
 
 import com.skaypal.ebay_clone.domain.admin.AdminFactory;
+import com.skaypal.ebay_clone.domain.bid.dto.CreateBidDto;
 import com.skaypal.ebay_clone.domain.bid.model.Bid;
 import com.skaypal.ebay_clone.domain.bid.repository.JPABidRepository;
+import com.skaypal.ebay_clone.domain.bid.service.BidService;
 import com.skaypal.ebay_clone.domain.category.model.Category;
 import com.skaypal.ebay_clone.domain.country.model.Country;
 import com.skaypal.ebay_clone.domain.interaction.model.Interaction;
 import com.skaypal.ebay_clone.domain.interaction.service.InteractionService;
 import com.skaypal.ebay_clone.domain.item.ItemStatusEnum;
+import com.skaypal.ebay_clone.domain.item.dto.CreateItemDto;
 import com.skaypal.ebay_clone.domain.item.dto.ViewItemDto;
 import com.skaypal.ebay_clone.domain.item.model.Item;
 import com.skaypal.ebay_clone.domain.item.repositories.item.JPAItemRepository;
@@ -45,16 +48,20 @@ public class OnStartupConfiguration {
     ItemService itemService;
 
     @Autowired
+    BidService bidService;
+
+    @Autowired
     InteractionService interactionService;
 
     @Autowired
     RecommendationService recommendationService;
+
     @Bean
     CommandLineRunner userRepoInit(JPAUserRepository JPAUserRepository) {
         return args -> {
             CreateUserDto user1 = (new CreateUserDto(
                     "Bratsaras420",
-                     "Psemouto4",
+                    "Psemouto4",
                     "Kostis",
                     "Palamidas",
                     "Spiti sou 3",
@@ -66,7 +73,7 @@ public class OnStartupConfiguration {
 
             CreateUserDto user2 = (new CreateUserDto(
                     "Boubounis666",
-                     "TzouraApoTzina",
+                    "TzouraApoTzina",
                     "Kyrios",
                     "Eugenios",
                     "Lilipoupoli 2",
@@ -88,7 +95,7 @@ public class OnStartupConfiguration {
                     "Albania"
             ));
 
-            User admin = ( AdminFactory.admin(
+            User admin = (AdminFactory.admin(
                     "Katsikas",
                     encoder.encode("Backfrombarca6*"),
                     "Panais",
@@ -113,120 +120,110 @@ public class OnStartupConfiguration {
     @Bean
     CommandLineRunner itemRepoInit(JPAItemRepository JPAItemRepository) {
         return args -> {
-            Item item1 = (new Item("Warmogs's",
+            CreateItemDto item1 = (new CreateItemDto("Warmogs's",
                     10f,
                     5f,
-                    50d,
-                    40d,
+                    "peri",
+                    List.of("Technology", "Beauty & Personal Care", "Clothing, Shoes & Jewelry", "Books"),
                     new Date(),
                     Date.from(Instant.now().plusSeconds(10000)),
-                    "peri",
-                    List.of(new Category(1),new Category(3),new Category(5),new Category(7)),
-                    ItemStatusEnum.ONGOING,
-                    new User(1),
-                    null,
-                    new Country(123)
+                    41.51899817,
+                    19.79700359,
+                    1
             ));
-            Item item2 = (new Item("Thornmail",
+            CreateItemDto item2 = (new CreateItemDto("Thornmail",
                     15f,
                     7f,
-                    50d,
-                    40d,
+                    "perigrafh",
+                    List.of("Home & Kitchen", "Toys & Games", "Sports & Outdoors", "Other"),
                     new Date(),
                     Date.from(Instant.now().plusSeconds(10000)),
-                    "perigrafh",
-                    List.of(new Category(2),new Category(4),new Category(6),new Category(8)),
-                    ItemStatusEnum.ONGOING,
-                    new User(1),
-                    null,
-                    new Country(99)
+
+                    -63.068615,
+                    18.220554,
+                    1
             ));
-            Item item3 = (new Item("email",
+            CreateItemDto item3 = (new CreateItemDto("email",
                     20f,
                     8f,
-                    50d,
-                    40d,
+                    "perigrafhsee",
+                    List.of("Beauty & Personal Care", "Other", "Clothing, Shoes & Jewelry", "Books"),
                     new Date(),
                     Date.from(Instant.now().plusSeconds(10000)),
-                    "perigrafhsee",
-                    List.of(new Category(3),new Category(8),new Category(5),new Category(7)),
-                    ItemStatusEnum.ONGOING,
-                    new User(1),
-                    null,
-                    new Country(6)
+                    -74.297333,
+                    4.570868,
+                    1
             ));
-            Item item4 = (new Item("moggolos",
+            CreateItemDto item4 = (new CreateItemDto("patsas",
                     25f,
                     10f,
-                    50d,
-                    40d,
+                    "grafh",
+                    List.of("Toys & Games"),
                     new Date(),
                     Date.from(Instant.now().plusSeconds(150)),
-                    "grafh",
-                    List.of(new Category(4)),
-                    ItemStatusEnum.BOUGHT_BUYOUT,
-                    new User(1),
-                    new User(2),
-                    new Country(4)
+
+                    22.43400358,
+                    38.89899915,
+                    1
             ));
-            Item item5 = (new Item("Amogus",
+            CreateItemDto item5 = (new CreateItemDto("Amogus",
                     140f,
                     3f,
-                    50d,
-                    40d,
+                    "periklees",
+                    List.of("Technology", "Toys & Games"),
                     new Date(),
                     Date.from(Instant.now().plusSeconds(30)),
-                    "periklees",
-                    List.of(new Category(1),new Category(4)),
-                    ItemStatusEnum.BOUGHT_TIMEOUT,
-                    new User(1),
-                    new User(2),
-                    new Country(5)
+                    -78.17900362,
+                    18.44299809,
+                    1
             ));
-            Item item6 = (new Item("Thumbemail",
+            CreateItemDto item6 = (new CreateItemDto("Thumbemail",
                     20f,
                     6f,
-                    50d,
-                    40d,
+                    "perigrafh",
+                    List.of("Home & Kitchen"),
                     new Date(),
                     Date.from(Instant.now().plusSeconds(10)),
-                    "perigrafh",
-                    List.of(new Category(2)),
-                    ItemStatusEnum.ONGOING,
-                    new User(1),
-                    null,
-                    new Country(1)
+                    50.16659135,
+                    -14.26617186,
+
+                    1
             ));
-            Item item7 = (new Item("Thumbroller",
+            CreateItemDto item7 = (new CreateItemDto("Thumbroller",
                     20f,
                     9f,
-                    50d,
-                    40d,
+                    "grafh ths peri",
+                    List.of("Home & Kitchen", "Beauty & Personal Care"),
                     new Date(),
                     Date.from(Instant.now().plusSeconds(1000)),
-                    "grafh ths peri",
-                    List.of(new Category(2),new Category(3)),
-                    ItemStatusEnum.ONGOING,
-                    new User(2),
-                    null,
-                    new Country(1)
+                    7.486002487,
+                    5.532003041,
+
+                    2
             ));
-            Item item8 = (new Item("broller de france",
+            CreateItemDto item8 = (new CreateItemDto("broller de france",
                     20f,
                     3f,
-                    80d,
-                    95.4d,
+                    "en peasant de france",
+                    List.of("Home & Kitchen", "Beauty & Personal Care", "Clothing, Shoes & Jewelry"),
                     new Date(),
                     Date.from(Instant.now().plusSeconds(500)),
-                    "en peasant de france",
-                    List.of(new Category(2),new Category(3),new Category(5)),
-                    ItemStatusEnum.ONGOING,
-                    new User(2),
-                    null,
-                    new Country(3)
+                    25.48583,
+                    42.733883,
+
+                    2
             ));
 
-            JPAItemRepository.saveAll(List.of(item1,item2,item3,item4,item5,item6,item7,item8));
+            itemService.createItem(item1);
+            itemService.createItem(item2);
+            itemService.createItem(item3);
+            itemService.createItem(item4);
+            itemService.createItem(item5);
+            itemService.createItem(item6);
+            itemService.createItem(item7);
+            itemService.createItem(item8);
+
+
         };
 
     }
@@ -234,55 +231,60 @@ public class OnStartupConfiguration {
     @Bean
     CommandLineRunner bidRepoInit(JPABidRepository JPABidRepository) {
         return args -> {
-            Bid bid1 = (new Bid(
-                    new Date(),
-                    5f,
-                    new Item(2),
-                    new User(3))
+            CreateBidDto bid1 = (new CreateBidDto(
+                    2,
+                    3,
+                    10f
+            )
+
             );
-            Bid bid2 = (new Bid(
-                    new Date(),
-                    20f,
-                    new Item(2),
-                    new User(2))
+            CreateBidDto bid2 = (new CreateBidDto(
+                    2,
+                    2,
+                    13f
+            )
             );
-            Bid bid3 = (new Bid(
-                    new Date(),
-                    15f,
-                    new Item(3),
-                    new User(2)
-            ));
-            Bid bid4 = (new Bid(
-                    new Date(),
-                    17f,
-                    new Item(3),
-                    new User(3)
+            CreateBidDto bid3 = (new CreateBidDto(
+                    3,
+                    2,
+                    16f
+            )
+            );
+            CreateBidDto bid4 = (new CreateBidDto(
+                    3,
+                    3,
+                    17f
             ));
 
+            bidService.createBid(bid1);
+            bidService.createBid(bid2);
+            bidService.createBid(bid3);
+            bidService.createBid(bid4);
 
-            JPABidRepository.saveAll(List.of(bid1,bid2,bid3,bid4));
+
+
         };
     }
 
     @Bean
-    CommandLineRunner recommendationsInit(){
+    CommandLineRunner recommendationsInit() {
         return args -> {
-            Page<ViewItemDto> viewItemDtoPage = itemService.getPage(null,0);
+            Page<ViewItemDto> viewItemDtoPage = itemService.getPage(null, 0);
 
-            interactionService.initializeInteractions(viewItemDtoPage,1);
-            interactionService.initializeInteractions(viewItemDtoPage,2);
-            interactionService.initializeInteractions(viewItemDtoPage,3);
+            interactionService.initializeInteractions(viewItemDtoPage, 1);
+            interactionService.initializeInteractions(viewItemDtoPage, 2);
+            interactionService.initializeInteractions(viewItemDtoPage, 3);
 
-            interactionService.itemViewed(1,6);
-            interactionService.itemViewed(1,7);
-            interactionService.itemViewed(1,3);
-            interactionService.itemViewed(1,1);
+            interactionService.itemViewed(1, 6);
+            interactionService.itemViewed(1, 7);
+            interactionService.itemViewed(1, 3);
+            interactionService.itemViewed(1, 1);
 
-            interactionService.itemViewed(2,1);
-            interactionService.itemViewed(2,8);
+            interactionService.itemViewed(2, 1);
+            interactionService.itemViewed(2, 8);
 
 
-            interactionService.itemViewed(3,5);
+            interactionService.itemViewed(3, 5);
 
 
             recommendationService.getRecommendations(2);
