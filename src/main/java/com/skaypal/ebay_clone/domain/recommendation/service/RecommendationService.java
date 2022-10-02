@@ -2,8 +2,10 @@ package com.skaypal.ebay_clone.domain.recommendation.service;
 
 import com.skaypal.ebay_clone.domain.interaction.model.Interaction;
 import com.skaypal.ebay_clone.domain.interaction.repository.InteractionRepository;
+import com.skaypal.ebay_clone.domain.item.dto.ViewItemDto;
 import com.skaypal.ebay_clone.domain.item.model.Item;
 import com.skaypal.ebay_clone.domain.item.repositories.item.ItemRepository;
+import com.skaypal.ebay_clone.domain.item.service.ItemService;
 import com.skaypal.ebay_clone.domain.recommendation.dto.RecommendationDto;
 import com.skaypal.ebay_clone.domain.recommendation.model.Recommendation;
 import com.skaypal.ebay_clone.domain.recommendation.model.RecommendationStatus;
@@ -12,13 +14,16 @@ import com.skaypal.ebay_clone.domain.user.model.User;
 import com.skaypal.ebay_clone.utils.matrix_factorization.MatrixFactorization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 import static com.skaypal.ebay_clone.domain.interaction.service.InteractionService.interactionStatusToDouble;
+import static com.skaypal.ebay_clone.domain.item.service.ItemService.ITEM_PAGE_SIZE;
 import static com.skaypal.ebay_clone.domain.recommendation.model.RecommendationStatus.IGNORE;
 import static com.skaypal.ebay_clone.domain.recommendation.model.RecommendationStatus.RECOMMEND;
+import static java.lang.Math.abs;
 
 @Service
 public class RecommendationService {
@@ -40,16 +45,22 @@ public class RecommendationService {
         this.itemRepository = itemRepository;
     }
 
-    public Page<RecommendationDto> getRecommendations(int userId){
+    public Page<ViewItemDto> getRecommendations(int userId){
+
             generateRecommendations(userId);
 
             User user = new User(userId);
 
             Page<Recommendation> recommendationPage = recommendationRepository.getUsersRecommendations(user,0);
 
-            return recommendationPage.map(RecommendationDto::new);
+            List<Integer> itemList = recommendationPage.get().map((r) -> r.getItem().getId()).toList();
+
+            Page<ViewItemDto> recommendedItems = itemRepository.getRecommendations(itemList,user, PageRequest.of(0, ITEM_PAGE_SIZE)).map(ViewItemDto::new);
+
+            return recommendedItems;
 
     }
+
 
     private void generateRecommendations(int forUser) {
 
@@ -111,7 +122,7 @@ public class RecommendationService {
         //Creating rows of sample users
         for (int i = 0 ; i < totalPicks - 1; i++){
 
-            int pick = random.nextInt() % totalUserIds;
+            int pick = abs(random.nextInt()) % totalUserIds;
 
             Integer userId = userIds.get(pick);
 
@@ -152,14 +163,20 @@ public class RecommendationService {
 
         }
         double[][] recommendationMatrix = MatrixFactorization.run(interactionMatrix,30000,0.0002,0.02);
-        for (int i = 0 ; i < totalUserIds; i++){
+        for (int i = 1 ; i <= totalItems; i++){
+            if (itemToCell.get(i) == null){
+                cellToItem.put(itemAvailablePos,i);
+                itemAvailablePos++;
+            }
+        }
+        for (int i = 0 ; i < totalPicks; i++){
             int userId = cellToUser.get(i);
             user = new User(userId);
             for (int j = 0; j < totalItems; j++){
                 int itemId = cellToItem.get(j);
                 Item item = new Item(itemId);
 
-                RecommendationStatus recommendationStatus = doubleToRecommendationStatus(recommendationMatrix[userId][itemId]);
+                RecommendationStatus recommendationStatus = doubleToRecommendationStatus(recommendationMatrix[i][j]);
 
                 Recommendation recommendation = new Recommendation(user,item,recommendationStatus);
 

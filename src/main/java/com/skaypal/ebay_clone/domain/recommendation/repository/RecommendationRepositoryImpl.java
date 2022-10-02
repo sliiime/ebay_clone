@@ -15,7 +15,7 @@ import java.util.Optional;
 @Repository
 public class RecommendationRepositoryImpl implements RecommendationRepository {
 
-    private static final int RECOMMENDATIONS_PAGE_SIZE = 4;
+    private static final int RECOMMENDATIONS_PAGE_SIZE = 20;
     private final JPARecommendationRepository jpaRecommendationRepository;
 
     @Autowired
@@ -24,8 +24,6 @@ public class RecommendationRepositoryImpl implements RecommendationRepository {
     }
     @Override
     public Page<Recommendation> getUsersRecommendations(User user,int page) {
-
-
             return jpaRecommendationRepository.findRecommendationsByUser(user, PageRequest.of(page,RECOMMENDATIONS_PAGE_SIZE));
     }
 

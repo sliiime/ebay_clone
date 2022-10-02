@@ -51,6 +51,7 @@ public class UserController {
     }
 
     @PutMapping(path = "/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> updateUser(@PathVariable Integer id,@Valid @RequestBody UpdateUserDto updateUserDto){
         updateUserDto.setId(id);
         userService.updateUser(updateUserDto);
@@ -58,6 +59,7 @@ public class UserController {
     }
 
     @DeleteMapping(path = "/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> deleteUser(@PathVariable Integer id){
         userService.deleteUser(id);
         return ResponseEntity.ok().build();

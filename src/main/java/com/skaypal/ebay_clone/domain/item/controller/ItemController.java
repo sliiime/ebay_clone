@@ -139,9 +139,18 @@ public class ItemController {
     }
 
     @PutMapping(path = "/{id}", consumes = "multipart/form-data")
-    public ResponseEntity<?> updateItem(@PathVariable Integer id, @Valid @ModelAttribute UpdateItemDto updateItemDto) {
-        updateItemDto.setId(id);
-        itemService.updateItem(updateItemDto);
+    public ResponseEntity<?> updateItem(@PathVariable("id") Integer itemId, @Valid @ModelAttribute UpdateItemDto updateItemDto,HttpServletRequest request) {
+
+        String token = request.getHeader("Authorization");
+        int userId = jwtUtil.retrieveUserId(token);
+
+        if (itemService.userIsOwnerOfItem(userId,itemId)) {
+
+            updateItemDto.setId(itemId);
+            itemService.updateItem(updateItemDto);
+
+        }else return ResponseEntity.badRequest().body("Can't update an item that you don't own");
+
         return ResponseEntity.ok().build();
     }
 

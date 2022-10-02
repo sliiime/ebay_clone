@@ -83,8 +83,8 @@ public class CreateItemDto implements ValidatableItemDto, LatLongMapped {
                          Float minBid,
                          String description,
                          List<String> categories,
-                         Date endDate,
                          Date startDate,
+                         Date endDate,
                          Integer ownerId) {
         this.name = name;
         this.buyPrice = buyPrice;
@@ -93,6 +93,27 @@ public class CreateItemDto implements ValidatableItemDto, LatLongMapped {
         this.minBid = minBid;
         this.endDate = endDate;
         this.startDate = startDate;
+        this.ownerId = ownerId;
+    }
+    public CreateItemDto(String name,
+                         Float buyPrice,
+                         Float minBid,
+                         String description,
+                         List<String> categories,
+                         Date startDate,
+                         Date endDate,
+                         Double longitude,
+                         Double latitude,
+                         Integer ownerId) {
+        this.name = name;
+        this.buyPrice = buyPrice;
+        this.description = description;
+        this.categories = categories;
+        this.minBid = minBid;
+        this.endDate = endDate;
+        this.startDate = startDate;
+        this.longitude = longitude;
+        this.latitude = latitude;
         this.ownerId = ownerId;
     }
 
